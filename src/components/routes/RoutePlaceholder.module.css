@@ -1,0 +1,8 @@
+.page {
+  padding-block: clamp(6rem, 14vw, 11rem);
+}
+
+.stack {
+  display: grid;
+  gap: var(--space-md);
+}

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { HomePage } from "@/components/home/HomePage";
+import { SiteNavigation } from "@/components/navigation/SiteNavigation";
 import { getHomeContent } from "@/content/home";
 import { isLocale, locales } from "@/content/locales";
 
@@ -21,5 +22,10 @@ export default async function LocalizedHomePage({
     notFound();
   }
 
-  return <HomePage content={getHomeContent(locale)} />;
+  return (
+    <>
+      <HomePage content={getHomeContent(locale)} />
+      <SiteNavigation locale={locale} placement="footer" />
+    </>
+  );
 }
