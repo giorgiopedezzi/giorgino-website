@@ -1,0 +1,84 @@
+@import "@fontsource/newsreader/400.css";
+@import "@fontsource/alegreya-sans/400.css";
+@import "@fontsource/alegreya-sans/500.css";
+@import "@fontsource/alegreya-sans/700.css";
+
+@font-face {
+  font-family: "Mazius Display";
+  src: url("./fonts/MaziusDisplay-Regular.otf") format("opentype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+:root {
+  /* Color */
+  --color-background: #f3f1eb;
+  --color-text: #1a1b1d;
+  --color-text-muted: #646569;
+  --color-border: #d7d4cc;
+  --color-dark-matter: #e4e9e9;
+  --color-running: #173a56;
+  --color-running-surface: #123149;
+  --color-running-accent: #d9465e;
+  --color-text-inverse: #f3f1eb;
+  --color-text-on-dark-muted: rgb(243 241 235 / 66%);
+  --color-text-on-running-muted: rgb(228 233 233 / 82%);
+
+  /* Typography */
+  --font-display: "Newsreader", Georgia, serif;
+  --font-body: "Alegreya Sans", Arial, sans-serif;
+  --font-editorial: "Mazius Display", "Iowan Old Style", Georgia, serif;
+  --font-size-label: 0.8125rem;
+  --font-size-body: clamp(1.125rem, 1rem + 0.45vw, 1.3125rem);
+  --font-size-editorial: clamp(1.5rem, 1.25rem + 0.7vw, 1.8125rem);
+  --font-size-heading: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  --font-size-section-heading: clamp(2.25rem, 1.7rem + 1.6vw, 2.875rem);
+
+  /* Layout */
+  --content-max: 67.5rem;
+  --gutter: clamp(1.5rem, 4vw, 3rem);
+  --measure-body: 40rem;
+  --measure-heading: 53.75rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1.125rem;
+  --space-md: 1.75rem;
+  --space-lg: 2.375rem;
+  --space-xl: clamp(4.5rem, 8vw, 7rem);
+  --space-2xl: clamp(6rem, 11vw, 9rem);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+body {
+  margin: 0;
+  min-width: 20rem;
+  background: var(--color-background);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.45;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-running-accent);
+  color: var(--color-text-inverse);
+}

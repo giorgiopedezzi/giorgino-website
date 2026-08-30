@@ -1,0 +1,4 @@
+Canonical dual-agent starter
+Generated 2026-08-29
+
+Includes Ready-to-Develop Gate 1, runtime gate, ADF AC integrity, Story branch+local commit, safe Git inspection, bounded Jira mechanics, and shared prompt refinement. Project-specific HRA/Framer rules intentionally excluded.

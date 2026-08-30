@@ -1,0 +1,19 @@
+# Replace __PROJECT_ROOT__ with the exact absolute repo root (use forward slashes on Windows),
+# rename this file to story-git.rules, then restart Codex.
+
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","status"], decision="allow", justification="Read-only Git status")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","diff"], decision="allow", justification="Read-only Git diff")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","log"], decision="allow", justification="Read-only Git log")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","show"], decision="allow", justification="Read-only Git show")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","rev-parse"], decision="allow", justification="Read-only Git rev-parse")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","ls-files"], decision="allow", justification="Read-only Git ls-files")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","remote","-v"], decision="allow", justification="Read-only Git remote inspection")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","branch","--show-current"], decision="allow", justification="Read-only current branch")
+
+# Story mutations already authorized by Ready-to-Develop Gate 1.
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","switch","-c"], decision="allow", justification="Create approved Story branch")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","switch"], decision="allow", justification="Resume existing Story branch")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","add","--"], decision="allow", justification="Stage explicit Story files")
+prefix_rule(pattern=["git","-C","__PROJECT_ROOT__","commit","-m"], decision="allow", justification="Create required local Story commit")
+
+# Intentionally no push/pull/fetch/merge/rebase/reset/clean/force/history rewrite rules.
