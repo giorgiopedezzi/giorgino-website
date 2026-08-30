@@ -103,6 +103,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+For this repository, Git commits must use the repository-local identity:
 
 ## Safe op
 For known-safe routine local operations and future Codex permission-rule tuning, see `.agents/codex-safe-local-operations.md`.
+
+user.name = Giorgio Pedezzi
+user.email = giorgio.pedezzi.hqsolutions@gmail.com
+
+Before committing, verify the repository-local Git identity. Do not modify the global Git identity
+
