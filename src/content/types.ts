@@ -10,6 +10,41 @@ export type ArticlePreview = {
   summary: string;
 };
 
+export type EditorialBlock =
+  | { type: "paragraph"; text: string }
+  | { type: "heading"; text: string }
+  | { type: "quote"; text: string; attribution?: string }
+  | { type: "image"; src: string; alt: string; caption?: string }
+  | { type: "artifact"; src: string; alt: string; caption?: string; note?: string }
+  | { type: "divider" }
+  | { type: "note"; text: string };
+
+export type EditorialArticle = {
+  title: string;
+  slug: string;
+  locale: "en" | "it";
+  excerpt: string;
+  publishedAt?: string;
+  status: "draft" | "published";
+  body: EditorialBlock[];
+};
+
+export type DialogueArtifact = {
+  screenshot: string;
+  alt: string;
+  line: string;
+  reflection?: string;
+  href?: string;
+};
+
+export type EditorialContent = {
+  label: string;
+  heading: string;
+  introduction: string;
+  articles: EditorialArticle[];
+  dialogueArtifacts: DialogueArtifact[];
+};
+
 export type TimelineEntry = {
   title: string;
 };

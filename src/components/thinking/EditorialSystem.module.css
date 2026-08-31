@@ -1,0 +1,26 @@
+.page { min-height: calc(100vh - 5rem); }
+.intro, .articleHeader { display: grid; gap: var(--space-md); }
+.intro { max-width: var(--measure-heading); }
+.articleList { margin: var(--space-xl) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--color-border); }
+.articleLink { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-md) 0; border-bottom: 1px solid var(--color-border); text-decoration: none; }
+.articleLink:hover h3, .articleLink:focus-visible h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.excerpt { display: block; margin-top: var(--space-2xs); color: var(--color-text-muted); font-size: 1.0625rem; line-height: 1.35; }
+.articleNumber { flex: 0 0 auto; color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .108em; }
+.article { max-width: var(--measure-heading); }
+.articleHeader { max-width: var(--measure-heading); padding-bottom: var(--space-xl); border-bottom: 1px solid var(--color-border); }
+.body { display: grid; gap: var(--space-md); max-width: var(--measure-body); margin-top: var(--space-xl); }
+.body h2 { margin-top: var(--space-md); }
+.body blockquote { margin: var(--space-sm) 0; padding-left: var(--space-md); border-left: 2px solid var(--color-border); font-family: var(--font-display); font-size: var(--font-size-section-heading); line-height: 1.12; }
+.body blockquote footer, .body figcaption, .body aside { margin-top: var(--space-sm); color: var(--color-text-muted); font-family: var(--font-body); font-size: 1rem; line-height: 1.4; }
+.body figure, .artifact { margin: 0; }
+.body img, .artifact img { display: block; width: 100%; height: auto; }
+.body figcaption { display: grid; gap: var(--space-2xs); }
+.body figcaption span { display: block; }
+.body hr { width: 100%; margin: var(--space-sm) 0; border: 0; border-top: 1px solid var(--color-border); }
+.body aside { padding: var(--space-sm); border: 1px solid var(--color-border); }
+.artifacts { display: grid; gap: var(--space-lg); margin-top: var(--space-xl); }
+.empty { color: var(--color-text-muted); font-size: 1.0625rem; }
+.artifact { display: grid; gap: var(--space-sm); max-width: var(--measure-heading); }
+.artifact figcaption { display: grid; gap: var(--space-2xs); max-width: var(--measure-body); }
+.artifact figcaption p { margin: 0; }
+@media (max-width: 36rem) { .articleLink { align-items: flex-start; } .articleNumber { padding-top: .35rem; } }

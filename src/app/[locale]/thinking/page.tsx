@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 
-import { RoutePlaceholder } from "@/components/routes/RoutePlaceholder";
+import { SiteNavigation } from "@/components/navigation/SiteNavigation";
+import { EditorialIndex } from "@/components/thinking/EditorialSystem";
 import { isLocale } from "@/content/locales";
+import { thinkingContent } from "@/content/thinking";
 
 export default async function ThinkingPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
-
   if (!isLocale(locale)) notFound();
 
-  return <RoutePlaceholder locale={locale} label={locale === "it" ? "Pensieri" : "Thinking"} heading={locale === "it" ? "Appunti che vale la pena lasciare incompiuti." : "Some notes worth leaving unfinished."} body={locale === "it" ? "L'indice editoriale arriverà qui." : "The editorial index will live here."} />;
+  return <><SiteNavigation locale={locale} placement="header" /><main><EditorialIndex locale={locale} {...thinkingContent[locale]} /></main></>;
 }
