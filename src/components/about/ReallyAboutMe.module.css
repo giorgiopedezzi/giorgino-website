@@ -1,0 +1,28 @@
+.hero { min-height: 52rem; padding-block: clamp(5rem, 10vw, 7rem); }
+.heroStack, .stack, .pizzaStack, .nonninoStack { display: grid; align-items: start; }
+.heroStack { max-width: 43rem; gap: var(--space-md); }
+.heroStack h1 { font-size: clamp(3.25rem, 2.2rem + 3.4vw, 4.5rem); }
+.thanks { font-size: clamp(2rem, 1.5rem + 1.75vw, 2.5rem); }
+.heart { display: grid; gap: var(--space-md); margin-top: clamp(1.5rem, 5vw, 3.25rem); }
+.human { display: grid; gap: var(--space-xs); margin-top: var(--space-lg); }
+.human p:last-child { font-size: clamp(2.25rem, 1.75rem + 1.8vw, 2.5rem); }
+.stack { max-width: 47.5rem; gap: var(--space-md); }
+.bordered { border-top: 1px solid var(--color-border); }
+.sectionHeading { font-size: var(--font-size-section-heading); }
+.timeline { display: grid; gap: var(--space-sm); margin-top: var(--space-sm); }
+.timelineFinal { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.1; }
+.artifact { display: flex; flex-direction: column; justify-content: space-between; width: min(100%, 53.75rem); min-height: clamp(16rem, 38vw, 26.25rem); padding: var(--space-md); border: 1px solid var(--color-border); background: var(--color-background); }
+.artifact span { color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .108em; text-transform: uppercase; }
+.artifact p, .muted { color: var(--color-text-muted); font-size: 1rem; }
+.reflect { font-size: clamp(2rem, 1.45rem + 1.6vw, 2.5rem); }
+.pizza { min-height: 41rem; }
+.pizzaStack { width: min(100%, 41.25rem); margin-left: auto; gap: var(--space-sm); }
+.pizzaEnd:first-of-type { margin-top: var(--space-sm); }
+.waitHeading { font-size: clamp(3.5rem, 2.2rem + 4vw, 4.25rem); }
+.artifactDark { border-color: rgb(228 233 233 / 35%); background: var(--color-running-surface); }
+.artifactDark span, .artifactDark p { color: var(--color-text-on-running-muted); }
+.nonnino { min-height: 35rem; display: grid; align-items: center; }
+.nonninoStack { width: min(100%, 42.5rem); margin-left: auto; gap: var(--space-md); }
+.next { width: fit-content; margin-top: var(--space-lg); color: var(--color-text-muted); font-size: 1rem; text-decoration: none; }
+.next:hover, .next:focus-visible { color: var(--color-text); text-decoration: underline; text-underline-offset: .25em; }
+@media (max-width: 40rem) { .hero { min-height: auto; } .pizza { min-height: 0; } .pizzaStack, .nonninoStack { margin-left: 0; } .nonnino { min-height: 26rem; } .artifact { min-height: 15rem; } }
