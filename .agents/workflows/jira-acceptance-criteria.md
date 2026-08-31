@@ -2,7 +2,7 @@
 
 ## Creation
 
-Acceptance Criteria,if present, must be real Jira ADF: one `taskList`, one `taskItem` per criterion, initial `attrs.state = "TODO"`. Never use Markdown `- [ ]`, escaped Markdown checkboxes, or ordinary bullets as a substitute. In case no AC exist, ask explicitly to humen
+Acceptance Criteria,if present, must be real Jira ADF: one `taskList`, one `taskItem` per criterion, initial `attrs.state = "TODO"`. Never use Markdown `- [ ]`, escaped Markdown checkboxes, or ordinary bullets as a substitute. If no Acceptance Criteria exist, ask the human for explicit approval to proceed without them. Proceed only after that approval.
 
 ## Implementation
 
