@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { Locale } from "@/content/locales";
 
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./SiteNavigation.module.css";
 
 type SiteNavigationProps = {
@@ -46,12 +47,15 @@ export function SiteNavigation({ locale, placement }: SiteNavigationProps) {
     return (
       <header className={styles.header}>
         <Link className={styles.homeLink} href={basePath}>{text.home}</Link>
-        <details className={styles.menu}>
-          <summary>{text.menu}</summary>
-          <nav aria-label={text.menu} className={styles.menuLinks}>
-            {text.links.map(([label, path]) => <Link href={`${basePath}/${path}`} key={path}>{label}</Link>)}
-          </nav>
-        </details>
+        <div className={styles.headerActions}>
+          <LanguageSwitcher locale={locale} />
+          <details className={styles.menu}>
+            <summary>{text.menu}</summary>
+            <nav aria-label={text.menu} className={styles.menuLinks}>
+              {text.links.map(([label, path]) => <Link href={`${basePath}/${path}`} key={path}>{label}</Link>)}
+            </nav>
+          </details>
+        </div>
       </header>
     );
   }
@@ -63,6 +67,7 @@ export function SiteNavigation({ locale, placement }: SiteNavigationProps) {
       <nav aria-label={text.heading} className={styles.footerLinks}>
         {text.links.map(([label, path]) => <Link href={`${basePath}/${path}`} key={path}>{label}</Link>)}
       </nav>
+      <LanguageSwitcher locale={locale} />
     </footer>
   );
 }

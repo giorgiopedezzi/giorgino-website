@@ -1,5 +1,9 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default function IndexPage() {
-  redirect("/en");
+import { defaultLocale, isLocale } from "@/content/locales";
+
+export default async function IndexPage() {
+  const preferredLocale = (await cookies()).get("site-locale")?.value;
+  redirect(`/${preferredLocale && isLocale(preferredLocale) ? preferredLocale : defaultLocale}`);
 }

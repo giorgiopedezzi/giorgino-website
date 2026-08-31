@@ -14,6 +14,36 @@
   font-size: 1rem;
 }
 
+.headerActions,
+.languageSwitcher {
+  display: flex;
+  align-items: center;
+}
+
+.headerActions {
+  gap: 1rem;
+}
+
+.languageSwitcher {
+  gap: .5rem;
+  font-size: .8125rem;
+  letter-spacing: .08em;
+}
+
+.languageSwitcher a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.languageSwitcher a:hover,
+.languageSwitcher a:focus-visible,
+.languageSwitcher .activeLanguage {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+}
+
 .homeLink,
 .menu summary,
 .menuLinks a,
@@ -109,6 +139,10 @@
 }
 
 @media (max-width: 32rem) {
+  .headerActions {
+    gap: .75rem;
+  }
+
   .menuLinks {
     min-width: min(16rem, calc(100vw - (var(--gutter) * 2)));
   }
