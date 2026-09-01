@@ -6,7 +6,7 @@ import { EditorialArticleView } from "@/components/thinking/EditorialSystem";
 import { ThinkingPreviewState } from "@/components/thinking/ThinkingPreviewState";
 import { isLocale } from "@/content/locales";
 import { getLocaleMetadata } from "@/content/locale-metadata";
-import { getEditorialArticle } from "@/content/thinking";
+import { getEditorialArticle, getThinkingContent } from "@/content/thinking";
 
 export async function generateMetadata({ params }: Readonly<{ params: Promise<{ locale: string; slug: string }> }>) {
   const { locale, slug } = await params;
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   if (!article) notFound();
   if (isPreview) return { robots: { index: false, follow: false } };
 
-  return getLocaleMetadata(locale, `/${locale}/thinking/${slug}`, `${article.title} — Giorgio Pedezzi`, article.excerpt);
+  return getLocaleMetadata(locale, `/${locale}/thinking/${slug}`, `${article.metadata?.title ?? article.title} — Giorgio Pedezzi`, article.metadata?.description ?? article.excerpt);
 }
 
 export default async function ThinkingArticlePage({ params }: Readonly<{ params: Promise<{ locale: string; slug: string }> }>) {
@@ -28,5 +28,6 @@ export default async function ThinkingArticlePage({ params }: Readonly<{ params:
   const article = getEditorialArticle(locale, slug, isPreview);
   if (!article) notFound();
 
-  return <><SiteNavigation locale={locale} placement="header" /><main>{isPreview && <ThinkingPreviewState />}<EditorialArticleView article={article} /></main></>;
+  const { articleLabels } = getThinkingContent(locale, isPreview);
+  return <><SiteNavigation locale={locale} placement="header" /><main>{isPreview && <ThinkingPreviewState />}<EditorialArticleView article={article} referenceLabel={articleLabels.references} relatedLinksLabel={articleLabels.relatedLinks} /></main></>;
 }

@@ -82,11 +82,30 @@ const dialogueArtifacts = fields.blocks(
   },
 );
 
+const editorialLinks = (label: string, description: string) => fields.array(
+  fields.object({
+    label: fields.text({ label: "Link label", validation: { isRequired: true } }),
+    href: fields.url({ label: "Internal or external link", validation: { isRequired: true } }),
+    note: fields.text({ label: "Optional note", multiline: true }),
+  }),
+  { label, description, itemLabel: (props) => props.fields.label.value || "Link" },
+);
+
 const indexSchema = {
   label: fields.text({ label: "Section label", validation: { isRequired: true } }),
   heading: fields.text({ label: "Heading", validation: { isRequired: true } }),
   introduction: fields.text({ label: "Introduction", multiline: true, validation: { isRequired: true } }),
   dialogueArtifacts,
+  dialogues: fields.object({
+    label: fields.text({ label: "Dialogue section label", validation: { isRequired: true } }),
+    heading: fields.text({ label: "Dialogue heading", validation: { isRequired: true } }),
+    introduction: fields.text({ label: "Dialogue introduction", multiline: true, validation: { isRequired: true } }),
+    emptyLabel: fields.text({ label: "Empty dialogue message", validation: { isRequired: true } }),
+  }, { label: "Dialogues page copy" }),
+  articleLabels: fields.object({
+    references: fields.text({ label: "References heading", validation: { isRequired: true } }),
+    relatedLinks: fields.text({ label: "Related links heading", validation: { isRequired: true } }),
+  }, { label: "Article link labels" }),
 };
 
 const authoringFoundationSchema = {
@@ -251,10 +270,16 @@ export default config({
         locale: fields.select({ label: "Locale", defaultValue: "en", options: [...localeOptions] }),
         translationKey: fields.text({ label: "Stable translation identity", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use the same lowercase identity in each locale." } } }),
         excerpt: fields.text({ label: "Excerpt", multiline: true, validation: { isRequired: true } }),
+        metadata: fields.object({
+          title: fields.text({ label: "Search/social title" }),
+          description: fields.text({ label: "Search/social description", multiline: true }),
+        }, { label: "Localized metadata", description: "Provide both fields to override the title and excerpt used in page metadata." }),
         status: fields.select({ label: "Status", defaultValue: "draft", options: [{ label: "Draft", value: "draft" }, { label: "Published", value: "published" }] }),
         publishedAt: fields.date({ label: "Published date" }),
         order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }),
         body: editorialBlocks,
+        references: editorialLinks("References", "Citations or source material. Add, remove, and reorder without changing the renderer."),
+        relatedLinks: editorialLinks("Related links", "Related internal or external reading. Add, remove, and reorder without changing the renderer."),
       },
     }),
   },

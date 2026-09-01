@@ -14,6 +14,8 @@ export function toEditorialArticle(slug: string, entry: ProofArticleEntry): Edit
     status: entry.status,
     publishedAt: entry.publishedAt || undefined,
     body: entry.body.map(toEditorialBlock),
+    references: [],
+    relatedLinks: [],
   };
 }
 

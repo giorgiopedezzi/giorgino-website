@@ -25,14 +25,28 @@ export type EditorialBlock =
   | { type: "divider" }
   | { type: "note"; text: string };
 
+export type EditorialLink = {
+  label: string;
+  href: string;
+  note?: string;
+};
+
+export type EditorialMetadata = {
+  title: string;
+  description: string;
+};
+
 export type EditorialArticle = {
   title: string;
   slug: string;
   locale: "en" | "it";
   excerpt: string;
+  metadata?: EditorialMetadata;
   publishedAt?: string;
   status: "draft" | "published";
   body: EditorialBlock[];
+  references: EditorialLink[];
+  relatedLinks: EditorialLink[];
 };
 
 export type DialogueArtifact = {
@@ -49,6 +63,16 @@ export type EditorialContent = {
   introduction: string;
   articles: EditorialArticle[];
   dialogueArtifacts: DialogueArtifact[];
+  dialogues: {
+    label: string;
+    heading: string;
+    introduction: string;
+    emptyLabel: string;
+  };
+  articleLabels: {
+    references: string;
+    relatedLinks: string;
+  };
 };
 
 export type PersonalArtifact = {

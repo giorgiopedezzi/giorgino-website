@@ -5,8 +5,8 @@ import { getEditorialArticle, getThinkingContent, getTranslatedThinkingSlug, val
 import { getLocalePath } from "../src/content/locale-routing";
 
 const indexes = {
-  en: { label: "Thinking", heading: "Heading", introduction: "Introduction", dialogueArtifacts: [] },
-  it: { label: "Pensieri", heading: "Titolo", introduction: "Introduzione", dialogueArtifacts: [] },
+  en: { label: "Thinking", heading: "Heading", introduction: "Introduction", dialogueArtifacts: [], dialogues: { label: "Dialogues", heading: "Heading", introduction: "Introduction", emptyLabel: "Empty" }, articleLabels: { references: "References", relatedLinks: "Related reading" } },
+  it: { label: "Pensieri", heading: "Titolo", introduction: "Introduzione", dialogueArtifacts: [], dialogues: { label: "Dialoghi", heading: "Titolo", introduction: "Introduzione", emptyLabel: "Vuoto" }, articleLabels: { references: "Riferimenti", relatedLinks: "Letture correlate" } },
 };
 
 function article(overrides: Record<string, unknown> = {}) {
@@ -54,6 +54,9 @@ expectValidationFailure({ translationKey: "Not a valid identity" }, "stable iden
 expectValidationFailure({ body: [{ type: "not-a-block" }] }, "unsupported block type");
 expectValidationFailure({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "" } }] }, "expected a non-empty string");
 expectValidationFailure({ body: [{ discriminant: "paragraph", value: "" }] }, "expected a non-empty string");
+expectValidationFailure({ metadata: { title: "", description: "Description" } }, "metadata.title");
+expectValidationFailure({ references: [{ label: "Unsafe", href: "javascript:alert(1)" }] }, "internal path or an http(s) URL");
+expectValidationFailure({ relatedLinks: [{ label: "One", href: "/thinking" }, { label: "Two", href: "/thinking" }] }, "must not duplicate another link");
 assert.throws(
   () => validateThinkingRepository(indexes, [pairedArticles()[0]]),
   (error: unknown) => error instanceof Error && error.message.includes("every supported locale"),

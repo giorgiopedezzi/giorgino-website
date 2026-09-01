@@ -20,6 +20,11 @@
 .body figcaption span { display: block; }
 .body hr { width: 100%; margin: var(--space-sm) 0; border: 0; border-top: 1px solid var(--color-border); }
 .body aside { padding: var(--space-sm); border: 1px solid var(--color-border); }
+.links { display: grid; gap: var(--space-sm); margin-top: var(--space-xl); max-width: var(--measure-body); }
+.links ul { display: grid; gap: var(--space-sm); margin: 0; padding-left: 1.2rem; }
+.links li { display: grid; gap: var(--space-2xs); }
+.links a { width: fit-content; color: inherit; text-underline-offset: .2em; }
+.links span { color: var(--color-text-muted); }
 .artifacts { display: grid; gap: var(--space-lg); margin-top: var(--space-xl); }
 .empty { color: var(--color-text-muted); font-size: 1.0625rem; }
 .artifact { display: grid; gap: var(--space-sm); max-width: var(--measure-heading); }

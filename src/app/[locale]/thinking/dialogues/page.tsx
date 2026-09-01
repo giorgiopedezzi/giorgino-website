@@ -11,18 +11,14 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
-  return getLocaleMetadata(
-    locale,
-    `/${locale}/thinking/dialogues`,
-    locale === "it" ? "Dialoghi con l'AI — Giorgio Pedezzi" : "Dialogues with AI — Giorgio Pedezzi",
-    locale === "it" ? "Riflessioni nate da conversazioni reali, con i loro artefatti originali." : "Reflections from real conversations, with their original artifacts.",
-  );
+  const dialogues = getThinkingContent(locale).dialogues;
+  return getLocaleMetadata(locale, `/${locale}/thinking/dialogues`, `${dialogues.label} — Giorgio Pedezzi`, dialogues.introduction);
 }
 
 export default async function DialoguesPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const isItalian = locale === "it";
-  return <><SiteNavigation locale={locale} placement="header" /><main><Section aria-labelledby="dialogues-heading"><PageContainer><SectionLabel>{isItalian ? "Dialoghi con l'AI" : "Dialogues with AI"}</SectionLabel><DisplayHeading id="dialogues-heading">{isItalian ? "Conversazioni da tenere aperte." : "Conversations worth keeping open."}</DisplayHeading><BodyCopy>{isItalian ? "Riflessioni nate da conversazioni reali, con i loro artefatti originali." : "Reflections from real conversations, with their original artifacts."}</BodyCopy><DialogueArtifacts artifacts={getThinkingContent(locale).dialogueArtifacts} emptyLabel={isItalian ? "Nessun dialogo pubblicato." : "No dialogues published."} /></PageContainer></Section></main></>;
+  const { dialogueArtifacts, dialogues } = getThinkingContent(locale);
+  return <><SiteNavigation locale={locale} placement="header" /><main><Section aria-labelledby="dialogues-heading"><PageContainer><SectionLabel>{dialogues.label}</SectionLabel><DisplayHeading id="dialogues-heading">{dialogues.heading}</DisplayHeading><BodyCopy>{dialogues.introduction}</BodyCopy><DialogueArtifacts artifacts={dialogueArtifacts} emptyLabel={dialogues.emptyLabel} /></PageContainer></Section></main></>;
 }

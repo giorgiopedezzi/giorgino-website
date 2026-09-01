@@ -2,5 +2,15 @@
   "label": "Thinking",
   "heading": "Some notes worth leaving unfinished.",
   "introduction": "Not content. A place to follow a line of thought long enough to see where it goes.",
-  "dialogueArtifacts": []
+  "dialogueArtifacts": [],
+  "dialogues": {
+    "label": "Dialogues with AI",
+    "heading": "Conversations worth keeping open.",
+    "introduction": "Reflections from real conversations, with their original artifacts.",
+    "emptyLabel": "No dialogues published."
+  },
+  "articleLabels": {
+    "references": "References",
+    "relatedLinks": "Related reading"
+  }
 }
