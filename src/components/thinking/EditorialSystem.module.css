@@ -1,4 +1,6 @@
 .page { min-height: calc(100vh - 5rem); }
+.previewState { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--color-border); background: var(--color-surface, var(--color-background)); color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .04em; }
+.previewState a { color: inherit; text-underline-offset: .2em; }
 .intro, .articleHeader { display: grid; gap: var(--space-md); }
 .intro { max-width: var(--measure-heading); }
 .articleList { margin: var(--space-xl) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--color-border); }

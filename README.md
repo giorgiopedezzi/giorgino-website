@@ -46,3 +46,13 @@ When adding a required variable, document its name and purpose here, and provide
 ## Deployment
 
 Create a production build with `npm run build`, then serve it with `npm run start`, or deploy through the hosting platform configured for the project.
+
+## Thinking editorial workflow
+
+1. Start the local server with `npm run dev`, then open `/keystatic` to edit the Thinking indexes and articles. The editor is intentionally available only during local development.
+2. To preview a draft through the site’s real Thinking route, open `/api/thinking-preview/enable?locale=en&slug=your-article-slug` (use `locale=it` for the Italian counterpart). The preview banner confirms that Draft Mode is active, refreshes saved content every few seconds, and provides an exit link. `/en/thinking` and `/it/thinking` also show their draft lists while preview is active.
+3. Keep English and Italian entries paired with the same `translationKey`, locale-specific slugs, and matching editorial intent. Add media through the editor; it is stored under `public/thinking-media/` and must have useful alternative text.
+4. Before review, run `npm run verify:thinking`, `npm run lint`, `npm run typecheck`, and `npm run build`. Correct editor validation errors rather than bypassing them: invalid paths, malformed JSON, missing translations, duplicate orders, unsafe links, and incomplete required fields are rejected.
+5. Review content and media changes in Git. A draft is not public until its status is changed to `published`, its publication date is set, and the reviewed commit is merged and deployed through the normal Vercel workflow. Do not push, merge, or publish automatically.
+
+Drafts stay out of normal public Thinking routes, metadata, and the sitemap. The editor and preview-enablement routes return 404 outside local development.

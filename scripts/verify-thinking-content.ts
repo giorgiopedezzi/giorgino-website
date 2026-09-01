@@ -41,6 +41,8 @@ function expectValidationFailure(overrides: Record<string, unknown>, evidence: s
 assert.equal(getThinkingContent("en").articles.length, 0, "draft entries must not appear in the public English index");
 assert.equal(getThinkingContent("it").articles.length, 0, "draft entries must not appear in the public Italian index");
 assert.equal(getEditorialArticle("en", "the-tears-were-ours"), undefined, "draft detail entries must not be publicly readable");
+assert.ok(getThinkingContent("en", true).articles.some((entry) => entry.status === "draft"), "draft preview must include English draft entries");
+assert.equal(getEditorialArticle("en", "the-tears-were-ours", true)?.status, "draft", "draft preview must render draft detail entries");
 assert.equal(getTranslatedThinkingSlug("en", "the-tears-were-ours", "it"), "le-lacrime-erano-nostre");
 assert.equal(getLocalePath("/en/thinking/the-tears-were-ours", "it"), "/it/thinking/le-lacrime-erano-nostre");
 assert.equal(getLocalePath("/en/thinking/unknown", "it"), "/it/thinking");

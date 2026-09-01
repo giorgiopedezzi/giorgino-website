@@ -214,8 +214,6 @@ function loadRepository(): ThinkingRepository {
   return validateThinkingRepository(indexes, articles);
 }
 
-const repository = loadRepository();
-
 function toEditorialArticle(article: ThinkingArticleFile): EditorialArticle {
   return {
     title: article.title,
@@ -228,26 +226,29 @@ function toEditorialArticle(article: ThinkingArticleFile): EditorialArticle {
   };
 }
 
-function articlesFor(locale: Locale, includeDrafts = false) {
+function articlesFor(repository: ThinkingRepository, locale: Locale, includeDrafts = false) {
   return repository.articles
     .filter((article) => article.locale === locale && (includeDrafts || article.status === "published"))
     .sort((left, right) => left.order - right.order);
 }
 
-export function getThinkingContent(locale: Locale): EditorialContent {
+export function getThinkingContent(locale: Locale, includeDrafts = false): EditorialContent {
+  const repository = loadRepository();
   return {
     ...repository.indexes[locale],
-    articles: articlesFor(locale).map(toEditorialArticle),
+    articles: articlesFor(repository, locale, includeDrafts).map(toEditorialArticle),
   };
 }
 
-export function getEditorialArticle(locale: Locale, slug: string) {
-  const article = articlesFor(locale).find((candidate) => candidate.slug === slug);
+export function getEditorialArticle(locale: Locale, slug: string, includeDrafts = false) {
+  const repository = loadRepository();
+  const article = articlesFor(repository, locale, includeDrafts).find((candidate) => candidate.slug === slug);
   return article ? toEditorialArticle(article) : undefined;
 }
 
 export function getTranslatedThinkingSlug(sourceLocale: Locale, sourceSlug: string, targetLocale: Locale) {
-  const source = articlesFor(sourceLocale, true).find((article) => article.slug === sourceSlug);
+  const repository = loadRepository();
+  const source = articlesFor(repository, sourceLocale, true).find((article) => article.slug === sourceSlug);
   if (!source) return undefined;
-  return articlesFor(targetLocale, true).find((article) => article.translationKey === source.translationKey)?.slug;
+  return articlesFor(repository, targetLocale, true).find((article) => article.translationKey === source.translationKey)?.slug;
 }
