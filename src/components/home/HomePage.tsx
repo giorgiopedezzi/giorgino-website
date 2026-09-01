@@ -51,7 +51,7 @@ export function HomePage({ content }: HomePageProps) {
           closingThought: content.darkMatter.closingThought,
           supportingText: content.darkMatter.supportingText,
         }}
-      />
+      >
 
       <Section className={styles.bordered} aria-labelledby="thinking-heading">
         <PageContainer>
@@ -193,6 +193,7 @@ export function HomePage({ content }: HomePageProps) {
           </div>
         </PageContainer>
       </Section>
+      </HomePageAnimations>
     </main>
   );
 }

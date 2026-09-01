@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import {
   BodyCopy,
@@ -25,13 +25,16 @@ type Props = {
   beliefLabel: string;
   beliefStatements: string[];
   darkMatter: DarkMatterContent;
+  children: ReactNode;
 };
 
 const BELIEF_TICK_MS = 42;
-const DARK_TYPE_TICK_MS = 34;
-const RESTORE_TICK_MS = 260;
-const FINAL_PAUSE_MS = 1_100;
-const CHARACTERS_PER_TICK = 2;
+const BELIEF_CHARACTERS_PER_TICK = 2;
+const DARK_MATTER_TYPEWRITER_TICK_MS = 34;
+const DARK_MATTER_RESTORE_TICK_MS = 260;
+const DARK_MATTER_FINAL_PAUSE_MS = 3_000;
+const DARK_MATTER_CHARACTERS_PER_TICK = 2;
+const DARK_MATTER_VIEWPORT_THRESHOLD = 0.4;
 
 function scrambleWord(word: string): string {
   const letters = Array.from(word);
@@ -87,7 +90,7 @@ function playKeyboardTick(context: AudioContext | null) {
   oscillator.stop(context.currentTime + 0.028);
 }
 
-export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }: Props) {
+export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, children }: Props) {
   const reducedMotion = usePrefersReducedMotion();
   const beliefRef = useRef<HTMLDivElement>(null);
   const darkMatterRef = useRef<HTMLDivElement>(null);
@@ -116,7 +119,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }
   useEffect(() => {
     if (beliefCharacters === null || beliefCharacters >= beliefText.length) return;
     const timer = window.setTimeout(() => {
-      setBeliefCharacters((count) => Math.min((count ?? 0) + CHARACTERS_PER_TICK, beliefText.length));
+      setBeliefCharacters((count) => Math.min((count ?? 0) + BELIEF_CHARACTERS_PER_TICK, beliefText.length));
     }, BELIEF_TICK_MS);
     return () => window.clearTimeout(timer);
   }, [beliefCharacters, beliefText.length]);
@@ -128,7 +131,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }
       observer.disconnect();
       setDarkPhase("typing");
       setDarkCharacters(0);
-    }, { threshold: 0.3 });
+    }, { threshold: DARK_MATTER_VIEWPORT_THRESHOLD });
     if (darkMatterRef.current) observer.observe(darkMatterRef.current);
     return () => observer.disconnect();
   }, [reducedMotion]);
@@ -143,9 +146,9 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }
       return () => window.clearTimeout(timer);
     }
     const timer = window.setTimeout(() => {
-      setDarkCharacters((count) => Math.min(count + CHARACTERS_PER_TICK, darkText.stripped.length));
+      setDarkCharacters((count) => Math.min(count + DARK_MATTER_CHARACTERS_PER_TICK, darkText.stripped.length));
       playKeyboardTick(audioContextRef.current);
-    }, DARK_TYPE_TICK_MS);
+    }, DARK_MATTER_TYPEWRITER_TICK_MS);
     return () => window.clearTimeout(timer);
   }, [darkCharacters, darkPhase, darkText.stripped.length]);
 
@@ -161,10 +164,10 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }
   useEffect(() => {
     if (darkPhase !== "restoring") return;
     if (restoredWords >= darkText.words.length) {
-      const timer = window.setTimeout(() => setDarkPhase("final"), FINAL_PAUSE_MS);
+      const timer = window.setTimeout(() => setDarkPhase("final"), DARK_MATTER_FINAL_PAUSE_MS);
       return () => window.clearTimeout(timer);
     }
-    const timer = window.setTimeout(() => setRestoredWords((count) => count + 1), RESTORE_TICK_MS);
+    const timer = window.setTimeout(() => setRestoredWords((count) => count + 1), DARK_MATTER_RESTORE_TICK_MS);
     return () => window.clearTimeout(timer);
   }, [darkPhase, darkText.words.length, restoredWords]);
 
@@ -203,9 +206,13 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }
             <SectionLabel>{darkMatter.label}</SectionLabel>
             <DisplayHeading as="h2" id="dark-matter-heading" className={styles.sectionHeading}>{darkMatter.heading}</DisplayHeading>
             <div className={styles.narrative} aria-label={darkText.canonical}>
-              {effectiveDarkPhase === "restoring" ? darkText.words.map((word, index) => (
-                <span className={index < restoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{word}{index < darkText.words.length - 1 ? " " : ""}</span>
-              )) : visibleNarrative.split("\n\n").map((paragraph, index) => <BodyCopy key={index}>{paragraph}</BodyCopy>)}
+              {effectiveDarkPhase === "restoring" ? (
+                <BodyCopy>
+                  {darkText.words.map((word, index) => (
+                    <span className={index < restoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{word}{index < darkText.words.length - 1 ? " " : ""}</span>
+                  ))}
+                </BodyCopy>
+              ) : visibleNarrative.split("\n\n").map((paragraph, index) => <BodyCopy key={index}>{paragraph}</BodyCopy>)}
             </div>
             {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}>{darkMatter.closingThought}</DisplayHeading>}
             {darkMatter.supportingText && <BodyCopy className={styles.supportingText}>{darkMatter.supportingText}</BodyCopy>}
@@ -214,6 +221,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter }
         </PageContainer>
       </Section>
       </div>
+      {effectiveDarkPhase === "final" && children}
     </>
   );
 }
