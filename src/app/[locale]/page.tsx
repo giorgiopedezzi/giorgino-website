@@ -37,6 +37,7 @@ export default async function LocalizedHomePage({
 
   return (
     <>
+      <SiteNavigation locale={locale} placement="header" />
       <HomePage content={getHomeContent(locale)} />
       <SiteNavigation locale={locale} placement="footer" />
     </>

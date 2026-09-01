@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import homePageStyles from "@/components/home/HomePage.module.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={homePageStyles.preload}>{children}</body>
     </html>
   );
 }

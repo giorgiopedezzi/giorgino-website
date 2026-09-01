@@ -1,3 +1,5 @@
+.preload { font-kerning: auto; }
+
 .hero {
   padding-block: clamp(4.75rem, 8vw, 7rem) clamp(5.5rem, 10vw, 8.5rem);
 }
@@ -24,10 +26,10 @@
 
 .bordered { border-top: 1px solid var(--color-border); }
 
-.heroHeading { max-width: 53.75rem; font-size: clamp(3.5rem, 2.3rem + 3vw, 4.5rem); }
-.sectionHeading { font-size: var(--font-size-section-heading); }
+.heroHeading.heroHeading { max-width: 53.75rem; font-size: clamp(3.5rem, 2.3rem + 3vw, 4.5rem); }
+.sectionHeading.sectionHeading { font-size: var(--font-size-section-heading); }
 
-.statement {
+.statement.statement {
   max-width: 52rem;
   font-size: clamp(2rem, 1.7rem + 1.2vw, 2.5rem);
   line-height: 1.14;
@@ -38,7 +40,7 @@
 .darkMatterPending { opacity: 0; pointer-events: none; }
 .darkMatterVisible { opacity: 1; transition: opacity .8s ease; }
 .restoredWord { display: inline; background: #000; color: #fff; box-decoration-break: clone; padding-inline: .08em; }
-.closingThought { max-width: 47.5rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.4vw, 2.5rem); font-weight: 400; line-height: 1.14; letter-spacing: -0.02em; }
+.closingThought.closingThought { max-width: 47.5rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.4vw, 2.5rem); font-weight: 400; line-height: 1.14; letter-spacing: -0.02em; }
 .supportingText { max-width: 38.75rem; }
 
 .articleList { width: 100%; border-top: 1px solid var(--color-border); }
@@ -47,7 +49,7 @@
 .articleNumber { flex: 0 0 auto; color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .108em; }
 .articleNumber span { margin-left: .65rem; font-size: 1.125rem; letter-spacing: 0; }
 
-.runningHeading { font-size: clamp(2.5rem, 2rem + 1.8vw, 3.125rem); }
+.runningHeading.runningHeading { font-size: clamp(2.5rem, 2rem + 1.8vw, 3.125rem); }
 .runningSurface { display: grid; gap: 1.375rem; width: min(100%, 53.75rem); padding: 1.75rem; border: 1px solid rgb(228 233 233 / 22%); border-radius: .875rem; background: var(--color-running-surface); color: var(--color-text-on-running-muted); }
 .visualHeader { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); color: var(--color-text-inverse); font-size: 1.125rem; }
 .visualHeader span { color: rgb(228 233 233 / 70%); font-size: .875rem; }
@@ -62,16 +64,16 @@
 
 .aboutOpening, .decadeBlock, .missingMan, .pizzaBlock, .waitBlock, .nonninoBlock, .bookBlock { display: grid; align-items: start; }
 .aboutOpening { gap: 1.5rem; padding-block: clamp(4.75rem, 8vw, 7rem) clamp(4.5rem, 8vw, 6.5rem); }
-.aboutThanks { font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); font-weight: 400; line-height: 1.15; }
+.aboutThanks.aboutThanks { font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); font-weight: 400; line-height: 1.15; }
 .openingLine0, .openingLine1, .openingLine2, .openingLine3, .openingLine4, .openingLine5 { max-width: 38.75rem; font-size: var(--font-size-body); line-height: 1.45; }
 .openingLine0 { margin-top: 1.5rem; }
 .openingLine1 { margin-top: .5rem; }
 .openingLine4 { margin-top: 1rem; }
-.openingLine6 { max-width: 35rem; margin-top: .25rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); line-height: 1.15; }
+.openingLine6.openingLine6 { max-width: 35rem; margin-top: .25rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); line-height: 1.15; }
 
 .decadeBlock { gap: 2.625rem; padding-block: clamp(4.75rem, 8vw, 7rem) clamp(5.5rem, 10vw, 8.5rem); border-top: 1px solid var(--color-border); }
 .decadeList { display: grid; gap: 1.125rem; max-width: 42.5rem; font-size: var(--font-size-body); }
-.decadeAccent { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.2; }
+.decadeAccent.decadeAccent { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.2; }
 
 .missingMan { gap: 2.375rem; padding: clamp(4.75rem, 8vw, 7rem) var(--gutter) clamp(5.5rem, 10vw, 8.25rem); margin-inline: calc(var(--gutter) * -1); background: var(--color-dark-matter); }
 .artifact { display: flex; min-height: 26.25rem; width: min(100%, 53.75rem); flex-direction: column; justify-content: space-between; padding: 1.5rem; border: 1px solid var(--color-border); background: var(--color-background); color: var(--color-text-muted); font-size: 1rem; }
@@ -80,21 +82,21 @@
 .mutedSignoff, .bookSignoff { color: var(--color-text-muted); font-size: 1rem; }
 
 .pizzaBlock { justify-items: start; gap: 1.125rem; max-width: 41.25rem; margin-left: auto; padding-block: clamp(5rem, 9vw, 7.75rem) clamp(6rem, 11vw, 9.25rem); font-size: var(--font-size-body); line-height: 1.45; }
-.pizzaHeading { margin-bottom: 1rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); font-weight: 400; line-height: 1.15; }
+.pizzaHeading.pizzaHeading { margin-bottom: 1rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); font-weight: 400; line-height: 1.15; }
 .pizzaPause { margin-top: 1.25rem; }
 
 .waitBlock { gap: 2.375rem; padding: clamp(4.75rem, 8vw, 7rem) var(--gutter) clamp(5.5rem, 10vw, 8.25rem); margin-inline: calc(var(--gutter) * -1); background: var(--color-running); color: var(--color-text-inverse); }
-.waitHeading { font-family: var(--font-display); font-size: clamp(3rem, 2rem + 2.5vw, 4.25rem); font-weight: 400; line-height: 1; }
+.waitHeading.waitHeading { font-family: var(--font-display); font-size: clamp(3rem, 2rem + 2.5vw, 4.25rem); font-weight: 400; line-height: 1; }
 .waitBlock .bodyCopy { color: var(--color-dark-matter); }
 
 .nonninoBlock { justify-items: start; gap: 1.75rem; max-width: 42.5rem; margin-left: auto; padding-block: 9.75rem 10.5rem; }
-.nonninoHeading { font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); font-weight: 400; line-height: 1.15; }
+.nonninoHeading.nonninoHeading { font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem); font-weight: 400; line-height: 1.15; }
 
 .bookBlock { gap: 1.875rem; padding-block: 8.25rem 9rem; border-top: 1px solid var(--color-border); }
 .bookBlock .bodyCopy + .bodyCopy { margin-top: -.25rem; }
 .bookSignoff { margin-top: 4.5rem; }
 
-.contactHeading { max-width: 47.5rem; font-size: clamp(2.5rem, 2rem + 1.8vw, 3.125rem); }
+.contactHeading.contactHeading { max-width: 47.5rem; font-size: clamp(2.5rem, 2rem + 1.8vw, 3.125rem); }
 .contactDetails { display: flex; flex-wrap: wrap; gap: 1.625rem; color: var(--color-text-inverse); font-size: 1.0625rem; font-weight: 700; }
 .contactSupporting { color: rgb(243 241 235 / 58%); font-size: 1rem; }
 
@@ -113,8 +115,8 @@
 }
 
 @media (max-width: 32rem) {
-  .heroHeading { font-size: 3rem; }
-  .statement, .closingThought, .aboutThanks, .pizzaHeading, .nonninoHeading { font-size: 1.875rem; }
+  .heroHeading.heroHeading { font-size: 3rem; }
+  .statement.statement, .closingThought.closingThought, .aboutThanks.aboutThanks, .pizzaHeading.pizzaHeading, .nonninoHeading.nonninoHeading { font-size: 1.875rem; }
   .runningSurface p, .contactDetails { font-size: 1rem; }
   .artifact { min-height: 18rem; }
 }

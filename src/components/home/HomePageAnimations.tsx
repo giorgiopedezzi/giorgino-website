@@ -169,12 +169,28 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   }, [darkCharacters, darkPhase, darkText.stripped.length]);
 
   useEffect(() => {
+    // Create the context immediately so browsers that permit autoplay can play
+    // the typewriter as soon as the Dark Matter section appears. Browsers that
+    // suspend autoplay are still unlocked by the first trusted gesture below.
+    const context = new AudioContext();
+    audioContextRef.current = context;
+
     const enableKeyboardAudio = () => {
-      if (!audioContextRef.current) audioContextRef.current = new AudioContext();
-      void audioContextRef.current.resume();
+      void context.resume();
+      window.removeEventListener("pointerdown", enableKeyboardAudio);
+      window.removeEventListener("keydown", enableKeyboardAudio);
+      window.removeEventListener("touchstart", enableKeyboardAudio);
     };
+    // Audio contexts must be resumed from a trusted user gesture. A mouse-only
+    // listener leaves the typewriter silent for keyboard and touch navigation.
     window.addEventListener("pointerdown", enableKeyboardAudio, { once: true });
-    return () => window.removeEventListener("pointerdown", enableKeyboardAudio);
+    window.addEventListener("keydown", enableKeyboardAudio, { once: true });
+    window.addEventListener("touchstart", enableKeyboardAudio, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", enableKeyboardAudio);
+      window.removeEventListener("keydown", enableKeyboardAudio);
+      window.removeEventListener("touchstart", enableKeyboardAudio);
+    };
   }, []);
 
   const transitionTextCharacters = useMemo(
