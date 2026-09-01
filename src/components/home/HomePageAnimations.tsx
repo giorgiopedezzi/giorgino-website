@@ -31,10 +31,13 @@ type Props = {
 const BELIEF_TICK_MS = 42;
 const BELIEF_CHARACTERS_PER_TICK = 2;
 const DARK_MATTER_TYPEWRITER_TICK_MS = 34;
-const DARK_MATTER_RESTORE_TICK_MS = 260;
-const DARK_MATTER_FINAL_PAUSE_MS = 3_000;
+const DARK_MATTER_NARRATIVE_PAUSE_MS = 5_000;
+const DARK_MATTER_TRANSITION_TICK_MS = 70;
+const DARK_MATTER_FINAL_PAUSE_MS = 2_000;
 const DARK_MATTER_CHARACTERS_PER_TICK = 2;
-const DARK_MATTER_VIEWPORT_THRESHOLD = 0.4;
+const DARK_MATTER_VIEWPORT_THRESHOLD = 0.35;
+
+type DarkMatterPhase = "idle" | "narrative" | "restoring" | "final";
 
 function scrambleWord(word: string): string {
   const letters = Array.from(word);
@@ -96,8 +99,9 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   const darkMatterRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const [beliefCharacters, setBeliefCharacters] = useState<number | null>(null);
-  const [darkPhase, setDarkPhase] = useState<"idle" | "typing" | "restoring" | "final">("idle");
+  const [darkPhase, setDarkPhase] = useState<DarkMatterPhase>("idle");
   const [darkCharacters, setDarkCharacters] = useState(0);
+  const [transitionCharacterCount, setTransitionCharacterCount] = useState(0);
   const [restoredWords, setRestoredWords] = useState(0);
 
   const beliefText = beliefStatements.join("\n");
@@ -129,7 +133,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     const observer = new IntersectionObserver((entries) => {
       if (!entries.some((entry) => entry.isIntersecting)) return;
       observer.disconnect();
-      setDarkPhase("typing");
+      setDarkPhase("narrative");
       setDarkCharacters(0);
     }, { threshold: DARK_MATTER_VIEWPORT_THRESHOLD });
     if (darkMatterRef.current) observer.observe(darkMatterRef.current);
@@ -137,12 +141,13 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   }, [reducedMotion]);
 
   useEffect(() => {
-    if (darkPhase !== "typing") return;
+    if (darkPhase !== "narrative") return;
     if (darkCharacters >= darkText.stripped.length) {
       const timer = window.setTimeout(() => {
-        setDarkPhase("restoring");
+        setTransitionCharacterCount(0);
         setRestoredWords(0);
-      }, 0);
+        setDarkPhase("restoring");
+      }, DARK_MATTER_NARRATIVE_PAUSE_MS);
       return () => window.clearTimeout(timer);
     }
     const timer = window.setTimeout(() => {
@@ -161,25 +166,43 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     return () => window.removeEventListener("pointerdown", enableKeyboardAudio);
   }, []);
 
+  const transitionTextCharacters = useMemo(
+    () => Array.from(darkMatter.closingThought ?? ""),
+    [darkMatter.closingThought],
+  );
+
   useEffect(() => {
     if (darkPhase !== "restoring") return;
-    if (restoredWords >= darkText.words.length) {
+    if (transitionTextCharacters.length === 0) {
       const timer = window.setTimeout(() => setDarkPhase("final"), DARK_MATTER_FINAL_PAUSE_MS);
       return () => window.clearTimeout(timer);
     }
-    const timer = window.setTimeout(() => setRestoredWords((count) => count + 1), DARK_MATTER_RESTORE_TICK_MS);
+    if (transitionCharacterCount >= transitionTextCharacters.length) {
+      const timer = window.setTimeout(() => setDarkPhase("final"), DARK_MATTER_FINAL_PAUSE_MS);
+      return () => window.clearTimeout(timer);
+    }
+    const timer = window.setTimeout(() => {
+      setTransitionCharacterCount((count) => {
+        const nextCount = Math.min(count + 1, transitionTextCharacters.length);
+        setRestoredWords(Math.round((nextCount / transitionTextCharacters.length) * darkText.words.length));
+        return nextCount;
+      });
+    }, DARK_MATTER_TRANSITION_TICK_MS);
     return () => window.clearTimeout(timer);
-  }, [darkPhase, darkText.words.length, restoredWords]);
+  }, [darkPhase, darkText.words.length, transitionCharacterCount, transitionTextCharacters.length]);
 
   useEffect(() => () => {
     void audioContextRef.current?.close();
   }, []);
 
   const animatedBelief = reducedMotion || beliefCharacters === null ? beliefText : beliefText.slice(0, beliefCharacters);
-  const effectiveDarkPhase = reducedMotion ? "final" : darkPhase;
+  const effectiveDarkPhase: DarkMatterPhase = reducedMotion ? "final" : darkPhase;
   const visibleNarrative = effectiveDarkPhase === "idle" || effectiveDarkPhase === "final"
     ? darkText.canonical
     : scrambleText(darkText.stripped).slice(0, darkCharacters);
+  const visibleTransition = transitionTextCharacters.slice(0, transitionCharacterCount).join("");
+  const displayedRestoredWords = transitionTextCharacters.length === 0 ? darkText.words.length : restoredWords;
+  const isDarkMatterVisible = reducedMotion || darkPhase !== "idle";
 
   return (
     <>
@@ -199,7 +222,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
       </Section>
       </div>
 
-      <div ref={darkMatterRef}>
+      <div ref={darkMatterRef} className={isDarkMatterVisible ? styles.darkMatterVisible : styles.darkMatterPending}>
       <Section tone="darkMatter" aria-labelledby="dark-matter-heading">
         <PageContainer>
           <div className={styles.darkMatterStack}>
@@ -209,14 +232,15 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
               {effectiveDarkPhase === "restoring" ? (
                 <BodyCopy>
                   {darkText.words.map((word, index) => (
-                    <span className={index < restoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{word}{index < darkText.words.length - 1 ? " " : ""}</span>
+                    <span className={index < displayedRestoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{index < displayedRestoredWords ? word : scrambleWord(word)}{index < darkText.words.length - 1 ? " " : ""}</span>
                   ))}
                 </BodyCopy>
               ) : visibleNarrative.split("\n\n").map((paragraph, index) => <BodyCopy key={index}>{paragraph}</BodyCopy>)}
             </div>
+            {darkMatter.closingThought && effectiveDarkPhase === "restoring" && <DisplayHeading as="h3" className={styles.closingThought}>{visibleTransition}</DisplayHeading>}
             {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}>{darkMatter.closingThought}</DisplayHeading>}
-            {darkMatter.supportingText && <BodyCopy className={styles.supportingText}>{darkMatter.supportingText}</BodyCopy>}
-            <NextLink />
+            {darkMatter.supportingText && effectiveDarkPhase === "final" && <BodyCopy className={styles.supportingText}>{darkMatter.supportingText}</BodyCopy>}
+            {effectiveDarkPhase === "final" && <NextLink />}
           </div>
         </PageContainer>
       </Section>
