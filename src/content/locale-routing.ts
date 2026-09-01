@@ -1,5 +1,5 @@
-import { thinkingContent } from "./thinking";
-import type { Locale } from "./locales";
+import { isLocale, type Locale } from "./locales";
+import { getTranslatedThinkingSlug } from "./thinking";
 
 function pathSegments(pathname: string) {
   return pathname.split("?")[0].split("#")[0].split("/").filter(Boolean);
@@ -7,25 +7,14 @@ function pathSegments(pathname: string) {
 
 export function getLocalePath(pathname: string, targetLocale: Locale) {
   const segments = pathSegments(pathname);
-  const currentLocale = segments[0] as Locale | undefined;
+  const currentLocale = segments[0];
 
-  if (!currentLocale || (currentLocale !== "en" && currentLocale !== "it")) {
-    return `/${targetLocale}`;
-  }
-
-  if (currentLocale === targetLocale) {
-    return pathname;
-  }
+  if (!currentLocale || !isLocale(currentLocale)) return `/${targetLocale}`;
+  if (currentLocale === targetLocale) return pathname;
 
   if (segments[1] === "thinking" && segments[2]) {
-    const articleIndex = thinkingContent[currentLocale].articles.findIndex((article) => article.slug === segments[2]);
-    const translatedArticle = thinkingContent[targetLocale].articles[articleIndex];
-
-    if (!translatedArticle) {
-      return `/${targetLocale}/thinking`;
-    }
-
-    return `/${targetLocale}/thinking/${translatedArticle.slug}`;
+    const translatedSlug = getTranslatedThinkingSlug(currentLocale, segments[2], targetLocale);
+    return translatedSlug ? `/${targetLocale}/thinking/${translatedSlug}` : `/${targetLocale}/thinking`;
   }
 
   return `/${targetLocale}${segments.length > 1 ? `/${segments.slice(1).join("/")}` : ""}`;

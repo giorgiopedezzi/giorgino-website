@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { locales } from "@/content/locales";
-import { thinkingContent } from "@/content/thinking";
+import { getThinkingContent } from "@/content/thinking";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const entries = locales.flatMap((locale) => {
     const localePaths = [
       ...staticPaths,
-      ...thinkingContent[locale].articles.map((article) => `/thinking/${article.slug}`),
+      ...getThinkingContent(locale).articles.map((article) => `/thinking/${article.slug}`),
     ];
 
     return localePaths.map((path) => ({

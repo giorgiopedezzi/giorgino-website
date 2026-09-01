@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { getLocalePath } from "@/content/locale-routing";
 import type { Locale } from "@/content/locales";
 
 import styles from "./SiteNavigation.module.css";
@@ -23,7 +22,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         <Link
           aria-current={nextLocale === locale ? "page" : undefined}
           className={nextLocale === locale ? styles.activeLanguage : undefined}
-          href={`/locale/${nextLocale}?returnTo=${encodeURIComponent(getLocalePath(pathname, nextLocale))}`}
+          href={`/locale/${nextLocale}?returnTo=${encodeURIComponent(pathname)}`}
           key={nextLocale}
           lang={nextLocale}
         >

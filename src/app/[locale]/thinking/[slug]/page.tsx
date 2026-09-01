@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   if (!isLocale(locale)) return {};
 
   const article = getEditorialArticle(locale, slug);
-  if (!article) return {};
+  if (!article) notFound();
 
   return getLocaleMetadata(locale, `/${locale}/thinking/${slug}`, `${article.title} — Giorgio Pedezzi`, article.excerpt);
 }
