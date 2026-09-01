@@ -1,0 +1,27 @@
+{
+  "title": "A file-backed proof on Next.js 16",
+  "locale": "en",
+  "excerpt": "A representative English draft, edited through Keystatic's local API on Next.js 16.3.3.",
+  "status": "draft",
+  "body": [
+    {
+      "discriminant": "quote",
+      "value": {
+        "text": "A useful authoring layer should make the intended change easier to see, not hide it.",
+        "attribution": "GWR-14 proof"
+      }
+    },
+    {
+      "discriminant": "heading",
+      "value": "The file remains the authority"
+    },
+    {
+      "discriminant": "heading",
+      "value": "heading is heading"
+    },
+    {
+      "discriminant": "paragraph",
+      "value": "The editor changes structured content, while Git keeps the resulting artifact visible and reviewable."
+    }
+  ]
+}

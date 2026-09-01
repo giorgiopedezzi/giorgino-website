@@ -1,0 +1,21 @@
+{
+  "title": "Una prova file-backed su Next.js 16",
+  "locale": "it",
+  "excerpt": "Una bozza italiana rappresentativa per validare il ciclo di authoring locale.",
+  "status": "draft",
+  "publishedAt": null,
+  "body": [
+    {
+      "discriminant": "heading",
+      "value": "Il file resta la fonte autorevole"
+    },
+    {
+      "discriminant": "paragraph",
+      "value": "L'editor modifica contenuto strutturato, mentre Git mantiene il risultato visibile e revisionabile."
+    },
+    {
+      "discriminant": "note",
+      "value": "Questa fixture è deliberatamente isolata dal repository di contenuti di produzione."
+    }
+  ]
+}
