@@ -100,6 +100,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   const audioContextRef = useRef<AudioContext | null>(null);
   const [beliefCharacters, setBeliefCharacters] = useState<number | null>(null);
   const [darkPhase, setDarkPhase] = useState<DarkMatterPhase>("idle");
+  const [isDarkMatterInView, setIsDarkMatterInView] = useState(false);
   const [darkCharacters, setDarkCharacters] = useState(0);
   const [transitionCharacterCount, setTransitionCharacterCount] = useState(0);
   const [restoredWords, setRestoredWords] = useState(0);
@@ -133,12 +134,22 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     const observer = new IntersectionObserver((entries) => {
       if (!entries.some((entry) => entry.isIntersecting)) return;
       observer.disconnect();
-      setDarkPhase("narrative");
-      setDarkCharacters(0);
+      setIsDarkMatterInView(true);
     }, { threshold: DARK_MATTER_VIEWPORT_THRESHOLD });
     if (darkMatterRef.current) observer.observe(darkMatterRef.current);
     return () => observer.disconnect();
   }, [reducedMotion]);
+
+  const isBeliefComplete = reducedMotion || beliefCharacters === beliefText.length;
+
+  useEffect(() => {
+    if (!isBeliefComplete || !isDarkMatterInView || darkPhase !== "idle") return;
+    const timer = window.setTimeout(() => {
+      setDarkPhase("narrative");
+      setDarkCharacters(0);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [darkPhase, isBeliefComplete, isDarkMatterInView]);
 
   useEffect(() => {
     if (darkPhase !== "narrative") return;
@@ -202,7 +213,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     : scrambleText(darkText.stripped).slice(0, darkCharacters);
   const visibleTransition = transitionTextCharacters.slice(0, transitionCharacterCount).join("");
   const displayedRestoredWords = transitionTextCharacters.length === 0 ? darkText.words.length : restoredWords;
-  const isDarkMatterVisible = reducedMotion || darkPhase !== "idle";
+  const isDarkMatterVisible = reducedMotion || (isBeliefComplete && darkPhase !== "idle");
 
   return (
     <>
