@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 
+import { validateThinkingAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { getEditorialArticle, getThinkingContent, getTranslatedThinkingSlug, validateThinkingRepository } from "../src/content/thinking";
 import { getLocalePath } from "../src/content/locale-routing";
 
@@ -49,9 +50,38 @@ expectValidationFailure({ status: "scheduled" }, "unsupported status");
 expectValidationFailure({ slug: "Not a valid slug" }, "lowercase URL slug");
 expectValidationFailure({ translationKey: "Not a valid identity" }, "stable identity");
 expectValidationFailure({ body: [{ type: "not-a-block" }] }, "unsupported block type");
+expectValidationFailure({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "" } }] }, "expected a non-empty string");
+expectValidationFailure({ body: [{ discriminant: "paragraph", value: "" }] }, "expected a non-empty string");
 assert.throws(
   () => validateThinkingRepository(indexes, [pairedArticles()[0]]),
   (error: unknown) => error instanceof Error && error.message.includes("every supported locale"),
 );
+assert.throws(
+  () => validateThinkingRepository({
+    ...indexes,
+    en: {
+      ...indexes.en,
+      dialogueArtifacts: [{
+        discriminant: "dialogueArtifact",
+        value: { screenshot: "/thinking-media/dialogue.png", alt: "A dialogue screenshot", line: "A short line", href: "javascript:alert(1)" },
+      }],
+    },
+  }, pairedArticles()),
+  (error: unknown) => error instanceof Error && error.message.includes("internal path or an http(s) URL"),
+);
+assert.throws(
+  () => validateThinkingAuthoringUpdate({ additions: [{ path: "src/content/home.ts", contents: "" }], deletions: [] }),
+  (error: unknown) => error instanceof Error && error.message.includes("outside the Thinking content and media directories"),
+);
+assert.throws(
+  () => validateThinkingAuthoringUpdate({
+    additions: [{
+      path: "src/content/thinking/en/articles/the-tears-were-ours.json",
+      contents: Buffer.from(JSON.stringify(article({ slug: "signal-noise-and-plausible-answers" }))).toString("base64url"),
+    }],
+    deletions: [],
+  }),
+  (error: unknown) => error instanceof Error && error.message.includes("duplicate slug"),
+);
 
-console.log("Verified Thinking content loading, draft exclusion, translation-key routing, and actionable schema validation.");
+console.log("Verified Thinking content loading, draft exclusion, translation-key routing, Keystatic block mapping, and guarded authoring updates.");

@@ -34,54 +34,77 @@ function requireString(value: unknown, path: string) {
   return value;
 }
 
+function requireSafeLink(value: unknown, path: string) {
+  const href = requireString(value, path);
+  if (!href.startsWith("/") && !/^https?:\/\//i.test(href)) {
+    fail(path, "must be an internal path or an http(s) URL");
+  }
+  return href;
+}
+
+function requireThinkingMedia(value: unknown, path: string) {
+  const src = requireString(value, path);
+  if (!src.startsWith("/thinking-media/")) fail(path, "must reference a repository-owned /thinking-media/ asset");
+  return src;
+}
+
+function isKeystaticBlock(value: unknown): value is { discriminant: string; value: unknown } {
+  return isRecord(value) && typeof value.discriminant === "string" && "value" in value;
+}
+
 function validateDialogueArtifacts(value: unknown, path: string): DialogueArtifact[] {
   if (!Array.isArray(value)) fail(path, "expected an array");
 
   return value.map((artifact, index) => {
     const artifactPath = `${path}[${index}]`;
-    if (!isRecord(artifact)) fail(artifactPath, "expected an object");
+    const artifactValue = isKeystaticBlock(artifact) && artifact.discriminant === "dialogueArtifact" ? artifact.value : artifact;
+    if (!isRecord(artifactValue)) fail(artifactPath, "expected an object");
     const result: DialogueArtifact = {
-      screenshot: requireString(artifact.screenshot, `${artifactPath}.screenshot`),
-      alt: requireString(artifact.alt, `${artifactPath}.alt`),
-      line: requireString(artifact.line, `${artifactPath}.line`),
+      screenshot: requireThinkingMedia(artifactValue.screenshot, `${artifactPath}.screenshot`),
+      alt: requireString(artifactValue.alt, `${artifactPath}.alt`),
+      line: requireString(artifactValue.line, `${artifactPath}.line`),
     };
-    if (artifact.reflection !== undefined) result.reflection = requireString(artifact.reflection, `${artifactPath}.reflection`);
-    if (artifact.href !== undefined) result.href = requireString(artifact.href, `${artifactPath}.href`);
+    if (artifactValue.reflection !== undefined && artifactValue.reflection !== null) result.reflection = requireString(artifactValue.reflection, `${artifactPath}.reflection`);
+    if (artifactValue.href !== undefined && artifactValue.href !== null) result.href = requireSafeLink(artifactValue.href, `${artifactPath}.href`);
     return result;
   });
 }
 
 function validateBlock(value: unknown, path: string): EditorialBlock {
   if (!isRecord(value)) fail(path, "expected an object");
-  const type = requireString(value.type, `${path}.type`);
+  const type = requireString(isKeystaticBlock(value) ? value.discriminant : value.type, `${path}.type`);
+  const blockValue = isKeystaticBlock(value) ? value.value : value;
 
   switch (type) {
     case "paragraph":
     case "heading":
     case "note":
-      return { type, text: requireString(value.text, `${path}.text`) };
+      return { type, text: requireString(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
     case "quote": {
-      const block: Extract<EditorialBlock, { type: "quote" }> = { type, text: requireString(value.text, `${path}.text`) };
-      if (value.attribution !== undefined) block.attribution = requireString(value.attribution, `${path}.attribution`);
+      const quote = isRecord(blockValue) ? blockValue : value;
+      const block: Extract<EditorialBlock, { type: "quote" }> = { type, text: requireString(quote.text, `${path}.text`) };
+      if (quote.attribution !== undefined && quote.attribution !== null) block.attribution = requireString(quote.attribution, `${path}.attribution`);
       return block;
     }
     case "image": {
+      const image = isRecord(blockValue) ? blockValue : value;
       const block: Extract<EditorialBlock, { type: "image" }> = {
         type: "image",
-        src: requireString(value.src, `${path}.src`),
-        alt: requireString(value.alt, `${path}.alt`),
+        src: requireThinkingMedia(image.src, `${path}.src`),
+        alt: requireString(image.alt, `${path}.alt`),
       };
-      if (value.caption !== undefined) block.caption = requireString(value.caption, `${path}.caption`);
+      if (image.caption !== undefined && image.caption !== null) block.caption = requireString(image.caption, `${path}.caption`);
       return block;
     }
     case "artifact": {
+      const artifact = isRecord(blockValue) ? blockValue : value;
       const block: Extract<EditorialBlock, { type: "artifact" }> = {
         type: "artifact",
-        src: requireString(value.src, `${path}.src`),
-        alt: requireString(value.alt, `${path}.alt`),
+        src: requireThinkingMedia(artifact.src, `${path}.src`),
+        alt: requireString(artifact.alt, `${path}.alt`),
       };
-      if (value.caption !== undefined) block.caption = requireString(value.caption, `${path}.caption`);
-      if (value.note !== undefined) block.note = requireString(value.note, `${path}.note`);
+      if (artifact.caption !== undefined && artifact.caption !== null) block.caption = requireString(artifact.caption, `${path}.caption`);
+      if (artifact.note !== undefined && artifact.note !== null) block.note = requireString(artifact.note, `${path}.note`);
       return block;
     }
     case "divider":
