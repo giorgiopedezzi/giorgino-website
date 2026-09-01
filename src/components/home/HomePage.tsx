@@ -9,6 +9,7 @@ import {
 } from "@/components/primitives/Editorial";
 import type { HomeContent } from "@/content/types";
 
+import { HomePageAnimations } from "./HomePageAnimations";
 import styles from "./HomePage.module.css";
 
 type HomePageProps = { content: HomeContent };
@@ -40,34 +41,17 @@ export function HomePage({ content }: HomePageProps) {
         </PageContainer>
       </Section>
 
-      <Section className={styles.bordered} aria-labelledby="belief-heading">
-        <PageContainer>
-          <div className={styles.beliefStack}>
-            <SectionLabel>{content.belief.label}</SectionLabel>
-            {(content.belief.statements ?? [content.belief.heading]).map((statement, index) => (
-              <DisplayHeading as="h2" className={styles.statement} id={index === 0 ? "belief-heading" : undefined} key={statement}>
-                {statement}
-              </DisplayHeading>
-            ))}
-            <NextLink />
-          </div>
-        </PageContainer>
-      </Section>
-
-      <Section tone="darkMatter" aria-labelledby="dark-matter-heading">
-        <PageContainer>
-          <div className={styles.darkMatterStack}>
-            <SectionLabel>{content.darkMatter.label}</SectionLabel>
-            <DisplayHeading as="h2" id="dark-matter-heading" className={styles.sectionHeading}>{content.darkMatter.heading}</DisplayHeading>
-            <div className={styles.narrative}>
-              {(content.darkMatter.narrative ?? [content.darkMatter.body]).map((paragraph) => <BodyCopy key={paragraph}>{paragraph}</BodyCopy>)}
-            </div>
-            {content.darkMatter.closingThought && <DisplayHeading as="h3" className={styles.closingThought}>{content.darkMatter.closingThought}</DisplayHeading>}
-            {content.darkMatter.supportingText && <BodyCopy className={styles.supportingText}>{content.darkMatter.supportingText}</BodyCopy>}
-            <NextLink />
-          </div>
-        </PageContainer>
-      </Section>
+      <HomePageAnimations
+        beliefLabel={content.belief.label}
+        beliefStatements={content.belief.statements ?? [content.belief.heading]}
+        darkMatter={{
+          label: content.darkMatter.label,
+          heading: content.darkMatter.heading,
+          narrative: content.darkMatter.narrative ?? [content.darkMatter.body],
+          closingThought: content.darkMatter.closingThought,
+          supportingText: content.darkMatter.supportingText,
+        }}
+      />
 
       <Section className={styles.bordered} aria-labelledby="thinking-heading">
         <PageContainer>
