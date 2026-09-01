@@ -2,13 +2,17 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { locales, type Locale } from "./locales";
+import { validateAuthoringFoundation } from "./site-content";
 import { validateThinkingRepository } from "./thinking";
 
 type LocalUpdate = { additions: Array<{ path: string; contents: string }>; deletions: Array<{ path: string }> };
 
 const contentRoot = join(process.cwd(), "src", "content", "thinking");
+const siteContentRoot = join(process.cwd(), "src", "content", "site");
 const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
+const siteContentPath = /^src\/content\/site\/(en|it)\/authoring-foundation\.json$/;
+const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:jpe?g|png|webp|gif)$/i;
 
 function parseUpdate(value: unknown): LocalUpdate {
   if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error("expected an update object");
@@ -50,4 +54,31 @@ export function validateThinkingAuthoringUpdate(value: unknown) {
     return [...paths].filter((path) => !deletions.has(path)).sort().map((path) => ({ path: path.replace("src/content/thinking/", ""), value: readCandidate(path) }));
   });
   validateThinkingRepository(indexes, articles);
+}
+
+export function validateSiteAuthoringUpdate(value: unknown) {
+  const update = parseUpdate(value);
+  const additions = new Map(update.additions.map((entry) => [entry.path, entry.contents]));
+  const deletions = new Set(update.deletions.map((entry) => entry.path));
+
+  for (const path of [...additions.keys(), ...deletions]) {
+    if (!contentPath.test(path) && !mediaPath.test(path) && !siteContentPath.test(path) && !siteMediaPath.test(path)) {
+      throw new Error(`saving ${path} is outside approved site content and media directories`);
+    }
+  }
+
+  const touchesThinking = [...additions.keys(), ...deletions].some((path) => contentPath.test(path) || mediaPath.test(path));
+  if (touchesThinking) validateThinkingAuthoringUpdate(value);
+
+  const readFoundation = (locale: Locale) => {
+    const path = `src/content/site/${locale}/authoring-foundation.json`;
+    if (deletions.has(path)) throw new Error(`${path} is required`);
+    const addition = additions.get(path);
+    const source = addition === undefined
+      ? readJson(join(siteContentRoot, locale, "authoring-foundation.json"))
+      : parseJsonAddition(addition, path);
+    return validateAuthoringFoundation(source, `${locale}/authoring-foundation.json`);
+  };
+
+  for (const locale of locales) readFoundation(locale);
 }

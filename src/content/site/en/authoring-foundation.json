@@ -1,0 +1,20 @@
+{
+  "title": "Local authoring foundation",
+  "summary": "A deliberately small, localized non-Thinking content fixture used to prove the site authoring boundary.",
+  "isVisible": true,
+  "link": "/en",
+  "media": [
+    {
+      "src": "/site-media/animated-authoring-proof.gif",
+      "alt": "A small animated proof image for the local authoring renderer",
+      "caption": "Animated GIF renderer proof"
+    }
+  ],
+  "items": [
+    {
+      "order": 1,
+      "label": "Homepage",
+      "href": "/en"
+    }
+  ]
+}
