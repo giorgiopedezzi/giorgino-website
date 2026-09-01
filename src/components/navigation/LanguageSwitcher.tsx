@@ -19,15 +19,21 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   return (
     <nav aria-label={text.label} className={styles.languageSwitcher}>
       {(["en", "it"] as const).map((nextLocale) => (
-        <Link
-          aria-current={nextLocale === locale ? "page" : undefined}
-          className={nextLocale === locale ? styles.activeLanguage : undefined}
-          href={`/locale/${nextLocale}?returnTo=${encodeURIComponent(pathname)}`}
-          key={nextLocale}
-          lang={nextLocale}
-        >
-          {nextLocale === "en" ? text.english : text.italian}
-        </Link>
+        nextLocale === "it" ? (
+          <span aria-disabled="true" className={styles.disabledLanguage} key={nextLocale} lang={nextLocale}>
+            {text.italian}
+          </span>
+        ) : (
+          <Link
+            aria-current={nextLocale === locale ? "page" : undefined}
+            className={nextLocale === locale ? styles.activeLanguage : undefined}
+            href={`/locale/${nextLocale}?returnTo=${encodeURIComponent(pathname)}`}
+            key={nextLocale}
+            lang={nextLocale}
+          >
+            {text.english}
+          </Link>
+        )
       ))}
     </nav>
   );
