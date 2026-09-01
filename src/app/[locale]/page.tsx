@@ -15,12 +15,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  const { metadata } = getHomeContent(locale);
 
   return getLocaleMetadata(
     locale,
     `/${locale}`,
-    locale === "it" ? "Giorgio Pedezzi — Appunti dall'intervallo" : "Giorgio Pedezzi — Notes from the in-between",
-    locale === "it" ? "Scritti, progetti e appunti di Giorgio Pedezzi." : "Writing, projects, and notes by Giorgio Pedezzi.",
+    metadata.title,
+    metadata.description,
   );
 }
 

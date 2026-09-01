@@ -11,9 +11,11 @@
 .sectionHeading.sectionHeading { font-size: var(--font-size-section-heading); }
 .timeline { display: grid; gap: var(--space-sm); margin-top: var(--space-sm); }
 .timelineFinal { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.1; }
-.artifact { display: flex; flex-direction: column; justify-content: space-between; width: min(100%, 53.75rem); min-height: clamp(16rem, 38vw, 26.25rem); padding: var(--space-md); border: 1px solid var(--color-border); background: var(--color-background); }
+.artifact { display: flex; flex-direction: column; justify-content: space-between; width: min(100%, 53.75rem); min-height: clamp(16rem, 38vw, 26.25rem); padding: var(--space-md); margin: 0; border: 1px solid var(--color-border); background: var(--color-background); }
 .artifact span { color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .108em; text-transform: uppercase; }
 .artifact p, .muted { color: var(--color-text-muted); font-size: 1rem; }
+.artifactImage { width: 100%; height: auto; max-height: 32rem; object-fit: contain; }
+.artifact figcaption { color: var(--color-text-muted); font-size: 1rem; }
 .reflect { font-size: clamp(2rem, 1.45rem + 1.6vw, 2.5rem); }
 .pizza { min-height: 41rem; }
 .pizzaStack { width: min(100%, 41.25rem); margin-left: auto; gap: var(--space-sm); }
@@ -21,6 +23,7 @@
 .waitHeading.waitHeading { font-size: var(--font-size-section-heading); }
 .artifactDark { border-color: rgb(228 233 233 / 35%); background: var(--color-running-surface); }
 .artifactDark span, .artifactDark p { color: var(--color-text-on-running-muted); }
+.artifactDark figcaption { color: var(--color-text-on-running-muted); }
 .nonnino { min-height: 35rem; display: grid; align-items: center; }
 .nonninoStack { width: min(100%, 42.5rem); margin-left: auto; gap: var(--space-md); }
 .next { width: fit-content; margin-top: var(--space-lg); color: var(--color-text-muted); font-size: 1rem; text-decoration: none; }

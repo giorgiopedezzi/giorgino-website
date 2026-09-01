@@ -4,6 +4,12 @@ export type ContentBlock = {
   body: string;
 };
 
+export type SiteMedia = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
 export type ArticlePreview = {
   number: string;
   title: string;
@@ -45,38 +51,54 @@ export type EditorialContent = {
   dialogueArtifacts: DialogueArtifact[];
 };
 
-export type TimelineEntry = {
-  title: string;
+export type PersonalArtifact = {
+  placeholder: string;
+  media?: SiteMedia;
+};
+
+export type PersonalNarrative = {
+  label: string;
+  stillHere: string;
+  thanks: string;
+  opening: string[];
+  decadeHeading: string;
+  decadeEntries: string[];
+  artifactLabel: string;
+  missingMan: {
+    heading: string;
+    body: string;
+    artifact: PersonalArtifact;
+    reflection: string;
+    signoff: string;
+  };
+  pizza: { heading: string; lines: string[] };
+  wait: { heading: string; body: string; artifact: PersonalArtifact };
+  nonnino: { label: string; heading: string };
+  book: { label: string; heading: string; lines: string[]; signoff: string };
+  continueLabel: string;
 };
 
 export type HomeContent = {
+  metadata: { title: string; description: string };
+  nextLabel: string;
   hero: ContentBlock;
-  belief: ContentBlock & { statements?: string[] };
-  darkMatter: ContentBlock & {
-    narrative?: string[];
+  belief: { label: string; statements: string[] };
+  darkMatter: {
+    label: string;
+    heading: string;
+    narrative: string[];
     closingThought?: string;
     supportingText?: string;
   };
-  thinking: ContentBlock & {
-    articleTitle: string;
-    articleSummary: string;
-    articles?: ArticlePreview[];
-  };
+  thinking: ContentBlock & { articles: ArticlePreview[] };
   running: ContentBlock & {
+    surfaceHeading: string;
+    surfaceLabel: string;
     placeholder: string;
     supportingStatement?: string;
   };
-  arc: ContentBlock & { timeline?: TimelineEntry[] };
+  arc: { label: string; heading: string; timeline: string[] };
   human: ContentBlock;
-  about: ContentBlock & {
-    opening?: string[];
-    decadeHeading?: string;
-    decadeEntries?: string[];
-    missingMan?: { heading: string; body: string; artifact: string; reflection: string; signoff: string };
-    pizza?: { heading: string; lines: string[] };
-    wait?: { heading: string; body: string; artifact: string };
-    nonnino?: { label: string; heading: string };
-    book?: { heading: string; lines: string[]; signoff: string };
-  };
-  contact: ContentBlock & { details?: string[]; supportingText?: string };
+  personalNarrative: PersonalNarrative;
+  contact: { label: string; heading: string; details: string[]; supportingText?: string };
 };
