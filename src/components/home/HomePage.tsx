@@ -10,11 +10,12 @@ import {
   SectionLabel,
 } from "@/components/primitives/Editorial";
 import type { HomeContent, PersonalArtifact } from "@/content/types";
+import type { ContactContent } from "@/content/contact";
 
 import { HomePageAnimations } from "./HomePageAnimations";
 import styles from "./HomePage.module.css";
 
-type HomePageProps = { content: HomeContent };
+type HomePageProps = { content: HomeContent; contact: ContactContent };
 
 const chartBars = [26, 42, 65, 88, 72, 52, 72, 102, 82, 45];
 
@@ -32,7 +33,7 @@ function Artifact({ artifact, label, dark = false }: { artifact: PersonalArtifac
   );
 }
 
-export function HomePage({ content }: HomePageProps) {
+export function HomePage({ content, contact }: HomePageProps) {
   const articles = content.thinking.articles;
   const about = content.personalNarrative;
 
@@ -183,10 +184,10 @@ export function HomePage({ content }: HomePageProps) {
       <Section tone="dark" aria-labelledby="contact-heading">
         <PageContainer>
           <div className={styles.contactStack}>
-            <SectionLabel>{content.contact.label}</SectionLabel>
-            <DisplayHeading as="h2" id="contact-heading" className={styles.contactHeading}>{content.contact.heading}</DisplayHeading>
-            <div className={styles.contactDetails}>{content.contact.details.map((detail) => <p key={detail}>{detail}</p>)}</div>
-            {content.contact.supportingText && <p className={styles.contactSupporting}>{content.contact.supportingText}</p>}
+            <SectionLabel>{contact.label}</SectionLabel>
+            <DisplayHeading as="h2" id="contact-heading" className={styles.contactHeading}>{contact.heading}</DisplayHeading>
+            <div className={styles.contactDetails}>{contact.details.map((detail) => <p key={detail}>{detail}</p>)}</div>
+            {contact.supportingText && <p className={styles.contactSupporting}>{contact.supportingText}</p>}
           </div>
         </PageContainer>
       </Section>

@@ -3,6 +3,9 @@ import assert from "node:assert/strict";
 import { validateSiteAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { getAuthoringFoundation, validateAuthoringFoundation } from "../src/content/site-content";
 import { getRunningContent, validateRunningContent } from "../src/content/running";
+import { getContactContent, validateContactContent } from "../src/content/contact";
+import { getSiteSettings, validateSiteSettings } from "../src/content/site-settings";
+import { getLocaleMetadata } from "../src/content/locale-metadata";
 
 const foundation = getAuthoringFoundation("en");
 assert.equal(foundation.title, "Local authoring foundation");
@@ -13,6 +16,23 @@ assert.deepEqual(validateAuthoringFoundation({ ...foundation, media: [validMedia
 assert.throws(
   () => validateAuthoringFoundation({ ...foundation, media: [{ src: "/site-media/unsupported.svg", alt: "SVG" }] }),
   /JPEG, PNG, WebP, or GIF/,
+);
+
+const settings = getSiteSettings("en");
+assert.equal(getSiteSettings("it").navigation.contact, "Contatti");
+assert.throws(() => validateSiteSettings({ ...settings, socialLinks: [{ label: "Unsafe", href: "javascript:alert(1)" }] }), /http\(s\) or mailto URL/);
+assert.throws(() => validateSiteSettings({ ...settings, metadata: { ...settings.metadata, socialImage: "/outside/image.jpg" } }), /repository-owned/);
+const contact = getContactContent("en");
+assert.equal(getContactContent("it").heading, "Continuiamo la conversazione.");
+assert.throws(() => validateContactContent({ ...contact, details: [] }), /between 1 and 6/);
+const metadata = getLocaleMetadata("en", "/en/contact", { ...contact.metadata, socialTitle: "Social Contact", socialImage: "/site-media/animated-authoring-proof.gif" });
+assert.equal(metadata.alternates?.canonical, "/en/contact");
+assert.deepEqual(metadata.alternates?.languages, { en: "/en/contact", it: "/it/contact", "x-default": "/en" });
+assert.equal(metadata.openGraph?.title, "Social Contact");
+assert.deepEqual(metadata.twitter?.images, ["/site-media/animated-authoring-proof.gif"]);
+assert.throws(
+  () => validateSiteAuthoringUpdate({ additions: [{ path: "src/content/site/fr/contact.json", contents: "" }], deletions: [] }),
+  /outside approved site content and media directories/,
 );
 assert.throws(
   () => validateAuthoringFoundation({ ...foundation, link: "javascript:alert(1)" }),
@@ -55,4 +75,4 @@ assert.throws(
   /outside approved site content and media directories/,
 );
 
-console.log("Verified localized authoring content, Running ordering and visibility data, URL and media validation, and approved write paths.");
+console.log("Verified localized site settings, Contact, homepage, Running, URL/media constraints, and approved write paths.");

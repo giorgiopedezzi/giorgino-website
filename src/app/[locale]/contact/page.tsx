@@ -3,17 +3,14 @@ import { notFound } from "next/navigation";
 import { RoutePlaceholder } from "@/components/routes/RoutePlaceholder";
 import { isLocale } from "@/content/locales";
 import { getLocaleMetadata } from "@/content/locale-metadata";
+import { getContactContent } from "@/content/contact";
+import { getSiteSettings } from "@/content/site-settings";
 
 export async function generateMetadata({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
-  return getLocaleMetadata(
-    locale,
-    `/${locale}/contact`,
-    locale === "it" ? "Contatti — Giorgio Pedezzi" : "Contact — Giorgio Pedezzi",
-    locale === "it" ? "Come continuare la conversazione con Giorgio Pedezzi." : "How to continue the conversation with Giorgio Pedezzi.",
-  );
+  return getLocaleMetadata(locale, `/${locale}/contact`, getContactContent(locale).metadata);
 }
 
 export default async function ContactPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
@@ -21,5 +18,6 @@ export default async function ContactPage({ params }: Readonly<{ params: Promise
 
   if (!isLocale(locale)) notFound();
 
-  return <RoutePlaceholder locale={locale} label={locale === "it" ? "Contatti" : "Contact"} heading={locale === "it" ? "Continuiamo la conversazione." : "Continue the conversation."} body={locale === "it" ? "I dettagli di contatto confermati appariranno qui." : "Confirmed contact details will appear here."} />;
+  const content = getContactContent(locale);
+  return <RoutePlaceholder locale={locale} label={content.label} heading={content.heading} body={content.body} details={content.details} links={getSiteSettings(locale).socialLinks} />;
 }

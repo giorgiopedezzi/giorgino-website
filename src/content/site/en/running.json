@@ -1,5 +1,5 @@
 {
-  "metadata": { "title": "Running / Building — Giorgio Pedezzi", "description": "A small visual language for a moving human being." },
+  "metadata": { "title": "Running / Building — Giorgio Pedezzi", "description": "A small visual language for a moving human being.", "socialTitle": "Running / Building — Giorgio Pedezzi", "socialDescription": "A small visual language for a moving human being." },
   "hero": { "label": "Running / Building", "heading": "The runner enlightens the data.", "intro": "Without the runner, there is telemetry. With the runner, the data acquires meaning." },
   "problem": { "label": "The problem", "heading": "More metrics do not automatically create more understanding.", "body": "A running plan can look precise while still missing the person who has to live it. Information is useful only when it helps a runner make sense of what is happening.", "isVisible": true },
   "restraint": { "label": "A deliberate restraint", "heading": "Not another dashboard asking to be obeyed.", "body": "This is not an attempt to reproduce every metric, build a universal coach, or turn running into a compliance exercise. It makes room for interpretation while keeping the objective in view.", "isVisible": true },

@@ -5,6 +5,8 @@ import { locales, type Locale } from "./locales";
 import { validateHomeContent } from "./home";
 import { validateAuthoringFoundation } from "./site-content";
 import { validateRunningContent } from "./running";
+import { validateContactContent } from "./contact";
+import { validateSiteSettings } from "./site-settings";
 import { validateThinkingRepository } from "./thinking";
 
 type LocalUpdate = { additions: Array<{ path: string; contents: string }>; deletions: Array<{ path: string }> };
@@ -13,7 +15,7 @@ const contentRoot = join(process.cwd(), "src", "content", "thinking");
 const siteContentRoot = join(process.cwd(), "src", "content", "site");
 const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
-const siteContentPath = /^src\/content\/site\/(en|it)\/(?:authoring-foundation|home|running)\.json$/;
+const siteContentPath = /^src\/content\/site\/(en|it)\/(?:authoring-foundation|contact|home|running|site-settings)\.json$/;
 const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:jpe?g|png|webp|gif)$/i;
 
 function parseUpdate(value: unknown): LocalUpdate {
@@ -100,9 +102,19 @@ export function validateSiteAuthoringUpdate(value: unknown) {
     return validateRunningContent(source, `${locale}/running.json`);
   };
 
+  const readLocalized = (locale: Locale, name: "contact" | "site-settings") => {
+    const path = `src/content/site/${locale}/${name}.json`;
+    if (deletions.has(path)) throw new Error(`${path} is required`);
+    const addition = additions.get(path);
+    const source = addition === undefined ? readJson(join(siteContentRoot, locale, `${name}.json`)) : parseJsonAddition(addition, path);
+    return name === "contact" ? validateContactContent(source, `${locale}/${name}.json`) : validateSiteSettings(source, `${locale}/${name}.json`);
+  };
+
   for (const locale of locales) {
     readFoundation(locale);
     readHome(locale);
     readRunning(locale);
+    readLocalized(locale, "contact");
+    readLocalized(locale, "site-settings");
   }
 }

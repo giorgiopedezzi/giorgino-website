@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { HomePage } from "@/components/home/HomePage";
 import { SiteNavigation } from "@/components/navigation/SiteNavigation";
 import { getHomeContent } from "@/content/home";
+import { getContactContent } from "@/content/contact";
 import { getLocaleMetadata } from "@/content/locale-metadata";
 import { isLocale, locales } from "@/content/locales";
 
@@ -17,12 +18,7 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   if (!isLocale(locale)) return {};
   const { metadata } = getHomeContent(locale);
 
-  return getLocaleMetadata(
-    locale,
-    `/${locale}`,
-    metadata.title,
-    metadata.description,
-  );
+  return getLocaleMetadata(locale, `/${locale}`, metadata);
 }
 
 export default async function LocalizedHomePage({
@@ -39,7 +35,7 @@ export default async function LocalizedHomePage({
   return (
     <>
       <SiteNavigation locale={locale} placement="header" />
-      <HomePage content={getHomeContent(locale)} />
+      <HomePage content={getHomeContent(locale)} contact={getContactContent(locale)} />
       <SiteNavigation locale={locale} placement="footer" />
     </>
   );

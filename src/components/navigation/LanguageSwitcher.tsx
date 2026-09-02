@@ -7,21 +7,15 @@ import type { Locale } from "@/content/locales";
 
 import styles from "./SiteNavigation.module.css";
 
-const copy = {
-  en: { label: "Language", english: "EN", italian: "IT" },
-  it: { label: "Lingua", english: "EN", italian: "IT" },
-} as const;
-
-export function LanguageSwitcher({ locale }: { locale: Locale }) {
+export function LanguageSwitcher({ locale, copy }: { locale: Locale; copy: { label: string; english: string; italian: string } }) {
   const pathname = usePathname() ?? `/${locale}`;
-  const text = copy[locale];
 
   return (
-    <nav aria-label={text.label} className={styles.languageSwitcher}>
+    <nav aria-label={copy.label} className={styles.languageSwitcher}>
       {(["en", "it"] as const).map((nextLocale) => (
         nextLocale === "it" ? (
           <span aria-disabled="true" className={styles.disabledLanguage} key={nextLocale} lang={nextLocale}>
-            {text.italian}
+            {copy.italian}
           </span>
         ) : (
           <Link
@@ -31,7 +25,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
             key={nextLocale}
             lang={nextLocale}
           >
-            {text.english}
+            {copy.english}
           </Link>
         )
       ))}

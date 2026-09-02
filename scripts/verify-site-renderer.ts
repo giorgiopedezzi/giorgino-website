@@ -51,7 +51,18 @@ async function main() {
     assert.equal(image.headers.get("content-type"), "image/gif");
     assert.equal(bytes.subarray(0, 6).toString("ascii"), "GIF89a");
     assert.ok(bytes.filter((byte) => byte === 0x2c).length >= 2, "the GIF must retain two image frames");
-    console.log("Verified the development renderer emits the authoring preview and preserves the two-frame animated GIF.");
+
+    const publicPaths = ["/en", "/it", "/en/contact", "/it/contact", "/en/really-about-me", "/it/really-about-me", "/en/running", "/it/running", "/en/thinking", "/it/thinking", "/en/thinking/dialogues", "/it/thinking/dialogues"];
+    for (const path of publicPaths) {
+      const response = await fetch(`${baseUrl}${path}`);
+      assert.equal(response.status, 200, `${path} must remain publicly renderable`);
+    }
+    const contactHtml = await (await fetch(`${baseUrl}/en/contact`)).text();
+    assert.match(contactHtml, /Confirmed contact details will appear here\./);
+    assert.match(contactHtml, /<title>Contact .* Giorgio Pedezzi<\/title>/);
+    assert.match(contactHtml, /rel="canonical" href="http:\/\/localhost:\d+\/en\/contact"/);
+    assert.match(contactHtml, /hrefLang="it" href="http:\/\/localhost:\d+\/it\/contact"/);
+    console.log("Verified localized public routes and metadata, development preview rendering, and preservation of the two-frame animated GIF.");
   } finally {
     server?.kill();
   }

@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   if (!isLocale(locale)) return {};
 
   const dialogues = getThinkingContent(locale).dialogues;
-  return getLocaleMetadata(locale, `/${locale}/thinking/dialogues`, `${dialogues.label} — Giorgio Pedezzi`, dialogues.introduction);
+  return getLocaleMetadata(locale, `/${locale}/thinking/dialogues`, dialogues.metadata);
 }
 
 export default async function DialoguesPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {

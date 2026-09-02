@@ -12,12 +12,7 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
-  return getLocaleMetadata(
-    locale,
-    `/${locale}/thinking`,
-    locale === "it" ? "Pensieri — Giorgio Pedezzi" : "Thinking — Giorgio Pedezzi",
-    getThinkingContent(locale).introduction,
-  );
+  return getLocaleMetadata(locale, `/${locale}/thinking`, getThinkingContent(locale).metadata);
 }
 
 export default async function ThinkingPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {

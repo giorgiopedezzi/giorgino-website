@@ -1,3 +1,5 @@
+import type { ContentMetadata } from "./content-metadata";
+
 export type ContentBlock = {
   label: string;
   heading: string;
@@ -31,10 +33,7 @@ export type EditorialLink = {
   note?: string;
 };
 
-export type EditorialMetadata = {
-  title: string;
-  description: string;
-};
+export type EditorialMetadata = ContentMetadata;
 
 export type EditorialArticle = {
   title: string;
@@ -58,12 +57,14 @@ export type DialogueArtifact = {
 };
 
 export type EditorialContent = {
+  metadata: ContentMetadata;
   label: string;
   heading: string;
   introduction: string;
   articles: EditorialArticle[];
   dialogueArtifacts: DialogueArtifact[];
   dialogues: {
+    metadata: ContentMetadata;
     label: string;
     heading: string;
     introduction: string;
@@ -103,7 +104,7 @@ export type PersonalNarrative = {
 };
 
 export type HomeContent = {
-  metadata: { title: string; description: string };
+  metadata: ContentMetadata;
   nextLabel: string;
   hero: ContentBlock;
   belief: { label: string; statements: string[] };
@@ -124,5 +125,4 @@ export type HomeContent = {
   arc: { label: string; heading: string; timeline: string[] };
   human: ContentBlock;
   personalNarrative: PersonalNarrative;
-  contact: { label: string; heading: string; details: string[]; supportingText?: string };
 };

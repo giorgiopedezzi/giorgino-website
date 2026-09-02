@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Readonly<{ params: Promise<{ 
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const content = getRunningContent(locale);
-  return getLocaleMetadata(locale, `/${locale}/running`, content.metadata.title, content.metadata.description);
+  return getLocaleMetadata(locale, `/${locale}/running`, content.metadata);
 }
 
 export default async function RunningPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {

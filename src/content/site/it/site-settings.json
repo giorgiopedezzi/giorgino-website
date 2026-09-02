@@ -1,0 +1,26 @@
+{
+  "siteName": "Giorgio Pedezzi",
+  "metadata": {
+    "title": "Giorgio Pedezzi",
+    "description": "Appunti dall'intervallo.",
+    "socialTitle": "Giorgio Pedezzi",
+    "socialDescription": "Appunti dall'intervallo."
+  },
+  "navigation": {
+    "home": "Home",
+    "menu": "Segui un altro filo.",
+    "footerLabel": "Altrove",
+    "footerHeading": "Segui un altro filo.",
+    "thinking": "Pensieri",
+    "dialogues": "Dialoghi con l'AI",
+    "running": "Sei un runner?",
+    "about": "Davvero di me",
+    "contact": "Contatti"
+  },
+  "language": { "label": "Lingua", "english": "EN", "italian": "IT" },
+  "socialLinks": [],
+  "aboutMetadata": {
+    "title": "Davvero di me \u2014 Giorgio Pedezzi",
+    "description": "Una nota pi\u00f9 personale su Giorgio Pedezzi."
+  }
+}

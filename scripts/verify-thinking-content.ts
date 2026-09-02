@@ -5,8 +5,8 @@ import { getEditorialArticle, getThinkingContent, getTranslatedThinkingSlug, val
 import { getLocalePath } from "../src/content/locale-routing";
 
 const indexes = {
-  en: { label: "Thinking", heading: "Heading", introduction: "Introduction", dialogueArtifacts: [], dialogues: { label: "Dialogues", heading: "Heading", introduction: "Introduction", emptyLabel: "Empty" }, articleLabels: { references: "References", relatedLinks: "Related reading" } },
-  it: { label: "Pensieri", heading: "Titolo", introduction: "Introduzione", dialogueArtifacts: [], dialogues: { label: "Dialoghi", heading: "Titolo", introduction: "Introduzione", emptyLabel: "Vuoto" }, articleLabels: { references: "Riferimenti", relatedLinks: "Letture correlate" } },
+  en: { metadata: { title: "Thinking", description: "Introduction" }, label: "Thinking", heading: "Heading", introduction: "Introduction", dialogueArtifacts: [], dialogues: { metadata: { title: "Dialogues", description: "Introduction" }, label: "Dialogues", heading: "Heading", introduction: "Introduction", emptyLabel: "Empty" }, articleLabels: { references: "References", relatedLinks: "Related reading" } },
+  it: { metadata: { title: "Pensieri", description: "Introduzione" }, label: "Pensieri", heading: "Titolo", introduction: "Introduzione", dialogueArtifacts: [], dialogues: { metadata: { title: "Dialoghi", description: "Introduzione" }, label: "Dialoghi", heading: "Titolo", introduction: "Introduzione", emptyLabel: "Vuoto" }, articleLabels: { references: "Riferimenti", relatedLinks: "Letture correlate" } },
 };
 
 function article(overrides: Record<string, unknown> = {}) {
