@@ -1,0 +1,20 @@
+{
+  "title": "Fondazione per l'authoring locale",
+  "summary": "Un piccolo contenuto localizzato non-Thinking per verificare il confine di authoring del sito.",
+  "isVisible": true,
+  "link": "/it",
+  "media": [
+    {
+      "src": "/site-media/animated-authoring-proof.gif",
+      "alt": "Una piccola immagine animata per verificare il renderer locale",
+      "caption": "Verifica del renderer GIF animato"
+    }
+  ],
+  "items": [
+    {
+      "order": 1,
+      "label": "Homepage",
+      "href": "/it"
+    }
+  ]
+}

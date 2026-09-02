@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "verify:thinking": "tsc --ignoreConfig --outDir .tmp/verify-thinking --rootDir . --module commonjs --moduleResolution node --target es2022 --esModuleInterop --skipLibCheck --types node --ignoreDeprecations 6.0 scripts/verify-thinking-content.ts && node .tmp/verify-thinking/scripts/verify-thinking-content.js"
+    "verify:thinking": "tsc --ignoreConfig --outDir .tmp/verify-thinking --rootDir . --module commonjs --moduleResolution node --target es2022 --esModuleInterop --skipLibCheck --types node --ignoreDeprecations 6.0 scripts/verify-thinking-content.ts && node .tmp/verify-thinking/scripts/verify-thinking-content.js",
+    "verify:site-authoring": "tsc --ignoreConfig --outDir .tmp/verify-site-authoring --rootDir . --module commonjs --moduleResolution node --target es2022 --esModuleInterop --skipLibCheck --types node --ignoreDeprecations 6.0 scripts/verify-site-authoring.ts && node .tmp/verify-site-authoring/scripts/verify-site-authoring.js",
+    "verify:site-renderer": "tsc --ignoreConfig --outDir .tmp/verify-site-renderer --rootDir . --module commonjs --moduleResolution node --target es2022 --esModuleInterop --skipLibCheck --types node --ignoreDeprecations 6.0 scripts/verify-site-renderer.ts && node .tmp/verify-site-renderer/scripts/verify-site-renderer.js"
   },
   "dependencies": {
     "@fontsource/alegreya-sans": "^5.3.0",

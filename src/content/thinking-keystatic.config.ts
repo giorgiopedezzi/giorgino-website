@@ -7,13 +7,15 @@ const localeOptions = [
   { label: "Italiano", value: "it" },
 ] as const;
 
-const media = (label: string) =>
+const media = (label: string, directory = "public/thinking-media", publicPath = "/thinking-media/") =>
   fields.image({
     label,
-    directory: "public/thinking-media",
-    publicPath: "/thinking-media/",
+    directory,
+    publicPath,
     validation: { isRequired: true },
   });
+
+const siteMedia = (label: string) => media(label, "public/site-media", "/site-media/");
 
 const editorialBlocks = fields.blocks(
   {
@@ -87,13 +89,38 @@ const indexSchema = {
   dialogueArtifacts,
 };
 
+const authoringFoundationSchema = {
+  title: fields.text({ label: "Title", validation: { isRequired: true } }),
+  summary: fields.text({ label: "Summary", multiline: true, validation: { isRequired: true } }),
+  isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
+  link: fields.url({ label: "Optional internal or external link" }),
+  media: fields.array(
+    fields.object({
+      src: siteMedia("Media file"),
+      alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
+      caption: fields.text({ label: "Caption" }),
+    }),
+    { label: "Media", itemLabel: (props) => props.fields.alt.value || "Media item" },
+  ),
+  items: fields.array(
+    fields.object({
+      order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }),
+      label: fields.text({ label: "Label", validation: { isRequired: true } }),
+      href: fields.url({ label: "Internal or external link", validation: { isRequired: true } }),
+    }),
+    { label: "Ordered items", itemLabel: (props) => props.fields.label.value || "Item" },
+  ),
+};
+
 export default config({
   storage: { kind: "local" },
   ui: {
-    brand: { name: "Thinking authoring" },
-    navigation: ["englishIndex", "italianIndex", "articles"],
+    brand: { name: "Site authoring" },
+    navigation: ["englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
   },
   singletons: {
+    englishFoundation: singleton({ label: "English authoring foundation", path: "src/content/site/en/authoring-foundation", format: "json", schema: authoringFoundationSchema }),
+    italianFoundation: singleton({ label: "Italian authoring foundation", path: "src/content/site/it/authoring-foundation", format: "json", schema: authoringFoundationSchema }),
     englishIndex: singleton({ label: "English Thinking index", path: "src/content/thinking/en/index", format: "json", schema: indexSchema }),
     italianIndex: singleton({ label: "Italian Thinking index", path: "src/content/thinking/it/index", format: "json", schema: indexSchema }),
   },
