@@ -3,7 +3,8 @@ import Link from "next/link";
 
 import { BodyCopy, DisplayHeading, PageContainer, Section, SectionLabel } from "@/components/primitives/Editorial";
 import type { Locale } from "@/content/locales";
-import type { HomeContent, PersonalArtifact, PersonalNarrative } from "@/content/types";
+import type { AboutContent } from "@/content/about";
+import type { PersonalArtifact, PersonalNarrative } from "@/content/types";
 
 import styles from "./ReallyAboutMe.module.css";
 
@@ -21,7 +22,7 @@ function Artifact({ artifact, label, dark = false }: { artifact: PersonalArtifac
   );
 }
 
-export function ReallyAboutMe({ arc, content, locale }: { arc: HomeContent["arc"]; content: PersonalNarrative; locale: Locale }) {
+export function ReallyAboutMe({ arc, content, locale }: { arc: AboutContent["arc"]; content: PersonalNarrative; locale: Locale }) {
   const basePath = `/${locale}`;
 
   return <>

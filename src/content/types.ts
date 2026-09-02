@@ -117,7 +117,5 @@ export type HomeContent = {
     supportingStatement?: string;
     linkLabel: string;
   };
-  arc: { label: string; heading: string; timeline: string[] };
   human: ContentBlock & { linkLabel: string };
-  personalNarrative: PersonalNarrative;
 };

@@ -208,17 +208,16 @@ const homeSchema = {
     supportingStatement: fields.text({ label: "Optional supporting statement", multiline: true }),
     linkLabel: requiredText("Running / Building link label"),
   }, { label: "Running teaser" }),
-  arc: fields.object({
-    label: requiredText("Section label"),
-    heading: requiredText("Heading"),
-    timeline: textList("Timeline entries", 1, 6),
-  }, { label: "Personal arc" }),
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
     body: requiredText("Body", true),
     linkLabel: requiredText("Really About Me link label"),
   }, { label: "Human" }),
+};
+
+const aboutSchema = {
+  arc: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), timeline: textList("Timeline entries", 1, 6) }, { label: "Personal arc" }),
   personalNarrative: fields.object({
     label: requiredText("Section label"),
     stillHere: requiredText("Opening heading"),
@@ -254,7 +253,7 @@ const homeSchema = {
       signoff: requiredText("Signoff"),
     }, { label: "Book" }),
     continueLabel: requiredText("Continue link label"),
-  }, { label: "Personal narrative", description: "Canonical content shared by the homepage and Really About Me." }),
+  }, { label: "Personal narrative", description: "Canonical content for Really About Me." }),
 };
 
 const siteSettingsSchema = {
@@ -296,7 +295,7 @@ export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishSettings", "italianSettings", "englishContact", "italianContact", "englishHome", "italianHome", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
+    navigation: ["englishSettings", "italianSettings", "englishContact", "italianContact", "englishHome", "italianHome", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
   },
   singletons: {
     englishSettings: singleton({ label: "English site settings", path: "src/content/site/en/site-settings", format: "json", schema: siteSettingsSchema }),
@@ -305,6 +304,8 @@ export default config({
     italianContact: singleton({ label: "Italian Contact", path: "src/content/site/it/contact", format: "json", schema: contactSchema }),
     englishHome: singleton({ label: "English homepage", path: "src/content/site/en/home", format: "json", schema: homeSchema }),
     italianHome: singleton({ label: "Italian homepage", path: "src/content/site/it/home", format: "json", schema: homeSchema }),
+    englishAbout: singleton({ label: "English Really About Me", path: "src/content/site/en/about", format: "json", schema: aboutSchema }),
+    italianAbout: singleton({ label: "Italian Really About Me", path: "src/content/site/it/about", format: "json", schema: aboutSchema }),
     englishRunning: singleton({ label: "English Running / Building", path: "src/content/site/en/running", format: "json", schema: runningSchema }),
     italianRunning: singleton({ label: "Italian Running / Building", path: "src/content/site/it/running", format: "json", schema: runningSchema }),
     englishFoundation: singleton({ label: "English authoring foundation", path: "src/content/site/en/authoring-foundation", format: "json", schema: authoringFoundationSchema }),

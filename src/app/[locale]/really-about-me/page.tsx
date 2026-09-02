@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { ReallyAboutMe } from "@/components/about/ReallyAboutMe";
 import { SiteNavigation } from "@/components/navigation/SiteNavigation";
-import { getHomeContent } from "@/content/home";
+import { getAboutContent } from "@/content/about";
 import { isLocale } from "@/content/locales";
 import { getLocaleMetadata } from "@/content/locale-metadata";
 import { getSiteSettings } from "@/content/site-settings";
@@ -19,6 +19,6 @@ export default async function ReallyAboutMePage({ params }: Readonly<{ params: P
 
   if (!isLocale(locale)) notFound();
 
-  const home = getHomeContent(locale);
-  return <><SiteNavigation locale={locale} placement="header" /><main><ReallyAboutMe arc={home.arc} content={home.personalNarrative} locale={locale} /></main><SiteNavigation locale={locale} placement="footer" /></>;
+  const about = getAboutContent(locale);
+  return <><SiteNavigation locale={locale} placement="header" /><main><ReallyAboutMe arc={about.arc} content={about.personalNarrative} locale={locale} /></main><SiteNavigation locale={locale} placement="footer" /></>;
 }

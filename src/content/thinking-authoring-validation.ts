@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { locales, type Locale } from "./locales";
 import { validateHomeContent } from "./home";
+import { validateAboutContent } from "./about";
 import { validateAuthoringFoundation } from "./site-content";
 import { validateRunningContent } from "./running";
 import { validateContactContent } from "./contact";
@@ -15,7 +16,7 @@ const contentRoot = join(process.cwd(), "src", "content", "thinking");
 const siteContentRoot = join(process.cwd(), "src", "content", "site");
 const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
-const siteContentPath = /^src\/content\/site\/(en|it)\/(?:authoring-foundation|contact|home|running|site-settings)\.json$/;
+const siteContentPath = /^src\/content\/site\/(en|it)\/(?:about|authoring-foundation|contact|home|running|site-settings)\.json$/;
 const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:jpe?g|png|webp|gif)$/i;
 
 function parseUpdate(value: unknown): LocalUpdate {
@@ -94,6 +95,14 @@ export function validateSiteAuthoringUpdate(value: unknown) {
     return validateHomeContent(source, `${locale}/home.json`);
   };
 
+  const readAbout = (locale: Locale) => {
+    const path = `src/content/site/${locale}/about.json`;
+    if (deletions.has(path)) throw new Error(`${path} is required`);
+    const addition = additions.get(path);
+    const source = addition === undefined ? readJson(join(siteContentRoot, locale, "about.json")) : parseJsonAddition(addition, path);
+    return validateAboutContent(source, `${locale}/about.json`);
+  };
+
   const readRunning = (locale: Locale) => {
     const path = `src/content/site/${locale}/running.json`;
     if (deletions.has(path)) throw new Error(`${path} is required`);
@@ -113,6 +122,7 @@ export function validateSiteAuthoringUpdate(value: unknown) {
   for (const locale of locales) {
     readFoundation(locale);
     readHome(locale);
+    readAbout(locale);
     readRunning(locale);
     readLocalized(locale, "contact");
     readLocalized(locale, "site-settings");

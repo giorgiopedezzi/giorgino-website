@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 
 import { getHomeContent, validateHomeContent } from "../src/content/home";
+import { getAboutContent } from "../src/content/about";
 import { validateSiteAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative } from "../src/components/home/home-animation";
 
 const english = getHomeContent("en");
 const italian = getHomeContent("it");
+const englishAbout = getAboutContent("en");
+const italianAbout = getAboutContent("it");
 
 assert.equal(english.hero.heading, "Technology keeps changing. The difficult part rarely does.");
 assert.equal(english.belief.statements.length, 4);
@@ -14,8 +17,10 @@ assert.equal(english.thinking.linkLabel, "Follow the thinking");
 assert.equal("articles" in english.thinking, false, "Home must not duplicate the Thinking index");
 assert.equal(italian.belief.statements.length, 4);
 assert.equal(italian.running.linkLabel, "Guarda l'esperimento");
-assert.equal(english.personalNarrative.missingMan.body, "When I left a long project, I posted the missing-man formation from Goose's funeral. At night. Then I left the chat. I wanted the image to be the first thing they saw the next morning.");
-assert.equal(italian.personalNarrative.book.heading, "Un giorno vorrei scrivere un libro.");
+assert.equal("arc" in english, false, "Home must not retain the personal arc");
+assert.equal("personalNarrative" in english, false, "Home must not retain the full personal narrative");
+assert.equal(englishAbout.personalNarrative.missingMan.body, "When I left a long project, I posted the missing-man formation from Goose's funeral. At night. Then I left the chat. I wanted the image to be the first thing they saw the next morning.");
+assert.equal(italianAbout.personalNarrative.book.heading, "Un giorno vorrei scrivere un libro.");
 const editedNarrative = prepareNarrative(["An editorial edit, with punctuation.", "A second paragraph."]);
 assert.equal(editedNarrative.canonical, "An editorial edit, with punctuation.\n\nA second paragraph.");
 assert.equal(editedNarrative.stripped, "an editorial edit with punctuation a second paragraph");
@@ -23,21 +28,6 @@ assert.equal(effectiveDarkMatterPhase(true, "idle"), "final", "reduced motion mu
 assert.equal(isDarkMatterVisible(true, false, "idle"), true, "reduced motion must reveal Dark Matter immediately");
 assert.equal(effectiveDarkMatterPhase(false, "restoring"), "restoring", "normal motion must retain the active phase");
 assert.equal(isDarkMatterVisible(false, true, "narrative"), true, "normal motion reveals Dark Matter after belief completion");
-
-const withMedia = structuredClone(english) as unknown as Record<string, unknown>;
-const personalNarrative = (withMedia.personalNarrative as Record<string, unknown>);
-const missingMan = personalNarrative.missingMan as Record<string, unknown>;
-missingMan.artifact = {
-  placeholder: "Fallback",
-  media: { src: "/site-media/missing-man.gif", alt: "Missing-man formation", caption: "Farewell artifact" },
-};
-assert.equal(validateHomeContent(withMedia).personalNarrative.missingMan.artifact.media?.caption, "Farewell artifact");
-
-const noAlt = structuredClone(withMedia) as Record<string, unknown>;
-const noAltPersonal = noAlt.personalNarrative as Record<string, unknown>;
-const noAltMissing = noAltPersonal.missingMan as Record<string, unknown>;
-noAltMissing.artifact = { placeholder: "Fallback", media: { src: "/site-media/missing-man.gif", alt: "" } };
-assert.throws(() => validateHomeContent(noAlt), /expected a non-empty string/);
 
 const tooManyBeliefs = structuredClone(english) as unknown as Record<string, unknown>;
 (tooManyBeliefs.belief as Record<string, unknown>).statements = Array.from({ length: 7 }, (_, index) => `Belief ${index}`);
