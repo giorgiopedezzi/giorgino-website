@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 
 import { validateSiteAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { getAuthoringFoundation, validateAuthoringFoundation } from "../src/content/site-content";
+import { getRunningContent, validateRunningContent } from "../src/content/running";
 
 const foundation = getAuthoringFoundation("en");
 assert.equal(foundation.title, "Local authoring foundation");
@@ -34,4 +35,24 @@ assert.throws(
   /expected a non-empty string/,
 );
 
-console.log("Verified localized non-Thinking loading, semantic field validation, approved write paths, and JPEG/PNG/WebP/GIF media constraints.");
+const running = getRunningContent("en");
+assert.equal(getRunningContent("it").hero.label, "Running / Costruire");
+assert.deepEqual(running.principles.items.map((item) => item.order), [1, 2, 3, 4, 5]);
+assert.throws(
+  () => validateRunningContent({ ...running, liveApp: { ...running.liveApp, href: "javascript:alert(1)" } }),
+  /internal path or an http\(s\) URL/,
+);
+assert.throws(
+  () => validateRunningContent({ ...running, object: { ...running.object, media: [{ src: "/site-media/unsupported.svg", alt: "SVG" }] } }),
+  /JPEG, PNG, WebP, or GIF/,
+);
+assert.throws(
+  () => validateRunningContent({ ...running, principles: { ...running.principles, items: [{ order: 1, text: "One" }, { order: 1, text: "Two" }] } }),
+  /orders must be unique/,
+);
+assert.throws(
+  () => validateSiteAuthoringUpdate({ additions: [{ path: "src/content/site/fr/running.json", contents: "" }], deletions: [] }),
+  /outside approved site content and media directories/,
+);
+
+console.log("Verified localized authoring content, Running ordering and visibility data, URL and media validation, and approved write paths.");

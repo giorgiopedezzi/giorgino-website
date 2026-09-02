@@ -132,6 +132,23 @@ const authoringFoundationSchema = {
 };
 
 const requiredText = (label: string, multiline = false) => fields.text({ label, multiline, validation: { isRequired: true } });
+const runningBlock = (label: string) => fields.object({
+  label: requiredText("Section label"),
+  heading: requiredText("Heading"),
+  body: requiredText("Body", true),
+  isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
+}, { label });
+const runningSchema = {
+  metadata: fields.object({ title: requiredText("Page title"), description: requiredText("Page description", true) }, { label: "Metadata" }),
+  hero: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), intro: requiredText("Introduction", true) }, { label: "Hero" }),
+  problem: runningBlock("Problem"),
+  restraint: runningBlock("Deliberate restraint"),
+  principles: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: requiredText("Principle", true) }), { label: "Ordered principles", validation: { length: { min: 1, max: 8 } }, itemLabel: (props) => props.fields.text.value || "Principle" }) }, { label: "Principles" }),
+  object: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), body: requiredText("Body", true), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: requiredText("Study title"), label: requiredText("Study label"), body: requiredText("Study explanation", true) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object({ src: siteMedia("Media file"), alt: requiredText("Alternative text"), caption: fields.text({ label: "Caption" }) }), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Media item" }) }, { label: "Object and visual study" }),
+  build: runningBlock("How it is being built"),
+  state: runningBlock("Current state"),
+  liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),
+};
 const textList = (label: string, min: number, max: number) => fields.array(
   requiredText("Text", true),
   { label, validation: { length: { min, max } } },
@@ -241,11 +258,13 @@ export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishHome", "italianHome", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
+    navigation: ["englishHome", "italianHome", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
   },
   singletons: {
     englishHome: singleton({ label: "English homepage", path: "src/content/site/en/home", format: "json", schema: homeSchema }),
     italianHome: singleton({ label: "Italian homepage", path: "src/content/site/it/home", format: "json", schema: homeSchema }),
+    englishRunning: singleton({ label: "English Running / Building", path: "src/content/site/en/running", format: "json", schema: runningSchema }),
+    italianRunning: singleton({ label: "Italian Running / Building", path: "src/content/site/it/running", format: "json", schema: runningSchema }),
     englishFoundation: singleton({ label: "English authoring foundation", path: "src/content/site/en/authoring-foundation", format: "json", schema: authoringFoundationSchema }),
     italianFoundation: singleton({ label: "Italian authoring foundation", path: "src/content/site/it/authoring-foundation", format: "json", schema: authoringFoundationSchema }),
     englishIndex: singleton({ label: "English Thinking index", path: "src/content/thinking/en/index", format: "json", schema: indexSchema }),
