@@ -25,7 +25,76 @@
                   }
                 }
               ],
-              "text": "Three decades in the room where delivery actually happens. "
+              "text": "label "
+            },
+            {
+              "type": "text",
+              "text": "Body "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "large"
+                  }
+                }
+              ],
+              "text": "Editorial "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "emphasis"
+                  }
+                }
+              ],
+              "text": "Editorial Enphasis"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "small"
+                  }
+                }
+              ],
+              "text": "Three decades in the room where delivery "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "emphasis"
+                  }
+                }
+              ],
+              "text": "actually "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "small"
+                  }
+                }
+              ],
+              "text": "happens. "
             },
             {
               "type": "text",
