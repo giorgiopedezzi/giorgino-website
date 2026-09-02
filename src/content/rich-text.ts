@@ -5,6 +5,8 @@ export type TextSize = (typeof textSizeOptions)[number];
 export type RichTextMark =
   | { type: "bold" }
   | { type: "italic" }
+  | { type: "underline" }
+  | { type: "strike" }
   | { type: "textStyle"; attrs?: { textSize?: TextSize | null } };
 
 export type RichTextNode =
@@ -21,7 +23,7 @@ function isTextSize(value: unknown): value is TextSize {
 function isMark(value: unknown): value is RichTextMark {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
   const mark = value as Record<string, unknown>;
-  if (mark.type === "bold" || mark.type === "italic") return true;
+  if (mark.type === "bold" || mark.type === "italic" || mark.type === "underline" || mark.type === "strike") return true;
   if (mark.type !== "textStyle") return false;
   if (mark.attrs === undefined) return true;
   if (typeof mark.attrs !== "object" || mark.attrs === null || Array.isArray(mark.attrs)) return false;

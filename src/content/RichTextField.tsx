@@ -2,6 +2,7 @@
 
 import { Extension } from "@tiptap/core";
 import { TextStyle } from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/react";
 import type { FormFieldInputProps } from "@keystatic/core";
@@ -38,9 +39,10 @@ const extensions = [
     horizontalRule: false,
     listItem: false,
     orderedList: false,
-    strike: false,
+    strike: {},
   }),
   TextStyle,
+  Underline,
   TextSizeExtension,
 ];
 
@@ -69,6 +71,8 @@ export function RichTextInput({ value, onChange }: FormFieldInputProps<RichText>
     <div className={styles.toolbar} aria-label="Text formatting">
       <button type="button" aria-label="Bold" aria-pressed={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><strong>B</strong></button>
       <button type="button" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
+      <button type="button" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
+      <button type="button" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
       <label>Size
         <select aria-label="Text size" value={activeSize(editor)} onChange={(event) => applySize(event.target.value as TextSize)}>
           <option value="small">Small</option><option value="normal">Normal</option><option value="large">Large</option><option value="emphasis">Emphasis</option>

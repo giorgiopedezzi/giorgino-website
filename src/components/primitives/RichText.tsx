@@ -9,6 +9,8 @@ function markText(text: string, marks: RichTextMark[] | undefined, key: string):
   for (const mark of marks ?? []) {
     if (mark.type === "bold") result = <strong key={`${key}-bold`}>{result}</strong>;
     if (mark.type === "italic") result = <em key={`${key}-italic`}>{result}</em>;
+    if (mark.type === "underline") result = <u key={`${key}-underline`}>{result}</u>;
+    if (mark.type === "strike") result = <s key={`${key}-strike`}>{result}</s>;
     if (mark.type === "textStyle" && mark.attrs?.textSize) result = <span className={styles[`size${mark.attrs.textSize[0].toUpperCase()}${mark.attrs.textSize.slice(1)}` as `size${Capitalize<TextSize>}`]} key={`${key}-size`}>{result}</span>;
   }
   return result;
