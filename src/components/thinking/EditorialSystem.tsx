@@ -11,8 +11,8 @@ export function EditorialIndex({ locale, label, heading, introduction, articles 
   return <Section className={styles.page} aria-labelledby="thinking-heading"><PageContainer><div className={styles.intro}><SectionLabel>{label}</SectionLabel><DisplayHeading id="thinking-heading">{heading}</DisplayHeading><BodyCopy>{introduction}</BodyCopy></div><ol className={styles.articleList}>{articles.map((article, index) => <li key={article.slug}><Link href={`/${locale}/thinking/${article.slug}`} className={styles.articleLink}><span><EditorialHeading>{article.title}</EditorialHeading><span className={styles.excerpt}>{article.excerpt}</span></span><span className={styles.articleNumber}>{String(index + 1).padStart(2, "0")} <span aria-hidden="true">→</span></span></Link></li>)}</ol></PageContainer></Section>;
 }
 
-export function EditorialArticleView({ article }: { article: EditorialArticle }) {
-  return <Section className={styles.page} aria-labelledby="article-heading"><PageContainer><article className={styles.article}><header className={styles.articleHeader}><SectionLabel>{article.publishedAt ?? (article.status === "draft" ? "Draft" : "Article")}</SectionLabel><DisplayHeading id="article-heading">{article.title}</DisplayHeading><BodyCopy>{article.excerpt}</BodyCopy></header><EditorialBody blocks={article.body} /></article></PageContainer></Section>;
+export function EditorialArticleView({ article, referenceLabel, relatedLinksLabel }: { article: EditorialArticle; referenceLabel: string; relatedLinksLabel: string }) {
+  return <Section className={styles.page} aria-labelledby="article-heading"><PageContainer><article className={styles.article}><header className={styles.articleHeader}><SectionLabel>{article.publishedAt ?? (article.status === "draft" ? "Draft" : "Article")}</SectionLabel><DisplayHeading id="article-heading">{article.title}</DisplayHeading><BodyCopy>{article.excerpt}</BodyCopy></header><EditorialBody blocks={article.body} /><EditorialLinks heading={referenceLabel} links={article.references} /><EditorialLinks heading={relatedLinksLabel} links={article.relatedLinks} /></article></PageContainer></Section>;
 }
 
 export function DialogueArtifacts({ artifacts, emptyLabel }: { artifacts: DialogueArtifact[]; emptyLabel: string }) {
@@ -30,4 +30,9 @@ function EditorialBody({ blocks }: { blocks: EditorialBlock[] }) {
       case "note": return <aside key={index}>{block.text}</aside>;
     }
   })}</div>;
+}
+
+function EditorialLinks({ heading, links }: { heading: string; links: EditorialArticle["references"] }) {
+  if (links.length === 0) return null;
+  return <section className={styles.links} aria-label={heading}><EditorialHeading as="h2">{heading}</EditorialHeading><ul>{links.map((link) => <li key={link.href}><Link href={link.href}>{link.label}</Link>{link.note && <span>{link.note}</span>}</li>)}</ul></section>;
 }

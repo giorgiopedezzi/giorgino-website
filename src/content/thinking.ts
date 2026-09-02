@@ -2,9 +2,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { locales, type Locale } from "./locales";
-import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialContent } from "./types";
+import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialContent, EditorialLink, EditorialMetadata } from "./types";
 
-type ThinkingIndexFile = Pick<EditorialContent, "label" | "heading" | "introduction" | "dialogueArtifacts">;
+type ThinkingIndexFile = Pick<EditorialContent, "label" | "heading" | "introduction" | "dialogueArtifacts" | "dialogues" | "articleLabels">;
 
 type ThinkingArticleFile = Omit<EditorialArticle, "publishedAt"> & {
   publishedAt: string | null;
@@ -70,6 +70,28 @@ function validateDialogueArtifacts(value: unknown, path: string): DialogueArtifa
   });
 }
 
+function validateLinks(value: unknown, path: string): EditorialLink[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) fail(path, "expected an array");
+  const hrefs = new Set<string>();
+  return value.map((link, index) => {
+    const linkPath = `${path}[${index}]`;
+    if (!isRecord(link)) fail(linkPath, "expected an object");
+    const href = requireSafeLink(link.href, `${linkPath}.href`);
+    if (hrefs.has(href)) fail(`${linkPath}.href`, "must not duplicate another link in this list");
+    hrefs.add(href);
+    const result: EditorialLink = { label: requireString(link.label, `${linkPath}.label`), href };
+    if (link.note !== undefined && link.note !== null) result.note = requireString(link.note, `${linkPath}.note`);
+    return result;
+  });
+}
+
+function validateMetadata(value: unknown, path: string): EditorialMetadata | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (!isRecord(value)) fail(path, "expected an object");
+  return { title: requireString(value.title, `${path}.title`), description: requireString(value.description, `${path}.description`) };
+}
+
 function validateBlock(value: unknown, path: string): EditorialBlock {
   if (!isRecord(value)) fail(path, "expected an object");
   const type = requireString(isKeystaticBlock(value) ? value.discriminant : value.type, `${path}.type`);
@@ -121,6 +143,16 @@ function validateIndex(value: unknown, path: string): ThinkingIndexFile {
     heading: requireString(value.heading, `${path}.heading`),
     introduction: requireString(value.introduction, `${path}.introduction`),
     dialogueArtifacts: validateDialogueArtifacts(value.dialogueArtifacts, `${path}.dialogueArtifacts`),
+    dialogues: {
+      label: requireString(isRecord(value.dialogues) ? value.dialogues.label : undefined, `${path}.dialogues.label`),
+      heading: requireString(isRecord(value.dialogues) ? value.dialogues.heading : undefined, `${path}.dialogues.heading`),
+      introduction: requireString(isRecord(value.dialogues) ? value.dialogues.introduction : undefined, `${path}.dialogues.introduction`),
+      emptyLabel: requireString(isRecord(value.dialogues) ? value.dialogues.emptyLabel : undefined, `${path}.dialogues.emptyLabel`),
+    },
+    articleLabels: {
+      references: requireString(isRecord(value.articleLabels) ? value.articleLabels.references : undefined, `${path}.articleLabels.references`),
+      relatedLinks: requireString(isRecord(value.articleLabels) ? value.articleLabels.relatedLinks : undefined, `${path}.articleLabels.relatedLinks`),
+    },
   };
 }
 
@@ -149,6 +181,7 @@ function validateArticle(value: unknown, path: string): ThinkingArticleFile {
     fail(`${path}.order`, "must be a positive integer");
   }
   if (!Array.isArray(value.body)) fail(`${path}.body`, "expected an array");
+  const metadata = validateMetadata(value.metadata, `${path}.metadata`);
 
   return {
     locale: locale as Locale,
@@ -156,10 +189,13 @@ function validateArticle(value: unknown, path: string): ThinkingArticleFile {
     translationKey,
     title: requireString(value.title, `${path}.title`),
     excerpt: requireString(value.excerpt, `${path}.excerpt`),
+    ...(metadata ? { metadata } : {}),
     status,
     publishedAt,
     order: value.order,
     body: value.body.map((block, index) => validateBlock(block, `${path}.body[${index}]`)),
+    references: validateLinks(value.references, `${path}.references`),
+    relatedLinks: validateLinks(value.relatedLinks, `${path}.relatedLinks`),
   };
 }
 
@@ -220,9 +256,12 @@ function toEditorialArticle(article: ThinkingArticleFile): EditorialArticle {
     slug: article.slug,
     locale: article.locale,
     excerpt: article.excerpt,
+    ...(article.metadata ? { metadata: article.metadata } : {}),
     ...(article.publishedAt ? { publishedAt: article.publishedAt } : {}),
     status: article.status,
     body: article.body,
+    references: article.references,
+    relatedLinks: article.relatedLinks,
   };
 }
 

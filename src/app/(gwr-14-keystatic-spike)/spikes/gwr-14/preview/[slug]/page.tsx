@@ -14,5 +14,5 @@ export default async function Gwr14PreviewPage({ params }: Readonly<{ params: Pr
   const entry = await reader.collections.proofArticles.read(slug);
   if (!entry) notFound();
 
-  return <main><EditorialArticleView article={toEditorialArticle(slug, entry)} /></main>;
+  return <main><EditorialArticleView article={toEditorialArticle(slug, entry)} referenceLabel="References" relatedLinksLabel="Related reading" /></main>;
 }

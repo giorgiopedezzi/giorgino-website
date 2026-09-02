@@ -2,5 +2,15 @@
   "label": "Pensieri",
   "heading": "Appunti che vale la pena lasciare incompiuti.",
   "introduction": "Non contenuti. Un luogo per seguire un pensiero abbastanza a lungo da vedere dove porta.",
-  "dialogueArtifacts": []
+  "dialogueArtifacts": [],
+  "dialogues": {
+    "label": "Dialoghi con l'AI",
+    "heading": "Conversazioni da tenere aperte.",
+    "introduction": "Riflessioni nate da conversazioni reali, con i loro artefatti originali.",
+    "emptyLabel": "Nessun dialogo pubblicato."
+  },
+  "articleLabels": {
+    "references": "Riferimenti",
+    "relatedLinks": "Letture correlate"
+  }
 }
