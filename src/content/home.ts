@@ -25,6 +25,12 @@ function optionalText(value: unknown, path: string): string | undefined {
   return text(value, path);
 }
 
+function href(value: unknown, path: string): string {
+  const valueAsText = text(value, path);
+  if (!valueAsText.startsWith("/") && !/^https?:\/\//i.test(valueAsText)) fail(path, "must be an internal path or an http(s) URL");
+  return valueAsText;
+}
+
 function textArray(value: unknown, path: string, minimum: number, maximum: number): string[] {
   if (!Array.isArray(value) || value.length < minimum || value.length > maximum) {
     fail(path, `expected between ${minimum} and ${maximum} items`);
@@ -54,15 +60,16 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
       heading: text(darkMatter.heading, `${path}.darkMatter.heading`),
       narrative: textArray(darkMatter.narrative, `${path}.darkMatter.narrative`, 1, 4),
     },
-    thinking: { ...block(thinking, `${path}.thinking`), linkLabel: text(thinking.linkLabel, `${path}.thinking.linkLabel`) },
+    thinking: { ...block(thinking, `${path}.thinking`), linkLabel: text(thinking.linkLabel, `${path}.thinking.linkLabel`), linkHref: href(thinking.linkHref, `${path}.thinking.linkHref`) },
     running: {
       ...block(running, `${path}.running`),
       surfaceHeading: text(running.surfaceHeading, `${path}.running.surfaceHeading`),
       surfaceLabel: text(running.surfaceLabel, `${path}.running.surfaceLabel`),
       placeholder: text(running.placeholder, `${path}.running.placeholder`),
       linkLabel: text(running.linkLabel, `${path}.running.linkLabel`),
+      linkHref: href(running.linkHref, `${path}.running.linkHref`),
     },
-    human: { ...block(source.human, `${path}.human`), linkLabel: text(record(source.human, `${path}.human`).linkLabel, `${path}.human.linkLabel`) },
+    human: { ...block(source.human, `${path}.human`), linkLabel: text(record(source.human, `${path}.human`).linkLabel, `${path}.human.linkLabel`), linkHref: href(record(source.human, `${path}.human`).linkHref, `${path}.human.linkHref`) },
   };
   const closingThought = optionalText(darkMatter.closingThought, `${path}.darkMatter.closingThought`);
   const darkSupportingText = optionalText(darkMatter.supportingText, `${path}.darkMatter.supportingText`);

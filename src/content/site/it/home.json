@@ -34,17 +34,19 @@
     "label": "03 — Pensieri",
     "heading": "Appunti che vale la pena lasciare incompiuti.",
     "body": "Non contenuti. Un luogo per seguire un pensiero abbastanza a lungo da vedere dove porta.",
-    "linkLabel": "Segui i pensieri"
+    "linkLabel": "Segui i pensieri",
+    "linkHref": "/it/thinking"
   },
   "running": {
     "label": "04 — Running / Costruire",
     "heading": "E poi ho provato a costruirlo.",
-    "body": "Sto costruendo un'applicazione per la corsa quasi interamente con agenti di coding AI. L'implementazione è spesso loro. Concetto, vincoli, priorità e decisioni restano miei.",
-    "surfaceHeading": "Il runner resta al centro.",
-    "surfaceLabel": "Uno studio visivo",
-    "placeholder": "L'intensità cardiaca passa dal rosa al rosso. Durante una pausa lunga il runner crolla; durante una breve continua a correre sul posto. È giocoso, ma ricorda che un corpo non è un foglio di calcolo.",
-    "supportingStatement": "Segnale prima del rumore. Piani flessibili prima della falsa perfezione. Assistenza senza resa.",
-    "linkLabel": "Guarda l'esperimento"
+    "body": "Una vera applicazione per la corsa, costruita in larga parte con agenti di coding AI. Concetto, vincoli, priorità e decisioni restano umani.",
+    "surfaceHeading": "Un runner, non una dashboard.",
+    "surfaceLabel": "Un piccolo studio visivo",
+    "placeholder": "Un promemoria: un corpo non è un foglio di calcolo.",
+    "supportingStatement": "Segnale prima del rumore. Assistenza senza resa.",
+    "linkLabel": "Guarda l'esperimento",
+    "linkHref": "/it/running"
   },
   "arc": {
     "label": "05 — Un breve arco personale",
@@ -59,8 +61,9 @@
   "human": {
     "label": "06 — Umano",
     "heading": "Mi interessa ciò che tiene — e ciò che sfugge.",
-    "body": "La tecnologia è solo uno dei modi in cui presto attenzione. Il resto viene dalla corsa, dalla storia, dalla filosofia, dal cibo, dalla letteratura, dalle conversazioni e da una passione per le metafore che a volte arrivano prima della spiegazione.",
-    "linkLabel": "Davvero di me"
+    "body": "La tecnologia è solo uno dei modi in cui presto attenzione. Il resto appartiene al mondo oltre lo schermo.",
+    "linkLabel": "Davvero di me",
+    "linkHref": "/it/really-about-me"
   },
   "personalNarrative": {
     "label": "07 — Davvero di me",

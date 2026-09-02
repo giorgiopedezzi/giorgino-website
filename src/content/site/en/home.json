@@ -34,17 +34,19 @@
     "label": "03 — Thinking",
     "heading": "Some notes worth leaving unfinished.",
     "body": "Not content. A place to follow a line of thought long enough to see where it goes.",
-    "linkLabel": "Follow the thinking"
+    "linkLabel": "Follow the thinking",
+    "linkHref": "/en/thinking"
   },
   "running": {
     "label": "04 — The Running Project",
     "heading": "And then I tried to build it.",
-    "body": "I am building a running application almost entirely with AI coding agents. The implementation is often theirs. The concept, constraints, priorities and decisions remain mine.",
-    "surfaceHeading": "The runner remains at the centre.",
-    "surfaceLabel": "A future interactive study",
-    "placeholder": "Heart-rate intensity shifts from pink towards red. During a long pause, the runner collapses; during a short one, they jog in place. It is playful — but it is also a reminder that a body is not a spreadsheet.",
-    "supportingStatement": "Signal over noise. Flexible plans over false perfection. Assistance without surrender.",
-    "linkLabel": "See the experiment"
+    "body": "A real running application, built substantially with AI coding agents. The concept, constraints, priorities and decisions remain human.",
+    "surfaceHeading": "A runner, not a dashboard.",
+    "surfaceLabel": "A small visual study",
+    "placeholder": "A reminder that a body is not a spreadsheet.",
+    "supportingStatement": "Signal over noise. Assistance without surrender.",
+    "linkLabel": "See the experiment",
+    "linkHref": "/en/running"
   },
   "arc": {
     "label": "05 — A Short Personal Arc",
@@ -59,8 +61,9 @@
   "human": {
     "label": "06 — Human",
     "heading": "I am interested in what holds — and what slips through.",
-    "body": "Technology is only one way I pay attention. The rest comes from running, history, philosophy, food, literature, conversation, and a fondness for metaphors that sometimes arrive before the explanation.",
-    "linkLabel": "Really about me"
+    "body": "Technology is only one way I pay attention. The rest belongs to the world beyond the screen.",
+    "linkLabel": "Really about me",
+    "linkHref": "/en/really-about-me"
   },
   "personalNarrative": {
     "label": "07 — Really About Me",

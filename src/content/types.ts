@@ -109,13 +109,14 @@ export type HomeContent = {
     closingThought?: string;
     supportingText?: string;
   };
-  thinking: ContentBlock & { linkLabel: string };
+  thinking: ContentBlock & { linkLabel: string; linkHref: string };
   running: ContentBlock & {
     surfaceHeading: string;
     surfaceLabel: string;
     placeholder: string;
     supportingStatement?: string;
     linkLabel: string;
+    linkHref: string;
   };
-  human: ContentBlock & { linkLabel: string };
+  human: ContentBlock & { linkLabel: string; linkHref: string };
 };

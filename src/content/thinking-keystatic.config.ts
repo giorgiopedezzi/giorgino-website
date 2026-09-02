@@ -197,6 +197,7 @@ const homeSchema = {
     heading: requiredText("Heading"),
     body: requiredText("Introduction", true),
     linkLabel: requiredText("Thinking link label"),
+    linkHref: fields.url({ label: "Thinking link target", validation: { isRequired: true } }),
   }, { label: "Thinking" }),
   running: fields.object({
     label: requiredText("Section label"),
@@ -207,12 +208,14 @@ const homeSchema = {
     placeholder: requiredText("Study description", true),
     supportingStatement: fields.text({ label: "Optional supporting statement", multiline: true }),
     linkLabel: requiredText("Running / Building link label"),
+    linkHref: fields.url({ label: "Running / Building link target", validation: { isRequired: true } }),
   }, { label: "Running teaser" }),
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
     body: requiredText("Body", true),
     linkLabel: requiredText("Really About Me link label"),
+    linkHref: fields.url({ label: "Really About Me link target", validation: { isRequired: true } }),
   }, { label: "Human" }),
 };
 

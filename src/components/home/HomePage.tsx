@@ -10,12 +10,11 @@ import {
 } from "@/components/primitives/Editorial";
 import type { HomeContent } from "@/content/types";
 import type { ContactContent } from "@/content/contact";
-import type { Locale } from "@/content/locales";
 
 import { HomePageAnimations } from "./HomePageAnimations";
 import styles from "./HomePage.module.css";
 
-type HomePageProps = { content: HomeContent; contact: ContactContent; locale: Locale };
+type HomePageProps = { content: HomeContent; contact: ContactContent };
 
 const chartBars = [26, 42, 65, 88, 72, 52, 72, 102, 82, 45];
 
@@ -23,9 +22,7 @@ function DeepLink({ href, children }: { href: string; children: string }) {
   return <Link className={styles.deepLink} href={href}>{children} <span aria-hidden="true">→</span></Link>;
 }
 
-export function HomePage({ content, contact, locale }: HomePageProps) {
-  const basePath = `/${locale}`;
-
+export function HomePage({ content, contact }: HomePageProps) {
   return (
     <main>
       <Section className={styles.hero} aria-labelledby="hero-heading">
@@ -58,7 +55,7 @@ export function HomePage({ content, contact, locale }: HomePageProps) {
             <SectionLabel>{content.thinking.label}</SectionLabel>
             <DisplayHeading as="h2" id="thinking-heading" className={styles.sectionHeading}>{content.thinking.heading}</DisplayHeading>
             <BodyCopy>{content.thinking.body}</BodyCopy>
-            <DeepLink href={`${basePath}/thinking`}>{content.thinking.linkLabel}</DeepLink>
+            <DeepLink href={content.thinking.linkHref}>{content.thinking.linkLabel}</DeepLink>
           </div>
         </PageContainer>
       </Section>
@@ -81,7 +78,7 @@ export function HomePage({ content, contact, locale }: HomePageProps) {
               <p>{content.running.placeholder}</p>
             </div>
             {content.running.supportingStatement && <p className={styles.runningStatement}>{content.running.supportingStatement}</p>}
-            <DeepLink href={`${basePath}/running`}>{content.running.linkLabel}</DeepLink>
+            <DeepLink href={content.running.linkHref}>{content.running.linkLabel}</DeepLink>
           </div>
         </PageContainer>
       </Section>
@@ -92,7 +89,7 @@ export function HomePage({ content, contact, locale }: HomePageProps) {
             <SectionLabel>{content.human.label}</SectionLabel>
             <DisplayHeading as="h2" id="human-heading" className={styles.sectionHeading}>{content.human.heading}</DisplayHeading>
             <BodyCopy>{content.human.body}</BodyCopy>
-            <DeepLink href={`${basePath}/really-about-me`}>{content.human.linkLabel}</DeepLink>
+            <DeepLink href={content.human.linkHref}>{content.human.linkLabel}</DeepLink>
           </div>
         </PageContainer>
       </Section>
