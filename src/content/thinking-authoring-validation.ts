@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { locales, type Locale } from "./locales";
 import { validateHomeContent } from "./home";
 import { validateAuthoringFoundation } from "./site-content";
+import { validateRunningContent } from "./running";
 import { validateThinkingRepository } from "./thinking";
 
 type LocalUpdate = { additions: Array<{ path: string; contents: string }>; deletions: Array<{ path: string }> };
@@ -12,7 +13,7 @@ const contentRoot = join(process.cwd(), "src", "content", "thinking");
 const siteContentRoot = join(process.cwd(), "src", "content", "site");
 const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
-const siteContentPath = /^src\/content\/site\/(en|it)\/(?:authoring-foundation|home)\.json$/;
+const siteContentPath = /^src\/content\/site\/(en|it)\/(?:authoring-foundation|home|running)\.json$/;
 const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:jpe?g|png|webp|gif)$/i;
 
 function parseUpdate(value: unknown): LocalUpdate {
@@ -91,8 +92,17 @@ export function validateSiteAuthoringUpdate(value: unknown) {
     return validateHomeContent(source, `${locale}/home.json`);
   };
 
+  const readRunning = (locale: Locale) => {
+    const path = `src/content/site/${locale}/running.json`;
+    if (deletions.has(path)) throw new Error(`${path} is required`);
+    const addition = additions.get(path);
+    const source = addition === undefined ? readJson(join(siteContentRoot, locale, "running.json")) : parseJsonAddition(addition, path);
+    return validateRunningContent(source, `${locale}/running.json`);
+  };
+
   for (const locale of locales) {
     readFoundation(locale);
     readHome(locale);
+    readRunning(locale);
   }
 }
