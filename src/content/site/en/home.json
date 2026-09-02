@@ -34,13 +34,7 @@
     "label": "03 — Thinking",
     "heading": "Some notes worth leaving unfinished.",
     "body": "Not content. A place to follow a line of thought long enough to see where it goes.",
-    "articles": [
-      { "number": "01", "title": "The tears were ours", "summary": "On anthropomorphising AI without forgetting what it is." },
-      { "number": "02", "title": "Signal, noise and plausible answers", "summary": "Why AI increases the value of judgment rather than eliminating it." },
-      { "number": "03", "title": "Some things should be earned", "summary": "Boston, friction, meaning and a world of instant outcomes." },
-      { "number": "04", "title": "The humanities belong inside the AI revolution", "summary": "Not as resistance to technology, but as part of learning how to use it." },
-      { "number": "05", "title": "Dialogues with AI", "summary": "Short reflections born from real conversations with AI." }
-    ]
+    "linkLabel": "Follow the thinking"
   },
   "running": {
     "label": "04 — The Running Project",
@@ -49,7 +43,8 @@
     "surfaceHeading": "The runner remains at the centre.",
     "surfaceLabel": "A future interactive study",
     "placeholder": "Heart-rate intensity shifts from pink towards red. During a long pause, the runner collapses; during a short one, they jog in place. It is playful — but it is also a reminder that a body is not a spreadsheet.",
-    "supportingStatement": "Signal over noise. Flexible plans over false perfection. Assistance without surrender."
+    "supportingStatement": "Signal over noise. Flexible plans over false perfection. Assistance without surrender.",
+    "linkLabel": "See the experiment"
   },
   "arc": {
     "label": "05 — A Short Personal Arc",
@@ -64,7 +59,8 @@
   "human": {
     "label": "06 — Human",
     "heading": "I am interested in what holds — and what slips through.",
-    "body": "Technology is only one way I pay attention. The rest comes from running, history, philosophy, food, literature, conversation, and a fondness for metaphors that sometimes arrive before the explanation."
+    "body": "Technology is only one way I pay attention. The rest comes from running, history, philosophy, food, literature, conversation, and a fondness for metaphors that sometimes arrive before the explanation.",
+    "linkLabel": "Really about me"
   },
   "personalNarrative": {
     "label": "07 — Really About Me",

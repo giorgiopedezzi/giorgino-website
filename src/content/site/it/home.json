@@ -9,42 +9,58 @@
   "hero": {
     "label": "Appunti dall'intervallo",
     "heading": "La tecnologia continua a cambiare. La parte difficile raramente lo fa.",
-    "body": "Il testo editoriale della homepage sarà definito nella Fase 2."
+    "body": "Pensieri su sistemi, giudizio e persone. E sulla domanda più importante: che cosa non dobbiamo delegare entrando nell'era dell'AI?"
   },
   "belief": {
     "label": "Ci credo",
-    "statements": ["L'AI va usata, non subita."]
+    "statements": [
+      "L'AI va usata, non subita.",
+      "La complessità merita sfumature. Le decisioni richiedono chiarezza.",
+      "La tecnologia può essere senza precedenti. Molte domande non lo sono.",
+      "L'informazione abbonda. Troppo. Il giudizio no. Mai abbastanza."
+    ]
   },
   "darkMatter": {
     "label": "Materia oscura",
     "heading": "Il lavoro tra un lavoro e l'altro.",
-    "narrative": ["Il testo editoriale lungo verrà aggiunto dopo l'approvazione della base tecnica."]
+    "narrative": [
+      "Nei progetti difficili mi sono trovato spesso a collegare parti che non avrebbero dovuto essere separate: tecnologia e business, decisioni e conseguenze, ruoli formali e responsabilità reale.",
+      "La chiamo materia oscura. È invisibile finché il sistema non comincia a separarsi."
+    ],
+    "closingThought": "Il passo successivo non è essere indispensabili. È aiutare altre persone a imparare a vedere l'insieme.",
+    "supportingText": "Un buon risultato è poter andare via quando il sistema non ha più bisogno di me."
   },
   "thinking": {
-    "label": "Pensieri",
+    "label": "03 — Pensieri",
     "heading": "Appunti che vale la pena lasciare incompiuti.",
-    "body": "Qui troverà posto un futuro indice editoriale, senza link in questa fase.",
-    "articles": [
-      { "number": "01", "title": "Titolo di un futuro articolo", "summary": "Link agli articoli e testo definitivo sono rimandati intenzionalmente." }
-    ]
+    "body": "Non contenuti. Un luogo per seguire un pensiero abbastanza a lungo da vedere dove porta.",
+    "linkLabel": "Segui i pensieri"
   },
   "running": {
-    "label": "Progetto running",
-    "heading": "Un progetto in movimento.",
-    "body": "La narrazione e la visualizzazione running saranno realizzate in una fase successiva.",
-    "surfaceHeading": "The runner remains at the centre.",
-    "surfaceLabel": "A future interactive study",
-    "placeholder": "Segnaposto per la visualizzazione running"
+    "label": "04 — Running / Costruire",
+    "heading": "E poi ho provato a costruirlo.",
+    "body": "Sto costruendo un'applicazione per la corsa quasi interamente con agenti di coding AI. L'implementazione è spesso loro. Concetto, vincoli, priorità e decisioni restano miei.",
+    "surfaceHeading": "Il runner resta al centro.",
+    "surfaceLabel": "Uno studio visivo",
+    "placeholder": "L'intensità cardiaca passa dal rosa al rosso. Durante una pausa lunga il runner crolla; durante una breve continua a correre sul posto. È giocoso, ma ricorda che un corpo non è un foglio di calcolo.",
+    "supportingStatement": "Segnale prima del rumore. Piani flessibili prima della falsa perfezione. Assistenza senza resa.",
+    "linkLabel": "Guarda l'esperimento"
   },
   "arc": {
-    "label": "Arco personale",
-    "heading": "Un breve arco personale.",
-    "timeline": ["Questa sezione riceverà in seguito la sua storia editoriale."]
+    "label": "05 — Un breve arco personale",
+    "heading": "L'esperienza conta solo se non ti impedisce di imparare di nuovo.",
+    "timeline": [
+      "Anni '80 — Ho iniziato a programmare, perché una macchina capace di seguire istruzioni era troppo interessante per ignorarla.",
+      "Poi — Ho attraversato diverse generazioni tecnologiche, dalle piccole aziende ai grandi ambienti di consulenza.",
+      "Intorno ai 50 — Ho iniziato a correre maratone; dalla prima in 3:24 sono arrivato a 2:57 osservando, modellando, sperimentando, misurando e adattando.",
+      "Ora — Costruisco con l'AI mentre rifletto con più attenzione sul lavoro umano che le macchine non dovrebbero mai sostituire."
+    ]
   },
   "human": {
-    "label": "Umano",
-    "heading": "La persona dietro il lavoro.",
-    "body": "Il materiale personale è intenzionalmente rimandato alla fase dei contenuti."
+    "label": "06 — Umano",
+    "heading": "Mi interessa ciò che tiene — e ciò che sfugge.",
+    "body": "La tecnologia è solo uno dei modi in cui presto attenzione. Il resto viene dalla corsa, dalla storia, dalla filosofia, dal cibo, dalla letteratura, dalle conversazioni e da una passione per le metafore che a volte arrivano prima della spiegazione.",
+    "linkLabel": "Davvero di me"
   },
   "personalNarrative": {
     "label": "07 — Davvero di me",

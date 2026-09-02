@@ -3,7 +3,7 @@ import { extname, join } from "node:path";
 
 import type { Locale } from "./locales";
 import { validateContentMetadata } from "./content-metadata";
-import type { ArticlePreview, ContentBlock, HomeContent, PersonalArtifact, PersonalNarrative, SiteMedia } from "./types";
+import type { ContentBlock, HomeContent, PersonalArtifact, PersonalNarrative, SiteMedia } from "./types";
 
 const mediaExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 
@@ -97,13 +97,6 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
   const thinking = record(source.thinking, `${path}.thinking`);
   const running = record(source.running, `${path}.running`);
   const arc = record(source.arc, `${path}.arc`);
-  if (!Array.isArray(thinking.articles)) fail(`${path}.thinking.articles`, "expected an array");
-  const articles: ArticlePreview[] = thinking.articles.map((entry, index) => {
-    const article = record(entry, `${path}.thinking.articles[${index}]`);
-    return { number: text(article.number, `${path}.thinking.articles[${index}].number`), title: text(article.title, `${path}.thinking.articles[${index}].title`), summary: text(article.summary, `${path}.thinking.articles[${index}].summary`) };
-  });
-  if (articles.length < 1 || articles.length > 6) fail(`${path}.thinking.articles`, "expected between 1 and 6 items");
-  if (new Set(articles.map((article) => article.number)).size !== articles.length) fail(`${path}.thinking.articles`, "numbers must be unique");
   const result: HomeContent = {
     metadata: validateContentMetadata(metadata, `${path}.metadata`),
     nextLabel: text(source.nextLabel, `${path}.nextLabel`),
@@ -114,15 +107,16 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
       heading: text(darkMatter.heading, `${path}.darkMatter.heading`),
       narrative: textArray(darkMatter.narrative, `${path}.darkMatter.narrative`, 1, 4),
     },
-    thinking: { ...block(thinking, `${path}.thinking`), articles },
+    thinking: { ...block(thinking, `${path}.thinking`), linkLabel: text(thinking.linkLabel, `${path}.thinking.linkLabel`) },
     running: {
       ...block(running, `${path}.running`),
       surfaceHeading: text(running.surfaceHeading, `${path}.running.surfaceHeading`),
       surfaceLabel: text(running.surfaceLabel, `${path}.running.surfaceLabel`),
       placeholder: text(running.placeholder, `${path}.running.placeholder`),
+      linkLabel: text(running.linkLabel, `${path}.running.linkLabel`),
     },
     arc: { label: text(arc.label, `${path}.arc.label`), heading: text(arc.heading, `${path}.arc.heading`), timeline: textArray(arc.timeline, `${path}.arc.timeline`, 1, 6) },
-    human: block(source.human, `${path}.human`),
+    human: { ...block(source.human, `${path}.human`), linkLabel: text(record(source.human, `${path}.human`).linkLabel, `${path}.human.linkLabel`) },
     personalNarrative: personalNarrative(source.personalNarrative, `${path}.personalNarrative`),
   };
   const closingThought = optionalText(darkMatter.closingThought, `${path}.darkMatter.closingThought`);

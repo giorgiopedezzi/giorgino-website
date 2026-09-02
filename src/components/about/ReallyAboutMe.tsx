@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { BodyCopy, DisplayHeading, PageContainer, Section, SectionLabel } from "@/components/primitives/Editorial";
 import type { Locale } from "@/content/locales";
-import type { PersonalArtifact, PersonalNarrative } from "@/content/types";
+import type { HomeContent, PersonalArtifact, PersonalNarrative } from "@/content/types";
 
 import styles from "./ReallyAboutMe.module.css";
 
@@ -21,7 +21,7 @@ function Artifact({ artifact, label, dark = false }: { artifact: PersonalArtifac
   );
 }
 
-export function ReallyAboutMe({ content, locale }: { content: PersonalNarrative; locale: Locale }) {
+export function ReallyAboutMe({ arc, content, locale }: { arc: HomeContent["arc"]; content: PersonalNarrative; locale: Locale }) {
   const basePath = `/${locale}`;
 
   return <>
@@ -34,6 +34,11 @@ export function ReallyAboutMe({ content, locale }: { content: PersonalNarrative;
     <Section className={styles.bordered} aria-labelledby="ideas-heading"><PageContainer><div className={styles.stack}>
       <DisplayHeading as="h2" id="ideas-heading" className={styles.sectionHeading}>{content.decadeHeading}</DisplayHeading>
       <div className={styles.timeline}>{content.decadeEntries.map((idea, index) => <BodyCopy className={index === 3 ? styles.timelineFinal : ""} key={idea}>{idea}</BodyCopy>)}</div>
+    </div></PageContainer></Section>
+
+    <Section className={styles.bordered} aria-labelledby="personal-arc-heading"><PageContainer><div className={styles.stack}>
+      <SectionLabel>{arc.label}</SectionLabel><DisplayHeading as="h2" id="personal-arc-heading" className={styles.sectionHeading}>{arc.heading}</DisplayHeading>
+      <div className={styles.arcTimeline}>{arc.timeline.map((entry) => <BodyCopy key={entry}>{entry}</BodyCopy>)}</div>
     </div></PageContainer></Section>
 
     <Section tone="darkMatter" aria-labelledby="missing-heading"><PageContainer><div className={styles.stack}>

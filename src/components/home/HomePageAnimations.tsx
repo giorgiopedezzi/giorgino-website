@@ -245,7 +245,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
         </PageContainer>
       </Section>
       </div>
-      {effectiveDarkPhase === "final" && children}
+      {children}
     </>
   );
 }
