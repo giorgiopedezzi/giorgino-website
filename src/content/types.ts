@@ -12,12 +12,6 @@ export type SiteMedia = {
   caption?: string;
 };
 
-export type ArticlePreview = {
-  number: string;
-  title: string;
-  summary: string;
-};
-
 export type EditorialBlock =
   | { type: "paragraph"; text: string }
   | { type: "heading"; text: string }
@@ -115,14 +109,15 @@ export type HomeContent = {
     closingThought?: string;
     supportingText?: string;
   };
-  thinking: ContentBlock & { articles: ArticlePreview[] };
+  thinking: ContentBlock & { linkLabel: string };
   running: ContentBlock & {
     surfaceHeading: string;
     surfaceLabel: string;
     placeholder: string;
     supportingStatement?: string;
+    linkLabel: string;
   };
   arc: { label: string; heading: string; timeline: string[] };
-  human: ContentBlock;
+  human: ContentBlock & { linkLabel: string };
   personalNarrative: PersonalNarrative;
 };

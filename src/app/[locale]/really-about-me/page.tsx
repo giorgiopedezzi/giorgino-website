@@ -19,5 +19,6 @@ export default async function ReallyAboutMePage({ params }: Readonly<{ params: P
 
   if (!isLocale(locale)) notFound();
 
-  return <><SiteNavigation locale={locale} placement="header" /><main><ReallyAboutMe content={getHomeContent(locale).personalNarrative} locale={locale} /></main><SiteNavigation locale={locale} placement="footer" /></>;
+  const home = getHomeContent(locale);
+  return <><SiteNavigation locale={locale} placement="header" /><main><ReallyAboutMe arc={home.arc} content={home.personalNarrative} locale={locale} /></main><SiteNavigation locale={locale} placement="footer" /></>;
 }

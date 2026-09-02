@@ -196,11 +196,7 @@ const homeSchema = {
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
     body: requiredText("Introduction", true),
-    articles: fields.array(fields.object({
-      number: requiredText("Number"),
-      title: requiredText("Title"),
-      summary: requiredText("Summary", true),
-    }), { label: "Curated teasers", validation: { length: { min: 1, max: 6 } } }),
+    linkLabel: requiredText("Thinking link label"),
   }, { label: "Thinking" }),
   running: fields.object({
     label: requiredText("Section label"),
@@ -210,13 +206,19 @@ const homeSchema = {
     surfaceLabel: requiredText("Study label"),
     placeholder: requiredText("Study description", true),
     supportingStatement: fields.text({ label: "Optional supporting statement", multiline: true }),
+    linkLabel: requiredText("Running / Building link label"),
   }, { label: "Running teaser" }),
   arc: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
     timeline: textList("Timeline entries", 1, 6),
   }, { label: "Personal arc" }),
-  human: homeBlock("Human"),
+  human: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    body: requiredText("Body", true),
+    linkLabel: requiredText("Really About Me link label"),
+  }, { label: "Human" }),
   personalNarrative: fields.object({
     label: requiredText("Section label"),
     stillHere: requiredText("Opening heading"),

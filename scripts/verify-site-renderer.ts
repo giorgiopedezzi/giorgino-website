@@ -27,6 +27,12 @@ async function waitForServer(baseUrl: string) {
 }
 
 async function rendererBaseUrl() {
+  const configuredBaseUrl = process.env.SITE_RENDERER_BASE_URL;
+  if (configuredBaseUrl) {
+    const configuredUrl = new URL(configuredBaseUrl);
+    if (configuredUrl.protocol !== "http:" && configuredUrl.protocol !== "https:") throw new Error("SITE_RENDERER_BASE_URL must use HTTP(S)");
+    return configuredUrl.origin;
+  }
   try {
     const existing = await fetch("http://127.0.0.1:3000/en/authoring-foundation");
     if (existing.ok) return "http://127.0.0.1:3000";
@@ -62,7 +68,15 @@ async function main() {
     assert.match(contactHtml, /<title>Contact .* Giorgio Pedezzi<\/title>/);
     assert.match(contactHtml, /rel="canonical" href="http:\/\/localhost:\d+\/en\/contact"/);
     assert.match(contactHtml, /hrefLang="it" href="http:\/\/localhost:\d+\/it\/contact"/);
-    console.log("Verified localized public routes and metadata, development preview rendering, and preservation of the two-frame animated GIF.");
+    const homeHtml = await (await fetch(`${baseUrl}/en`)).text();
+    assert.match(homeHtml, /href="\/en\/thinking"/);
+    assert.match(homeHtml, /href="\/en\/running"/);
+    assert.match(homeHtml, /href="\/en\/really-about-me"/);
+    assert.doesNotMatch(homeHtml, /Missing Man\./, "Home must not reproduce the personal deep page");
+    const aboutHtml = await (await fetch(`${baseUrl}/en/really-about-me`)).text();
+    assert.match(aboutHtml, /Experience matters only if it doesn/);
+    assert.match(aboutHtml, /Started programming/);
+    console.log("Verified localized public routes, homepage deep-page handoffs, personal-content separation, metadata, development preview rendering, and animated GIF preservation.");
   } finally {
     server?.kill();
   }

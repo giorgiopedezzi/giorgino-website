@@ -11,6 +11,8 @@
 .sectionHeading.sectionHeading { font-size: var(--font-size-section-heading); }
 .timeline { display: grid; gap: var(--space-sm); margin-top: var(--space-sm); }
 .timelineFinal { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.1; }
+.arcTimeline { display: grid; max-width: 47.5rem; border-top: 1px solid var(--color-border); }
+.arcTimeline p { padding-block: 1.125rem; border-bottom: 1px solid var(--color-border); font-size: 1.25rem; line-height: 1.45; }
 .artifact { display: flex; flex-direction: column; justify-content: space-between; width: min(100%, 53.75rem); min-height: clamp(16rem, 38vw, 26.25rem); padding: var(--space-md); margin: 0; border: 1px solid var(--color-border); background: var(--color-background); }
 .artifact span { color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .108em; text-transform: uppercase; }
 .artifact p, .muted { color: var(--color-text-muted); font-size: 1rem; }
@@ -29,4 +31,4 @@
 .next { width: fit-content; margin-top: var(--space-lg); color: var(--color-text-muted); font-size: 1rem; text-decoration: none; }
 .next:hover, .next:focus-visible { color: var(--color-text); text-decoration: underline; text-underline-offset: .25em; }
 .preload { font-kerning: auto; }
-@media (max-width: 40rem) { .hero { min-height: auto; } .pizza { min-height: 0; } .pizzaStack, .nonninoStack { margin-left: 0; } .nonnino { min-height: 26rem; } .artifact { min-height: 15rem; } }
+@media (max-width: 40rem) { .hero { min-height: auto; } .pizza { min-height: 0; } .pizzaStack, .nonninoStack { margin-left: 0; } .nonnino { min-height: 26rem; } .artifact { min-height: 15rem; } .arcTimeline p { font-size: 1.125rem; } }
