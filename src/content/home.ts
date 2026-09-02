@@ -4,6 +4,7 @@ import { join } from "node:path";
 import type { Locale } from "./locales";
 import { validateContentMetadata } from "./content-metadata";
 import type { ContentBlock, HomeContent } from "./types";
+import { validateRichText } from "./rich-text";
 
 
 function fail(path: string, message: string): never {
@@ -40,7 +41,7 @@ function textArray(value: unknown, path: string, minimum: number, maximum: numbe
 
 function block(value: unknown, path: string): ContentBlock {
   const source = record(value, path);
-  return { label: text(source.label, `${path}.label`), heading: text(source.heading, `${path}.heading`), body: text(source.body, `${path}.body`) };
+  return { label: text(source.label, `${path}.label`), heading: text(source.heading, `${path}.heading`), body: validateRichText(source.body, `${path}.body`) };
 }
 
 export function validateHomeContent(value: unknown, path = "home.json"): HomeContent {

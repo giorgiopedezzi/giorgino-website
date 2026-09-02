@@ -1,5 +1,7 @@
 import { collection, config, fields, singleton } from "@keystatic/core";
 
+import { richText } from "./rich-text-field";
+
 export const isThinkingAuthoringEnabled = process.env.NODE_ENV === "development";
 
 const localeOptions = [
@@ -21,7 +23,7 @@ const editorialBlocks = fields.blocks(
   {
     paragraph: {
       label: "Paragraph",
-      schema: fields.text({ label: "Text", multiline: true, validation: { isRequired: true } }),
+      schema: richText({ label: "Text", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
     },
     heading: {
       label: "Heading",
@@ -166,7 +168,7 @@ const textList = (label: string, min: number, max: number) => fields.array(
 const homeBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
   heading: requiredText("Heading"),
-  body: requiredText("Body", true),
+  body: richText({ label: "Body", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
 }, { label });
 const personalArtifact = (label: string) => fields.object({
   placeholder: requiredText("Placeholder text", true),
@@ -195,14 +197,14 @@ const homeSchema = {
   thinking: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: requiredText("Introduction", true),
+    body: richText({ label: "Introduction", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
     linkLabel: requiredText("Thinking link label"),
     linkHref: fields.url({ label: "Thinking link target", validation: { isRequired: true } }),
   }, { label: "Thinking" }),
   running: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: requiredText("Body", true),
+    body: richText({ label: "Body", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
     surfaceHeading: requiredText("Study heading"),
     surfaceLabel: requiredText("Study label"),
     placeholder: requiredText("Study description", true),
@@ -213,7 +215,7 @@ const homeSchema = {
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: requiredText("Body", true),
+    body: richText({ label: "Body", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
     linkLabel: requiredText("Really About Me link label"),
     linkHref: fields.url({ label: "Really About Me link target", validation: { isRequired: true } }),
   }, { label: "Human" }),

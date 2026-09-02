@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { BodyCopy, DisplayHeading, EditorialHeading, PageContainer, Section, SectionLabel } from "@/components/primitives/Editorial";
+import { RichTextCopy } from "@/components/primitives/RichText";
 import type { Locale } from "@/content/locales";
 import type { DialogueArtifact, EditorialArticle, EditorialBlock } from "@/content/types";
 
@@ -22,7 +23,7 @@ export function DialogueArtifacts({ artifacts, emptyLabel }: { artifacts: Dialog
 function EditorialBody({ blocks }: { blocks: EditorialBlock[] }) {
   return <div className={styles.body}>{blocks.map((block, index) => {
     switch (block.type) {
-      case "paragraph": return <BodyCopy key={index}>{block.text}</BodyCopy>;
+      case "paragraph": return <RichTextCopy key={index} value={block.text} />;
       case "heading": return <EditorialHeading as="h2" key={index}>{block.text}</EditorialHeading>;
       case "quote": return <blockquote key={index}>{block.text}{block.attribution && <footer>— {block.attribution}</footer>}</blockquote>;
       case "image": case "artifact": return <figure key={index}><Image src={block.src} alt={block.alt} width={960} height={640} />{(block.caption || (block.type === "artifact" && block.note)) && <figcaption>{block.caption}{block.type === "artifact" && block.note && <span>{block.note}</span>}</figcaption>}</figure>;

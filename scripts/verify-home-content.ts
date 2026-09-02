@@ -11,6 +11,7 @@ const englishAbout = getAboutContent("en");
 const italianAbout = getAboutContent("it");
 
 assert.equal(english.hero.heading, "Technology keeps changing. The difficult part rarely does.");
+assert.equal(typeof english.hero.body, "string", "existing plain homepage prose must remain valid");
 assert.equal(english.belief.statements.length, 4);
 assert.equal(english.darkMatter.narrative.length, 2);
 assert.equal(english.thinking.linkLabel, "Follow the thinking");
@@ -42,6 +43,23 @@ assert.throws(() => validateHomeContent(missingDeepLink), /thinking\.linkLabel/)
 const unsafeDeepLink = structuredClone(english) as unknown as Record<string, unknown>;
 (unsafeDeepLink.running as Record<string, unknown>).linkHref = "javascript:alert(1)";
 assert.throws(() => validateHomeContent(unsafeDeepLink), /internal path or an http\(s\) URL/);
+
+const formattedHomepage = structuredClone(english) as unknown as Record<string, unknown>;
+(formattedHomepage.thinking as Record<string, unknown>).body = {
+  type: "doc",
+  content: [{
+    type: "paragraph",
+    content: [
+      { type: "text", text: "Editorial ", marks: [{ type: "bold" }] },
+      { type: "text", text: "emphasis", marks: [{ type: "italic" }, { type: "textStyle", attrs: { textSize: "emphasis" } }] },
+    ],
+  }],
+};
+assert.doesNotThrow(() => validateHomeContent(formattedHomepage));
+
+const unsupportedFormatting = structuredClone(formattedHomepage) as Record<string, unknown>;
+((((unsupportedFormatting.thinking as Record<string, unknown>).body as Record<string, unknown>).content as Array<Record<string, unknown>>)[0].content as Array<Record<string, unknown>>)[0].marks = [{ type: "link" }];
+assert.throws(() => validateHomeContent(unsupportedFormatting), /unsupported Tiptap node or mark/);
 
 const encodedHome = Buffer.from(JSON.stringify(english)).toString("base64url");
 assert.doesNotThrow(() => validateSiteAuthoringUpdate({

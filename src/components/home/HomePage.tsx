@@ -1,13 +1,13 @@
 import Link from "next/link";
 
 import {
-  BodyCopy,
   DisplayHeading,
   NextLink,
   PageContainer,
   Section,
   SectionLabel,
 } from "@/components/primitives/Editorial";
+import { RichTextCopy } from "@/components/primitives/RichText";
 import type { HomeContent } from "@/content/types";
 import type { ContactContent } from "@/content/contact";
 
@@ -30,7 +30,7 @@ export function HomePage({ content, contact }: HomePageProps) {
           <div className={styles.stack}>
             <SectionLabel>{content.hero.label}</SectionLabel>
             <DisplayHeading id="hero-heading" className={styles.heroHeading}>{content.hero.heading}</DisplayHeading>
-            <BodyCopy>{content.hero.body}</BodyCopy>
+            <RichTextCopy value={content.hero.body} />
             <NextLink>{content.nextLabel}</NextLink>
           </div>
         </PageContainer>
@@ -54,7 +54,7 @@ export function HomePage({ content, contact }: HomePageProps) {
           <div className={styles.thinkingStack}>
             <SectionLabel>{content.thinking.label}</SectionLabel>
             <DisplayHeading as="h2" id="thinking-heading" className={styles.sectionHeading}>{content.thinking.heading}</DisplayHeading>
-            <BodyCopy>{content.thinking.body}</BodyCopy>
+            <RichTextCopy value={content.thinking.body} />
             <DeepLink href={content.thinking.linkHref}>{content.thinking.linkLabel}</DeepLink>
           </div>
         </PageContainer>
@@ -65,7 +65,7 @@ export function HomePage({ content, contact }: HomePageProps) {
           <div className={styles.runningStack}>
             <SectionLabel>{content.running.label}</SectionLabel>
             <DisplayHeading as="h2" id="running-heading" className={styles.runningHeading}>{content.running.heading}</DisplayHeading>
-            <BodyCopy>{content.running.body}</BodyCopy>
+            <RichTextCopy value={content.running.body} />
             <div className={styles.runningSurface}>
               <div className={styles.visualHeader}>
                 <strong>{content.running.surfaceHeading}</strong>
@@ -88,7 +88,7 @@ export function HomePage({ content, contact }: HomePageProps) {
           <div className={styles.humanStack}>
             <SectionLabel>{content.human.label}</SectionLabel>
             <DisplayHeading as="h2" id="human-heading" className={styles.sectionHeading}>{content.human.heading}</DisplayHeading>
-            <BodyCopy>{content.human.body}</BodyCopy>
+            <RichTextCopy value={content.human.body} />
             <DeepLink href={content.human.linkHref}>{content.human.linkLabel}</DeepLink>
           </div>
         </PageContainer>

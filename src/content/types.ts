@@ -1,9 +1,10 @@
 import type { ContentMetadata } from "./content-metadata";
+import type { RichText } from "./rich-text";
 
 export type ContentBlock = {
   label: string;
   heading: string;
-  body: string;
+  body: RichText;
 };
 
 export type SiteMedia = {
@@ -13,7 +14,7 @@ export type SiteMedia = {
 };
 
 export type EditorialBlock =
-  | { type: "paragraph"; text: string }
+  | { type: "paragraph"; text: RichText }
   | { type: "heading"; text: string }
   | { type: "quote"; text: string; attribution?: string }
   | { type: "image"; src: string; alt: string; caption?: string }

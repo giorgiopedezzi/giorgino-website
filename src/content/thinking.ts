@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { locales, type Locale } from "./locales";
 import { validateContentMetadata } from "./content-metadata";
 import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialContent, EditorialLink, EditorialMetadata } from "./types";
+import { validateRichText } from "./rich-text";
 
 type ThinkingIndexFile = Pick<EditorialContent, "metadata" | "label" | "heading" | "introduction" | "dialogueArtifacts" | "dialogues" | "articleLabels">;
 
@@ -100,6 +101,7 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
 
   switch (type) {
     case "paragraph":
+      return { type, text: validateRichText(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
     case "heading":
     case "note":
       return { type, text: requireString(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
