@@ -1,10 +1,58 @@
 {
-  "metadata": { "title": "Giorgio Pedezzi — Notes from the in-between", "description": "Writing, projects, and notes by Giorgio Pedezzi.", "socialTitle": "Giorgio Pedezzi — Notes from the in-between", "socialDescription": "Writing, projects, and notes by Giorgio Pedezzi." },
+  "metadata": {
+    "title": "Giorgio Pedezzi — Notes from the in-between",
+    "description": "Writing, projects, and notes by Giorgio Pedezzi.",
+    "socialTitle": "Giorgio Pedezzi — Notes from the in-between",
+    "socialDescription": "Writing, projects, and notes by Giorgio Pedezzi."
+  },
   "nextLabel": "Next?",
-  "hero": { "label": "Notes from the in-between", "heading": "Technology keeps changing. The difficult part rarely does.", "body": "Thinking about systems, judgment, people. And the greatest question: what we must not delegate as we enter AI age?" },
-  "belief": { "label": "I Believe", "statements": ["AI should be used, not surrendered to.", "Complexity deserves nuance. Decisions require clarity.", "The technology may be unprecedented. Many of the questions are not.", "Information is abundant. Too much. Judgment is not. Never enough."] },
-  "darkMatter": { "label": "Dark Matter", "heading": "The work between the work.", "narrative": ["In difficult projects, I have often found myself connecting the pieces that were not supposed to be disconnected in the first place: technology and business, decisions and consequences, formal roles and real responsibility.", "I call that dark matter. It is invisible until the system starts to pull apart."], "closingThought": "The next step is not being indispensable. It is helping other people learn how to see the whole.", "supportingText": "A good outcome is when I can leave and the system no longer needs me." },
-  "thinking": { "label": "03 — Thinking", "heading": "Some notes worth leaving unfinished.", "body": "Not content. A place to follow a line of thought long enough to see where it goes.", "linkLabel": "Follow the thinking", "linkHref": "/en/thinking" },
-  "running": { "label": "04 — The Running Project", "heading": "And then I tried to build it.", "body": "A real running application, built substantially with AI coding agents. The concept, constraints, priorities and decisions remain human.", "surfaceHeading": "A runner, not a dashboard.", "surfaceLabel": "A small visual study", "placeholder": "A reminder that a body is not a spreadsheet.", "supportingStatement": "Signal over noise. Assistance without surrender.", "linkLabel": "See the experiment", "linkHref": "/en/running" },
-  "human": { "label": "06 — Human", "heading": "I am interested in what holds — and what slips through.", "body": "Technology is only one way I pay attention. The rest belongs to the world beyond the screen.", "linkLabel": "Really about me", "linkHref": "/en/really-about-me" }
+  "hero": {
+    "label": "Notes from the in-between",
+    "heading": "Technology keeps changing. The difficult part rarely does.",
+    "body": "Three decades in the room where delivery actually happens. \nWhere the plan meets the people. \nMumbling about systems, judgment, people. \nAnd now the new era greatest question: what we must not delegate to AI?"
+  },
+  "belief": {
+    "label": "01 — I Believe",
+    "statements": [
+      "AI should be used. Not abused. Do not let it use you. Do not let it abuse you.",
+      "Complexity deserves nuance. Decisions require clarity.",
+      "The technology may be unprecedented. Many of the questions are not.",
+      "Information is abundant. Too much. Judgment is not. Never enough.\nGuess what belongs to AI, and what belongs to human?"
+    ]
+  },
+  "darkMatter": {
+    "label": "Dark Matter",
+    "heading": "02 —  The work between the work.",
+    "narrative": [
+      "In difficult projects, you  often miss the connection the pieces that were not supposed to be disconnected in the first place. Technology and business, decisions and consequences, formal roles and real responsibility, tasks and final goal",
+      "It seems that everything is ok. It's not. The system is starting to pull apart. You need... THE DARK MATTER"
+    ],
+    "closingThought": "Help other people learning how to see the whole. Clearly",
+    "supportingText": "Now I can leave. But I think they will miss Giorgino, anyway"
+  },
+  "thinking": {
+    "label": "03 — Thinking",
+    "heading": "Some notes worth leaving unfinished.",
+    "body": "Not content. A place to follow a line of thought long enough to see where it goes.",
+    "linkLabel": "Follow the thinking",
+    "linkHref": "/en/thinking"
+  },
+  "running": {
+    "label": "04 — The Running Project",
+    "heading": "And then I tried to build it.",
+    "body": "A real running application, built substantially with AI coding agents. The concept, constraints, priorities and decisions remain human.",
+    "surfaceHeading": "A runner, not a dashboard.",
+    "surfaceLabel": "A small visual study",
+    "placeholder": "A reminder that a body is not a spreadsheet.",
+    "supportingStatement": "Signal over noise. Assistance without surrender.",
+    "linkLabel": "See the experiment",
+    "linkHref": "/en/running"
+  },
+  "human": {
+    "label": "06 — Human",
+    "heading": "I am interested in what holds — and what slips through.",
+    "body": "Technology is only one way I pay attention. The rest belongs to the world beyond the screen.",
+    "linkLabel": "Really about me",
+    "linkHref": "/en/really-about-me"
+  }
 }
