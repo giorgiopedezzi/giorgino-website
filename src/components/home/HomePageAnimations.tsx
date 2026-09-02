@@ -12,6 +12,7 @@ import {
 } from "@/components/primitives/Editorial";
 
 import styles from "./HomePage.module.css";
+import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative, scrambleText, scrambleWord, type DarkMatterPhase } from "./home-animation";
 
 type DarkMatterContent = {
   label: string;
@@ -25,6 +26,7 @@ type Props = {
   beliefLabel: string;
   beliefStatements: string[];
   darkMatter: DarkMatterContent;
+  nextLabel: string;
   children: ReactNode;
 };
 
@@ -36,35 +38,6 @@ const DARK_MATTER_TRANSITION_TICK_MS = 70;
 const DARK_MATTER_FINAL_PAUSE_MS = 2_000;
 const DARK_MATTER_CHARACTERS_PER_TICK = 2;
 const DARK_MATTER_VIEWPORT_THRESHOLD = 0.35;
-
-type DarkMatterPhase = "idle" | "narrative" | "restoring" | "final";
-
-function scrambleWord(word: string): string {
-  const letters = Array.from(word);
-  if (letters.length < 4) return word;
-
-  // A fixed middle-letter swap gives the Cambridge effect without random output.
-  const first = 1;
-  const second = letters.length - 2;
-  [letters[first], letters[second]] = [letters[second], letters[first]];
-  return letters.join("");
-}
-
-function scrambleText(text: string): string {
-  return text.split(/(\s+)/).map((part) => (/^\s+$/.test(part) ? part : scrambleWord(part))).join("");
-}
-
-function prepareNarrative(narrative: string[]) {
-  const canonical = narrative.join("\n\n");
-  const stripped = canonical
-    .replace(/[^\p{L}\p{N}\s]/gu, "")
-    .toLocaleLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
-  const words = stripped.split(" ").filter(Boolean);
-
-  return { canonical, stripped, words };
-}
 
 function usePrefersReducedMotion() {
   const [reducedMotion, setReducedMotion] = useState<boolean | null>(null);
@@ -93,7 +66,7 @@ function playKeyboardTick(context: AudioContext | null) {
   oscillator.stop(context.currentTime + 0.028);
 }
 
-export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, children }: Props) {
+export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, nextLabel, children }: Props) {
   const reducedMotion = usePrefersReducedMotion();
   const beliefRef = useRef<HTMLDivElement>(null);
   const darkMatterRef = useRef<HTMLDivElement>(null);
@@ -223,13 +196,13 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   }, []);
 
   const animatedBelief = reducedMotion || beliefCharacters === null ? beliefText : beliefText.slice(0, beliefCharacters);
-  const effectiveDarkPhase: DarkMatterPhase = reducedMotion ? "final" : darkPhase;
+  const effectiveDarkPhase = effectiveDarkMatterPhase(reducedMotion, darkPhase);
   const visibleNarrative = effectiveDarkPhase === "idle" || effectiveDarkPhase === "final"
     ? darkText.canonical
     : scrambleText(darkText.stripped).slice(0, darkCharacters);
   const visibleTransition = transitionTextCharacters.slice(0, transitionCharacterCount).join("");
   const displayedRestoredWords = transitionTextCharacters.length === 0 ? darkText.words.length : restoredWords;
-  const isDarkMatterVisible = reducedMotion || (isBeliefComplete && darkPhase !== "idle");
+  const showDarkMatter = isDarkMatterVisible(reducedMotion, Boolean(isBeliefComplete), darkPhase);
 
   return (
     <>
@@ -243,13 +216,13 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
                 {statement}
               </DisplayHeading>
             ))}
-            <NextLink />
+            <NextLink>{nextLabel}</NextLink>
           </div>
         </PageContainer>
       </Section>
       </div>
 
-      <div ref={darkMatterRef} className={isDarkMatterVisible ? styles.darkMatterVisible : styles.darkMatterPending}>
+      <div ref={darkMatterRef} className={showDarkMatter ? styles.darkMatterVisible : styles.darkMatterPending}>
       <Section tone="darkMatter" aria-labelledby="dark-matter-heading">
         <PageContainer>
           <div className={styles.darkMatterStack}>
@@ -267,7 +240,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
             {darkMatter.closingThought && effectiveDarkPhase === "restoring" && <DisplayHeading as="h3" className={styles.closingThought}>{visibleTransition}</DisplayHeading>}
             {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}>{darkMatter.closingThought}</DisplayHeading>}
             {darkMatter.supportingText && effectiveDarkPhase === "final" && <BodyCopy className={styles.supportingText}>{darkMatter.supportingText}</BodyCopy>}
-            {effectiveDarkPhase === "final" && <NextLink />}
+            {effectiveDarkPhase === "final" && <NextLink>{nextLabel}</NextLink>}
           </div>
         </PageContainer>
       </Section>

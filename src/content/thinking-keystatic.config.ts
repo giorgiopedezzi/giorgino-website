@@ -112,13 +112,121 @@ const authoringFoundationSchema = {
   ),
 };
 
+const requiredText = (label: string, multiline = false) => fields.text({ label, multiline, validation: { isRequired: true } });
+const textList = (label: string, min: number, max: number) => fields.array(
+  requiredText("Text", true),
+  { label, validation: { length: { min, max } } },
+);
+const homeBlock = (label: string) => fields.object({
+  label: requiredText("Section label"),
+  heading: requiredText("Heading"),
+  body: requiredText("Body", true),
+}, { label });
+const personalArtifact = (label: string) => fields.object({
+  placeholder: requiredText("Placeholder text", true),
+  media: fields.object({
+    src: fields.image({ label: "Media file", directory: "public/site-media", publicPath: "/site-media/" }),
+    alt: fields.text({ label: "Alternative text", description: "Required by validation when a media file is present." }),
+    caption: fields.text({ label: "Caption" }),
+  }, { label: "Optional media" }),
+}, { label });
+
+const homeSchema = {
+  metadata: fields.object({
+    title: requiredText("Page title"),
+    description: requiredText("Page description", true),
+  }, { label: "Metadata" }),
+  nextLabel: requiredText("Section continuation label"),
+  hero: homeBlock("Hero"),
+  belief: fields.object({
+    label: requiredText("Section label"),
+    statements: textList("Belief statements", 1, 6),
+  }, { label: "Belief statements", description: "One to six statements; their order drives the typewriter animation." }),
+  darkMatter: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    narrative: textList("Narrative paragraphs", 1, 4),
+    closingThought: fields.text({ label: "Optional closing thought", multiline: true }),
+    supportingText: fields.text({ label: "Optional supporting text", multiline: true }),
+  }, { label: "Dark Matter", description: "Narrative order drives the scramble and restoration animation." }),
+  thinking: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    body: requiredText("Introduction", true),
+    articles: fields.array(fields.object({
+      number: requiredText("Number"),
+      title: requiredText("Title"),
+      summary: requiredText("Summary", true),
+    }), { label: "Curated teasers", validation: { length: { min: 1, max: 6 } } }),
+  }, { label: "Thinking" }),
+  running: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    body: requiredText("Body", true),
+    surfaceHeading: requiredText("Study heading"),
+    surfaceLabel: requiredText("Study label"),
+    placeholder: requiredText("Study description", true),
+    supportingStatement: fields.text({ label: "Optional supporting statement", multiline: true }),
+  }, { label: "Running teaser" }),
+  arc: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    timeline: textList("Timeline entries", 1, 6),
+  }, { label: "Personal arc" }),
+  human: homeBlock("Human"),
+  personalNarrative: fields.object({
+    label: requiredText("Section label"),
+    stillHere: requiredText("Opening heading"),
+    thanks: requiredText("Thank-you line"),
+    opening: textList("Opening lines", 7, 7),
+    decadeHeading: requiredText("Decade heading"),
+    decadeEntries: textList("Decade entries", 4, 4),
+    artifactLabel: requiredText("Artifact label"),
+    missingMan: fields.object({
+      heading: requiredText("Heading"),
+      body: requiredText("Body", true),
+      artifact: personalArtifact("Missing Man artifact"),
+      reflection: requiredText("Reflection", true),
+      signoff: requiredText("Signoff"),
+    }, { label: "Missing Man" }),
+    pizza: fields.object({
+      heading: requiredText("Heading"),
+      lines: textList("Lines", 7, 7),
+    }, { label: "Pizza" }),
+    wait: fields.object({
+      heading: requiredText("Heading"),
+      body: requiredText("Body", true),
+      artifact: personalArtifact("T-shirt artifact"),
+    }, { label: "Wait" }),
+    nonnino: fields.object({
+      label: requiredText("Section label"),
+      heading: requiredText("Heading", true),
+    }, { label: "Nonnino" }),
+    book: fields.object({
+      label: requiredText("Section label"),
+      heading: requiredText("Heading"),
+      lines: textList("Lines", 2, 2),
+      signoff: requiredText("Signoff"),
+    }, { label: "Book" }),
+    continueLabel: requiredText("Continue link label"),
+  }, { label: "Personal narrative", description: "Canonical content shared by the homepage and Really About Me." }),
+  contact: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    details: textList("Contact details", 1, 4),
+    supportingText: fields.text({ label: "Optional supporting text", multiline: true }),
+  }, { label: "Contact teaser" }),
+};
+
 export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
+    navigation: ["englishHome", "italianHome", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
   },
   singletons: {
+    englishHome: singleton({ label: "English homepage", path: "src/content/site/en/home", format: "json", schema: homeSchema }),
+    italianHome: singleton({ label: "Italian homepage", path: "src/content/site/it/home", format: "json", schema: homeSchema }),
     englishFoundation: singleton({ label: "English authoring foundation", path: "src/content/site/en/authoring-foundation", format: "json", schema: authoringFoundationSchema }),
     italianFoundation: singleton({ label: "Italian authoring foundation", path: "src/content/site/it/authoring-foundation", format: "json", schema: authoringFoundationSchema }),
     englishIndex: singleton({ label: "English Thinking index", path: "src/content/thinking/en/index", format: "json", schema: indexSchema }),
