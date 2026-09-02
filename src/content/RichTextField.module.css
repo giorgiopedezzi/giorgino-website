@@ -6,6 +6,10 @@
 .toolbar button[aria-pressed="true"] { border-color: #f4f4f4; background: #666; }
 .toolbar label { display: flex; align-items: center; gap: .3rem; margin-left: .35rem; font-size: .875rem; }
 .toolbar select { border: 1px solid #666; border-radius: .25rem; background: #353535; color: #f4f4f4; padding: .25rem .4rem; }
+.typePreview { min-width: 7.5rem; color: #d8d8d8; }
+.typePreviewSmall { font-size: var(--font-size-label, .8125rem); }
+.typePreviewLarge { font-size: var(--font-size-editorial, 1.5rem); }
+.typePreviewEmphasis { font-family: var(--font-display, inherit); font-size: var(--font-size-editorial, 1.5rem); line-height: 1; }
 .editor { min-height: 7rem; padding: .8rem; outline: none; color: #f4f4f4; line-height: 1.5; }
 .editor p { margin: 0 0 .75rem; }
 .editor p:last-child { margin-bottom: 0; }

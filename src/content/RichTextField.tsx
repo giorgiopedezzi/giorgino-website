@@ -51,6 +51,13 @@ function activeSize(editor: ReturnType<typeof useEditor>): TextSize {
   return textSizeOptions.includes(size) ? size : "normal";
 }
 
+const typographyLabels: Record<TextSize, string> = {
+  small: "Label",
+  normal: "Body",
+  large: "Editorial",
+  emphasis: "Editorial emphasis",
+};
+
 export function RichTextInput({ value, onChange }: FormFieldInputProps<RichText>) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -61,6 +68,7 @@ export function RichTextInput({ value, onChange }: FormFieldInputProps<RichText>
   });
 
   if (!editor) return null;
+  const selectedSize = activeSize(editor);
   const applySize = (size: TextSize) => {
     const chain = editor.chain().focus();
     if (size === "normal") chain.unsetMark("textStyle").run();
@@ -73,10 +81,11 @@ export function RichTextInput({ value, onChange }: FormFieldInputProps<RichText>
       <button type="button" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
       <button type="button" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
       <button type="button" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
-      <label>Size
-        <select aria-label="Text size" value={activeSize(editor)} onChange={(event) => applySize(event.target.value as TextSize)}>
-          <option value="small">Small</option><option value="normal">Normal</option><option value="large">Large</option><option value="emphasis">Emphasis</option>
+      <label>Typography
+        <select aria-label="Typography style" value={selectedSize} onChange={(event) => applySize(event.target.value as TextSize)}>
+          <option value="small">Label</option><option value="normal">Body</option><option value="large">Editorial</option><option value="emphasis">Editorial emphasis</option>
         </select>
+        <span className={[styles.typePreview, styles[`typePreview${selectedSize[0].toUpperCase()}${selectedSize.slice(1)}`]].join(" ")} aria-hidden="true">{typographyLabels[selectedSize]}</span>
       </label>
     </div>
     <EditorContent editor={editor} />
