@@ -2,9 +2,10 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { locales, type Locale } from "./locales";
+import { validateContentMetadata } from "./content-metadata";
 import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialContent, EditorialLink, EditorialMetadata } from "./types";
 
-type ThinkingIndexFile = Pick<EditorialContent, "label" | "heading" | "introduction" | "dialogueArtifacts" | "dialogues" | "articleLabels">;
+type ThinkingIndexFile = Pick<EditorialContent, "metadata" | "label" | "heading" | "introduction" | "dialogueArtifacts" | "dialogues" | "articleLabels">;
 
 type ThinkingArticleFile = Omit<EditorialArticle, "publishedAt"> & {
   publishedAt: string | null;
@@ -89,7 +90,7 @@ function validateLinks(value: unknown, path: string): EditorialLink[] {
 function validateMetadata(value: unknown, path: string): EditorialMetadata | undefined {
   if (value === undefined || value === null) return undefined;
   if (!isRecord(value)) fail(path, "expected an object");
-  return { title: requireString(value.title, `${path}.title`), description: requireString(value.description, `${path}.description`) };
+  return validateContentMetadata(value, path);
 }
 
 function validateBlock(value: unknown, path: string): EditorialBlock {
@@ -139,11 +140,13 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
 function validateIndex(value: unknown, path: string): ThinkingIndexFile {
   if (!isRecord(value)) fail(path, "expected an object");
   return {
+    metadata: validateContentMetadata(value.metadata, `${path}.metadata`),
     label: requireString(value.label, `${path}.label`),
     heading: requireString(value.heading, `${path}.heading`),
     introduction: requireString(value.introduction, `${path}.introduction`),
     dialogueArtifacts: validateDialogueArtifacts(value.dialogueArtifacts, `${path}.dialogueArtifacts`),
     dialogues: {
+      metadata: validateContentMetadata(isRecord(value.dialogues) ? value.dialogues.metadata : undefined, `${path}.dialogues.metadata`),
       label: requireString(isRecord(value.dialogues) ? value.dialogues.label : undefined, `${path}.dialogues.label`),
       heading: requireString(isRecord(value.dialogues) ? value.dialogues.heading : undefined, `${path}.dialogues.heading`),
       introduction: requireString(isRecord(value.dialogues) ? value.dialogues.introduction : undefined, `${path}.dialogues.introduction`),

@@ -91,12 +91,23 @@ const editorialLinks = (label: string, description: string) => fields.array(
   { label, description, itemLabel: (props) => props.fields.label.value || "Link" },
 );
 
+const requiredText = (label: string, multiline = false) => fields.text({ label, multiline, validation: { isRequired: true } });
+const metadataSchema = (label = "Metadata") => fields.object({
+  title: requiredText("Page title"),
+  description: requiredText("Page description", true),
+  socialTitle: fields.text({ label: "Social title" }),
+  socialDescription: fields.text({ label: "Social description", multiline: true }),
+  socialImage: fields.image({ label: "Social image", directory: "public/site-media", publicPath: "/site-media/" }),
+}, { label, description: "Canonical URL and locale alternates remain application-generated." });
+
 const indexSchema = {
+  metadata: metadataSchema("Thinking index metadata"),
   label: fields.text({ label: "Section label", validation: { isRequired: true } }),
   heading: fields.text({ label: "Heading", validation: { isRequired: true } }),
   introduction: fields.text({ label: "Introduction", multiline: true, validation: { isRequired: true } }),
   dialogueArtifacts,
   dialogues: fields.object({
+    metadata: metadataSchema("Dialogues metadata"),
     label: fields.text({ label: "Dialogue section label", validation: { isRequired: true } }),
     heading: fields.text({ label: "Dialogue heading", validation: { isRequired: true } }),
     introduction: fields.text({ label: "Dialogue introduction", multiline: true, validation: { isRequired: true } }),
@@ -131,7 +142,6 @@ const authoringFoundationSchema = {
   ),
 };
 
-const requiredText = (label: string, multiline = false) => fields.text({ label, multiline, validation: { isRequired: true } });
 const runningBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
   heading: requiredText("Heading"),
@@ -139,7 +149,7 @@ const runningBlock = (label: string) => fields.object({
   isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
 }, { label });
 const runningSchema = {
-  metadata: fields.object({ title: requiredText("Page title"), description: requiredText("Page description", true) }, { label: "Metadata" }),
+  metadata: metadataSchema(),
   hero: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), intro: requiredText("Introduction", true) }, { label: "Hero" }),
   problem: runningBlock("Problem"),
   restraint: runningBlock("Deliberate restraint"),
@@ -168,10 +178,7 @@ const personalArtifact = (label: string) => fields.object({
 }, { label });
 
 const homeSchema = {
-  metadata: fields.object({
-    title: requiredText("Page title"),
-    description: requiredText("Page description", true),
-  }, { label: "Metadata" }),
+  metadata: metadataSchema(),
   nextLabel: requiredText("Section continuation label"),
   hero: homeBlock("Hero"),
   belief: fields.object({
@@ -246,21 +253,54 @@ const homeSchema = {
     }, { label: "Book" }),
     continueLabel: requiredText("Continue link label"),
   }, { label: "Personal narrative", description: "Canonical content shared by the homepage and Really About Me." }),
-  contact: fields.object({
-    label: requiredText("Section label"),
-    heading: requiredText("Heading"),
-    details: textList("Contact details", 1, 4),
-    supportingText: fields.text({ label: "Optional supporting text", multiline: true }),
-  }, { label: "Contact teaser" }),
+};
+
+const siteSettingsSchema = {
+  siteName: requiredText("Site name"),
+  metadata: metadataSchema("Site default metadata"),
+  navigation: fields.object({
+    home: requiredText("Home label"),
+    menu: requiredText("Menu label"),
+    footerLabel: requiredText("Footer section label"),
+    footerHeading: requiredText("Footer heading"),
+    thinking: requiredText("Thinking link"),
+    dialogues: requiredText("Dialogues link"),
+    running: requiredText("Running link"),
+    about: requiredText("About link"),
+    contact: requiredText("Contact link"),
+  }, { label: "Navigation and footer", description: "Labels are editable; route destinations remain code-controlled." }),
+  language: fields.object({
+    label: requiredText("Accessible language label"),
+    english: requiredText("English label"),
+    italian: requiredText("Italian label"),
+  }, { label: "Language switcher" }),
+  socialLinks: fields.array(fields.object({
+    label: requiredText("Link label"),
+    href: fields.url({ label: "HTTP(S) or email URL", validation: { isRequired: true } }),
+  }), { label: "Social and contact links", itemLabel: (props) => props.fields.label.value || "Link" }),
+  aboutMetadata: metadataSchema("Really About Me metadata"),
+};
+
+const contactSchema = {
+  metadata: metadataSchema(),
+  label: requiredText("Section label"),
+  heading: requiredText("Heading"),
+  body: requiredText("Page introduction", true),
+  details: textList("Contact details", 1, 6),
+  supportingText: fields.text({ label: "Optional supporting text", multiline: true }),
 };
 
 export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishHome", "italianHome", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
+    navigation: ["englishSettings", "italianSettings", "englishContact", "italianContact", "englishHome", "italianHome", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
   },
   singletons: {
+    englishSettings: singleton({ label: "English site settings", path: "src/content/site/en/site-settings", format: "json", schema: siteSettingsSchema }),
+    italianSettings: singleton({ label: "Italian site settings", path: "src/content/site/it/site-settings", format: "json", schema: siteSettingsSchema }),
+    englishContact: singleton({ label: "English Contact", path: "src/content/site/en/contact", format: "json", schema: contactSchema }),
+    italianContact: singleton({ label: "Italian Contact", path: "src/content/site/it/contact", format: "json", schema: contactSchema }),
     englishHome: singleton({ label: "English homepage", path: "src/content/site/en/home", format: "json", schema: homeSchema }),
     italianHome: singleton({ label: "Italian homepage", path: "src/content/site/it/home", format: "json", schema: homeSchema }),
     englishRunning: singleton({ label: "English Running / Building", path: "src/content/site/en/running", format: "json", schema: runningSchema }),
@@ -290,9 +330,12 @@ export default config({
         translationKey: fields.text({ label: "Stable translation identity", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use the same lowercase identity in each locale." } } }),
         excerpt: fields.text({ label: "Excerpt", multiline: true, validation: { isRequired: true } }),
         metadata: fields.object({
-          title: fields.text({ label: "Search/social title" }),
-          description: fields.text({ label: "Search/social description", multiline: true }),
-        }, { label: "Localized metadata", description: "Provide both fields to override the title and excerpt used in page metadata." }),
+          title: fields.text({ label: "Search title" }),
+          description: fields.text({ label: "Search description", multiline: true }),
+          socialTitle: fields.text({ label: "Social title" }),
+          socialDescription: fields.text({ label: "Social description", multiline: true }),
+          socialImage: fields.image({ label: "Social image", directory: "public/site-media", publicPath: "/site-media/" }),
+        }, { label: "Localized metadata", description: "Canonical URL and locale alternates remain application-generated." }),
         status: fields.select({ label: "Status", defaultValue: "draft", options: [{ label: "Draft", value: "draft" }, { label: "Published", value: "published" }] }),
         publishedAt: fields.date({ label: "Published date" }),
         order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }),

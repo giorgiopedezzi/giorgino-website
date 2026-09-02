@@ -1,5 +1,5 @@
 {
-  "metadata": { "title": "Running / Building — Giorgio Pedezzi", "description": "Un piccolo linguaggio visivo per una persona in movimento." },
+  "metadata": { "title": "Running / Building — Giorgio Pedezzi", "description": "Un piccolo linguaggio visivo per una persona in movimento.", "socialTitle": "Running / Building — Giorgio Pedezzi", "socialDescription": "Un piccolo linguaggio visivo per una persona in movimento." },
   "hero": { "label": "Running / Costruire", "heading": "Il runner da significato ai dati.", "intro": "Senza il runner ci sono dati telemetrici. Con il runner, i dati acquistano significato." },
   "problem": { "label": "Il problema", "heading": "Piu metriche non significano automaticamente piu comprensione.", "body": "Un piano di corsa puo sembrare preciso e comunque perdere di vista la persona che deve viverlo. L'informazione e utile solo se aiuta il runner a capire cosa sta succedendo.", "isVisible": true },
   "restraint": { "label": "Una scelta di misura", "heading": "Non l'ennesima dashboard da obbedire.", "body": "Non e un tentativo di riprodurre ogni metrica, costruire un coach universale o trasformare la corsa in un esercizio di conformita. Lascia spazio all'interpretazione, senza perdere di vista la direzione.", "isVisible": true },

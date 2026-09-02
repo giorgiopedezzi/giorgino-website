@@ -1,0 +1,26 @@
+{
+  "siteName": "Giorgio Pedezzi",
+  "metadata": {
+    "title": "Giorgio Pedezzi",
+    "description": "Notes from the in-between.",
+    "socialTitle": "Giorgio Pedezzi",
+    "socialDescription": "Notes from the in-between."
+  },
+  "navigation": {
+    "home": "Home",
+    "menu": "Find a different thread",
+    "footerLabel": "Elsewhere",
+    "footerHeading": "Find a different thread",
+    "thinking": "Thinking",
+    "dialogues": "Dialogues with AI",
+    "running": "Are you a runner?",
+    "about": "Really About Me",
+    "contact": "Contact"
+  },
+  "language": { "label": "Language", "english": "EN", "italian": "IT" },
+  "socialLinks": [],
+  "aboutMetadata": {
+    "title": "Really About Me \u2014 Giorgio Pedezzi",
+    "description": "A more personal note from Giorgio Pedezzi."
+  }
+}

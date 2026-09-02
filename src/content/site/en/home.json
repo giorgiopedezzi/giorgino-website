@@ -1,7 +1,9 @@
 {
   "metadata": {
     "title": "Giorgio Pedezzi — Notes from the in-between",
-    "description": "Writing, projects, and notes by Giorgio Pedezzi."
+    "description": "Writing, projects, and notes by Giorgio Pedezzi.",
+    "socialTitle": "Giorgio Pedezzi — Notes from the in-between",
+    "socialDescription": "Writing, projects, and notes by Giorgio Pedezzi."
   },
   "nextLabel": "Next?",
   "hero": {
@@ -123,11 +125,5 @@
       "signoff": "The dreams hunter runs free."
     },
     "continueLabel": "Continue the conversation"
-  },
-  "contact": {
-    "label": "08 — Continue the Conversation",
-    "heading": "If something here resonated, we probably have something to talk about.",
-    "details": ["Email — details to follow", "LinkedIn — details to follow"],
-    "supportingText": "The technology may be unprecedented. Many of the questions are not."
   }
 }

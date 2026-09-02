@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { extname, join } from "node:path";
 
 import type { Locale } from "./locales";
+import { validateContentMetadata } from "./content-metadata";
 import type { ArticlePreview, ContentBlock, HomeContent, PersonalArtifact, PersonalNarrative, SiteMedia } from "./types";
 
 const mediaExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
@@ -96,7 +97,6 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
   const thinking = record(source.thinking, `${path}.thinking`);
   const running = record(source.running, `${path}.running`);
   const arc = record(source.arc, `${path}.arc`);
-  const contact = record(source.contact, `${path}.contact`);
   if (!Array.isArray(thinking.articles)) fail(`${path}.thinking.articles`, "expected an array");
   const articles: ArticlePreview[] = thinking.articles.map((entry, index) => {
     const article = record(entry, `${path}.thinking.articles[${index}]`);
@@ -105,7 +105,7 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
   if (articles.length < 1 || articles.length > 6) fail(`${path}.thinking.articles`, "expected between 1 and 6 items");
   if (new Set(articles.map((article) => article.number)).size !== articles.length) fail(`${path}.thinking.articles`, "numbers must be unique");
   const result: HomeContent = {
-    metadata: { title: text(metadata.title, `${path}.metadata.title`), description: text(metadata.description, `${path}.metadata.description`) },
+    metadata: validateContentMetadata(metadata, `${path}.metadata`),
     nextLabel: text(source.nextLabel, `${path}.nextLabel`),
     hero: block(source.hero, `${path}.hero`),
     belief: { label: text(belief.label, `${path}.belief.label`), statements: textArray(belief.statements, `${path}.belief.statements`, 1, 6) },
@@ -124,16 +124,13 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
     arc: { label: text(arc.label, `${path}.arc.label`), heading: text(arc.heading, `${path}.arc.heading`), timeline: textArray(arc.timeline, `${path}.arc.timeline`, 1, 6) },
     human: block(source.human, `${path}.human`),
     personalNarrative: personalNarrative(source.personalNarrative, `${path}.personalNarrative`),
-    contact: { label: text(contact.label, `${path}.contact.label`), heading: text(contact.heading, `${path}.contact.heading`), details: textArray(contact.details, `${path}.contact.details`, 1, 4) },
   };
   const closingThought = optionalText(darkMatter.closingThought, `${path}.darkMatter.closingThought`);
   const darkSupportingText = optionalText(darkMatter.supportingText, `${path}.darkMatter.supportingText`);
   const runningSupportingStatement = optionalText(running.supportingStatement, `${path}.running.supportingStatement`);
-  const contactSupportingText = optionalText(contact.supportingText, `${path}.contact.supportingText`);
   if (closingThought) result.darkMatter.closingThought = closingThought;
   if (darkSupportingText) result.darkMatter.supportingText = darkSupportingText;
   if (runningSupportingStatement) result.running.supportingStatement = runningSupportingStatement;
-  if (contactSupportingText) result.contact.supportingText = contactSupportingText;
   return result;
 }
 

@@ -1,7 +1,9 @@
 {
   "metadata": {
     "title": "Giorgio Pedezzi — Appunti dall'intervallo",
-    "description": "Scritti, progetti e appunti di Giorgio Pedezzi."
+    "description": "Scritti, progetti e appunti di Giorgio Pedezzi.",
+    "socialTitle": "Giorgio Pedezzi — Appunti dall'intervallo",
+    "socialDescription": "Scritti, progetti e appunti di Giorgio Pedezzi."
   },
   "nextLabel": "Next?",
   "hero": {
@@ -103,10 +105,5 @@
       "signoff": "Il cacciatore di sogni corre libero."
     },
     "continueLabel": "Continuiamo la conversazione"
-  },
-  "contact": {
-    "label": "Contatti",
-    "heading": "Continuiamo la conversazione.",
-    "details": ["I contatti saranno forniti e confermati prima della pubblicazione."]
   }
 }

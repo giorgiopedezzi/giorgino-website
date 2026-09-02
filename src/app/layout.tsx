@@ -5,8 +5,6 @@ import homePageStyles from "@/components/home/HomePage.module.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Giorgio Pedezzi",
-  description: "Notes from the in-between.",
   robots: {
     index: true,
     follow: true,

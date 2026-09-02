@@ -2,11 +2,12 @@ import { readFileSync } from "node:fs";
 import { extname, join } from "node:path";
 
 import type { Locale } from "./locales";
+import { validateContentMetadata, type ContentMetadata } from "./content-metadata";
 
 export type RunningMedia = { src: string; alt: string; caption?: string };
 export type RunningBlock = { label: string; heading: string; body: string; isVisible: boolean };
 export type RunningContent = {
-  metadata: { title: string; description: string };
+  metadata: ContentMetadata;
   hero: { label: string; heading: string; intro: string };
   problem: RunningBlock;
   restraint: RunningBlock;
@@ -65,7 +66,7 @@ export function validateRunningContent(value: unknown, path = "running.json"): R
   });
   if (new Set(items.map((item) => item.order)).size !== items.length) fail(`${path}.principles.items`, "orders must be unique");
   const result = {
-    metadata: { title: text(metadata.title, `${path}.metadata.title`), description: text(metadata.description, `${path}.metadata.description`) },
+    metadata: validateContentMetadata(metadata, `${path}.metadata`),
     hero: { label: text(hero.label, `${path}.hero.label`), heading: text(hero.heading, `${path}.hero.heading`), intro: text(hero.intro, `${path}.hero.intro`) },
     problem: block(source.problem, `${path}.problem`),
     restraint: block(source.restraint, `${path}.restraint`),
