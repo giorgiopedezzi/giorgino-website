@@ -9,7 +9,74 @@
   "hero": {
     "label": "Notes from the in-between",
     "heading": "Technology keeps changing. The difficult part rarely does.",
-    "body": "Three decades in the room where delivery actually happens. \nWhere the plan meets the people. \nMumbling about systems, judgment, people. \nAnd now the new era greatest question: what we must not delegate to AI?"
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "small"
+                  }
+                }
+              ],
+              "text": "Three decades in the room where delivery actually happens. "
+            },
+            {
+              "type": "text",
+              "text": "\nWhere the plan meets the people. "
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "\n"
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "large"
+                  }
+                }
+              ],
+              "text": "Mumbling about systems, judgment, people. "
+            },
+            {
+              "type": "text",
+              "text": "\n"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "emphasis"
+                  }
+                }
+              ],
+              "text": "And now the new era greatest question: what we must not delegate to AI?"
+            }
+          ]
+        }
+      ]
+    }
   },
   "belief": {
     "label": "01 — I Believe",
