@@ -11,7 +11,7 @@ const englishAbout = getAboutContent("en");
 const italianAbout = getAboutContent("it");
 
 assert.equal(english.hero.heading, "Technology keeps changing. The difficult part rarely does.");
-assert.equal(typeof english.hero.body, "string", "existing plain homepage prose must remain valid");
+assert.doesNotThrow(() => validateHomeContent(english), "current structured homepage prose must remain valid");
 assert.equal(english.belief.statements.length, 4);
 assert.equal(english.darkMatter.narrative.length, 2);
 assert.equal(english.thinking.linkLabel, "Follow the thinking");
@@ -28,13 +28,17 @@ const editedNarrative = prepareNarrative(["An editorial edit, with punctuation."
 assert.equal(editedNarrative.canonical, "An editorial edit, with punctuation.\n\nA second paragraph.");
 assert.equal(editedNarrative.stripped, "an editorial edit with punctuation a second paragraph");
 assert.equal(effectiveDarkMatterPhase(true, "idle"), "final", "reduced motion must skip animation phases");
-assert.equal(isDarkMatterVisible(true, false, "idle"), true, "reduced motion must reveal Dark Matter immediately");
+assert.equal(isDarkMatterVisible(true, "idle"), true, "reduced motion must reveal Dark Matter immediately");
 assert.equal(effectiveDarkMatterPhase(false, "restoring"), "restoring", "normal motion must retain the active phase");
-assert.equal(isDarkMatterVisible(false, true, "narrative"), true, "normal motion reveals Dark Matter after belief completion");
+assert.equal(isDarkMatterVisible(false, "narrative"), true, "normal motion reveals Dark Matter independently of I Believe");
 
 const tooManyBeliefs = structuredClone(english) as unknown as Record<string, unknown>;
 (tooManyBeliefs.belief as Record<string, unknown>).statements = Array.from({ length: 7 }, (_, index) => `Belief ${index}`);
 assert.throws(() => validateHomeContent(tooManyBeliefs), /between 1 and 6 items/);
+
+const legacyHomepage = structuredClone(english) as unknown as Record<string, unknown>;
+(legacyHomepage.hero as Record<string, unknown>).body = "Existing plain homepage prose.";
+assert.doesNotThrow(() => validateHomeContent(legacyHomepage), "existing plain homepage prose must remain valid");
 
 const missingDeepLink = structuredClone(english) as unknown as Record<string, unknown>;
 delete (missingDeepLink.thinking as Record<string, unknown>).linkLabel;

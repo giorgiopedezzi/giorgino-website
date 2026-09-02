@@ -28,6 +28,6 @@ export function effectiveDarkMatterPhase(reducedMotion: boolean | null, phase: D
   return reducedMotion ? "final" : phase;
 }
 
-export function isDarkMatterVisible(reducedMotion: boolean | null, beliefComplete: boolean, phase: DarkMatterPhase): boolean {
-  return Boolean(reducedMotion || (beliefComplete && phase !== "idle"));
+export function isDarkMatterVisible(reducedMotion: boolean | null, phase: DarkMatterPhase): boolean {
+  return Boolean(reducedMotion || phase !== "idle");
 }

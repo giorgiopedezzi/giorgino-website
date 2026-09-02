@@ -113,16 +113,14 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     return () => observer.disconnect();
   }, [reducedMotion]);
 
-  const isBeliefComplete = reducedMotion || beliefCharacters === beliefText.length;
-
   useEffect(() => {
-    if (!isBeliefComplete || !isDarkMatterInView || darkPhase !== "idle") return;
+    if (!isDarkMatterInView || darkPhase !== "idle") return;
     const timer = window.setTimeout(() => {
       setDarkPhase("narrative");
       setDarkCharacters(0);
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [darkPhase, isBeliefComplete, isDarkMatterInView]);
+  }, [darkPhase, isDarkMatterInView]);
 
   useEffect(() => {
     if (darkPhase !== "narrative") return;
@@ -202,26 +200,10 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     : scrambleText(darkText.stripped).slice(0, darkCharacters);
   const visibleTransition = transitionTextCharacters.slice(0, transitionCharacterCount).join("");
   const displayedRestoredWords = transitionTextCharacters.length === 0 ? darkText.words.length : restoredWords;
-  const showDarkMatter = isDarkMatterVisible(reducedMotion, Boolean(isBeliefComplete), darkPhase);
+  const showDarkMatter = isDarkMatterVisible(reducedMotion, darkPhase);
 
   return (
     <>
-      <div ref={beliefRef}>
-      <Section className={styles.bordered} aria-labelledby="belief-heading">
-        <PageContainer>
-          <div className={styles.beliefStack}>
-            <SectionLabel>{beliefLabel}</SectionLabel>
-            {animatedBelief.split("\n").map((statement, index) => (
-              <DisplayHeading as="h2" className={styles.statement} id={index === 0 ? "belief-heading" : undefined} key={`${index}-${statement}`}>
-                {statement}
-              </DisplayHeading>
-            ))}
-            <NextLink>{nextLabel}</NextLink>
-          </div>
-        </PageContainer>
-      </Section>
-      </div>
-
       <div ref={darkMatterRef} className={showDarkMatter ? styles.darkMatterVisible : styles.darkMatterPending}>
       <Section tone="darkMatter" aria-labelledby="dark-matter-heading">
         <PageContainer>
@@ -241,6 +223,22 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
             {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}>{darkMatter.closingThought}</DisplayHeading>}
             {darkMatter.supportingText && effectiveDarkPhase === "final" && <BodyCopy className={styles.supportingText}>{darkMatter.supportingText}</BodyCopy>}
             {effectiveDarkPhase === "final" && <NextLink>{nextLabel}</NextLink>}
+          </div>
+        </PageContainer>
+      </Section>
+      </div>
+
+      <div ref={beliefRef}>
+      <Section className={styles.bordered} aria-labelledby="belief-heading">
+        <PageContainer>
+          <div className={styles.beliefStack}>
+            <SectionLabel>{beliefLabel}</SectionLabel>
+            {animatedBelief.split("\n").map((statement, index) => (
+              <DisplayHeading as="h2" className={styles.statement} id={index === 0 ? "belief-heading" : undefined} key={`${index}-${statement}`}>
+                {statement}
+              </DisplayHeading>
+            ))}
+            <NextLink>{nextLabel}</NextLink>
           </div>
         </PageContainer>
       </Section>
