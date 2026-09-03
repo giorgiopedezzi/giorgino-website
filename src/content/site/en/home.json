@@ -86,7 +86,7 @@
     "heading": "The work between the work.",
     "narrative": [
       "In difficult projects, you  often miss the connection the pieces that were not supposed to be disconnected in the first place. Technology and business, decisions and consequences, formal roles and real responsibility, tasks and final goal",
-      "It seems that everything is ok. It's not. The system is starting to pull apart. You need... THE DARK MATTER"
+      "It seems that everything is ok. It's not. The system is starting to pull apart. I call that dark matter"
     ],
     "closingThought": "Help other people learning how to see the whole. Clearly",
     "supportingText": "Now I can leave. But I think they will miss Giorgino, anyway"
@@ -119,7 +119,8 @@
     "heading": "Human concept, AI jobs",
     "media": {
       "src": "/site-media/running/media/src.jpg",
-      "alt": "the running project"
+      "alt": "the running project",
+      "stretch": true
     },
     "linkLabel": "See the experiment",
     "linkHref": "/en/running"
