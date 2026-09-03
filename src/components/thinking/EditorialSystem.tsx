@@ -17,7 +17,7 @@ export function EditorialArticleView({ article, referenceLabel, relatedLinksLabe
 }
 
 export function DialogueArtifacts({ artifacts, emptyLabel }: { artifacts: DialogueArtifact[]; emptyLabel: string }) {
-  return <div className={styles.artifacts}>{artifacts.length === 0 ? <p className={styles.empty}>{emptyLabel}</p> : artifacts.map((artifact) => <figure className={styles.artifact} key={artifact.screenshot}><Image src={artifact.screenshot} alt={artifact.alt} width={960} height={640} /><figcaption><p>{artifact.line}</p>{artifact.reflection && <p>{artifact.href ? <Link href={artifact.href}>{artifact.reflection}</Link> : artifact.reflection}</p>}</figcaption></figure>)}</div>;
+  return <div className={styles.artifacts}>{artifacts.length === 0 ? <p className={styles.empty}>{emptyLabel}</p> : artifacts.map((artifact) => <figure className={styles.artifact} key={artifact.screenshot}><Image src={artifact.screenshot} alt={artifact.alt} width={960} height={640} style={artifact.stretch ? { objectFit: "fill" } : undefined} /><figcaption><p>{artifact.line}</p>{artifact.reflection && <p>{artifact.href ? <Link href={artifact.href}>{artifact.reflection}</Link> : artifact.reflection}</p>}</figcaption></figure>)}</div>;
 }
 
 function EditorialBody({ blocks }: { blocks: EditorialBlock[] }) {
@@ -26,7 +26,7 @@ function EditorialBody({ blocks }: { blocks: EditorialBlock[] }) {
       case "paragraph": return <RichTextCopy key={index} value={block.text} />;
       case "heading": return <EditorialHeading as="h2" key={index}>{block.text}</EditorialHeading>;
       case "quote": return <blockquote key={index}>{block.text}{block.attribution && <footer>— {block.attribution}</footer>}</blockquote>;
-      case "image": case "artifact": return <figure key={index}><Image src={block.src} alt={block.alt} width={960} height={640} />{(block.caption || (block.type === "artifact" && block.note)) && <figcaption>{block.caption}{block.type === "artifact" && block.note && <span>{block.note}</span>}</figcaption>}</figure>;
+      case "image": case "artifact": return <figure key={index}><Image src={block.src} alt={block.alt} width={960} height={640} style={block.stretch ? { objectFit: "fill" } : undefined} />{(block.caption || (block.type === "artifact" && block.note)) && <figcaption>{block.caption}{block.type === "artifact" && block.note && <span>{block.note}</span>}</figcaption>}</figure>;
       case "divider": return <hr key={index} />;
       case "note": return <aside key={index}>{block.text}</aside>;
     }

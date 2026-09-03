@@ -116,12 +116,11 @@
   },
   "running": {
     "label": "04 — The Running Project",
-    "heading": "And then I tried to build it.",
-    "body": "A real running application, built substantially with AI coding agents. The concept, constraints, priorities and decisions remain human.",
-    "surfaceHeading": "A runner, not a dashboard.",
-    "surfaceLabel": "A small visual study",
-    "placeholder": "A reminder that a body is not a spreadsheet.",
-    "supportingStatement": "Signal over noise. Assistance without surrender.",
+    "heading": "Human concept, AI jobs",
+    "media": {
+      "src": "/site-media/running/media/src.jpg",
+      "alt": "the running project"
+    },
     "linkLabel": "See the experiment",
     "linkHref": "/en/running"
   },

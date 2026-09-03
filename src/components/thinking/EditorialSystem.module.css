@@ -15,7 +15,7 @@
 .body blockquote { margin: var(--space-sm) 0; padding-left: var(--space-md); border-left: 2px solid var(--color-border); font-family: var(--font-display); font-size: var(--font-size-section-heading); line-height: 1.12; }
 .body blockquote footer, .body figcaption, .body aside { margin-top: var(--space-sm); color: var(--color-text-muted); font-family: var(--font-body); font-size: 1rem; line-height: 1.4; }
 .body figure, .artifact { margin: 0; }
-.body img, .artifact img { display: block; width: 100%; height: auto; }
+.body img, .artifact img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; }
 .body figcaption { display: grid; gap: var(--space-2xs); }
 .body figcaption span { display: block; }
 .body hr { width: 100%; margin: var(--space-sm) 0; border: 0; border-top: 1px solid var(--color-border); }

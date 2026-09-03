@@ -79,6 +79,14 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   const [restoredWords, setRestoredWords] = useState(0);
 
   const beliefText = beliefStatements.join("\n");
+  const beliefRanges = useMemo(() => {
+    let offset = 0;
+    return beliefStatements.map((statement) => {
+      const start = offset;
+      offset += statement.length + 1;
+      return { start, length: statement.length };
+    });
+  }, [beliefStatements]);
   const darkText = useMemo(() => prepareNarrative(darkMatter.narrative), [darkMatter.narrative]);
 
   useEffect(() => {
@@ -233,11 +241,25 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
         <PageContainer>
           <div className={styles.beliefStack}>
             <SectionLabel>{beliefLabel}</SectionLabel>
-            {animatedBelief.split("\n").map((statement, index) => (
-              <DisplayHeading as="h2" className={styles.statement} id={index === 0 ? "belief-heading" : undefined} key={`${index}-${statement}`}>
-                {statement}
-              </DisplayHeading>
-            ))}
+            {beliefRanges.map((range, statementIndex) => {
+              const visible = animatedBelief.length > range.start
+                ? beliefText.slice(range.start, Math.min(range.start + range.length, animatedBelief.length))
+                : "";
+              return (
+                <div className={styles.statementGroup} key={statementIndex}>
+                  {visible.split("\n").map((line, lineIndex) => (
+                    <DisplayHeading
+                      as="h2"
+                      className={styles.statement}
+                      id={statementIndex === 0 && lineIndex === 0 ? "belief-heading" : undefined}
+                      key={lineIndex}
+                    >
+                      {line}
+                    </DisplayHeading>
+                  ))}
+                </div>
+              );
+            })}
             <NextLink>{nextLabel}</NextLink>
           </div>
         </PageContainer>

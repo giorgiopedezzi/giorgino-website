@@ -40,6 +40,7 @@ function artifact(value: unknown, path: string): PersonalArtifact {
   if (!src.startsWith("/site-media/") || !mediaExtensions.has(src.slice(src.lastIndexOf(".")).toLowerCase())) fail(`${path}.media.src`, "must reference a repository-owned image asset");
   const image: SiteMedia = { src, alt: text(media.alt, `${path}.media.alt`) };
   if (media.caption !== undefined && media.caption !== null && media.caption !== "") image.caption = text(media.caption, `${path}.media.caption`);
+  if (media.stretch === true) image.stretch = true;
   result.media = image;
   return result;
 }

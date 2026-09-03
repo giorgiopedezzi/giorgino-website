@@ -14,7 +14,7 @@ function Artifact({ artifact, label, dark = false }: { artifact: PersonalArtifac
       <span>{label}</span>
       {artifact.media ? (
         <>
-          <Image className={styles.artifactImage} src={artifact.media.src} alt={artifact.media.alt} width={860} height={420} unoptimized />
+          <Image className={styles.artifactImage} style={artifact.media.stretch ? { objectFit: "fill" } : undefined} src={artifact.media.src} alt={artifact.media.alt} width={860} height={420} unoptimized />
           {artifact.media.caption && <figcaption>{artifact.media.caption}</figcaption>}
         </>
       ) : <p>{artifact.placeholder}</p>}

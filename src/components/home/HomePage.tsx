@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -15,8 +16,6 @@ import { HomePageAnimations } from "./HomePageAnimations";
 import styles from "./HomePage.module.css";
 
 type HomePageProps = { content: HomeContent; contact: ContactContent };
-
-const chartBars = [26, 42, 65, 88, 72, 52, 72, 102, 82, 45];
 
 function DeepLink({ href, children }: { href: string; children: string }) {
   return <Link className={styles.deepLink} href={href}>{children} <span aria-hidden="true">→</span></Link>;
@@ -65,19 +64,9 @@ export function HomePage({ content, contact }: HomePageProps) {
           <div className={styles.runningStack}>
             <SectionLabel>{content.running.label}</SectionLabel>
             <DisplayHeading as="h2" id="running-heading" className={styles.runningHeading}>{content.running.heading}</DisplayHeading>
-            <RichTextCopy value={content.running.body} />
-            <div className={styles.runningSurface}>
-              <div className={styles.visualHeader}>
-                <strong>{content.running.surfaceHeading}</strong>
-                <span>{content.running.surfaceLabel}</span>
-              </div>
-              <div className={styles.chart} aria-hidden="true">
-                {chartBars.map((height, index) => <span className={styles.chartBar} style={{ height }} key={index} />)}
-                <i className={styles.chartPoint} />
-              </div>
-              <p>{content.running.placeholder}</p>
-            </div>
-            {content.running.supportingStatement && <p className={styles.runningStatement}>{content.running.supportingStatement}</p>}
+            {content.running.media
+              ? <Image className={styles.gifPlaceholder} style={content.running.media.stretch ? { objectFit: "fill" } : undefined} src={content.running.media.src} alt={content.running.media.alt} width={860} height={484} unoptimized />
+              : <div className={styles.gifPlaceholder} aria-hidden="true" />}
             <DeepLink href={content.running.linkHref}>{content.running.linkLabel}</DeepLink>
           </div>
         </PageContainer>

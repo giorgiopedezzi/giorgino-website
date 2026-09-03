@@ -68,6 +68,7 @@ function validateDialogueArtifacts(value: unknown, path: string): DialogueArtifa
     };
     if (artifactValue.reflection !== undefined && artifactValue.reflection !== null) result.reflection = requireString(artifactValue.reflection, `${artifactPath}.reflection`);
     if (artifactValue.href !== undefined && artifactValue.href !== null) result.href = requireSafeLink(artifactValue.href, `${artifactPath}.href`);
+    if (artifactValue.stretch === true) result.stretch = true;
     return result;
   });
 }
@@ -119,6 +120,7 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
         alt: requireString(image.alt, `${path}.alt`),
       };
       if (image.caption !== undefined && image.caption !== null) block.caption = requireString(image.caption, `${path}.caption`);
+      if (image.stretch === true) block.stretch = true;
       return block;
     }
     case "artifact": {
@@ -130,6 +132,7 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
       };
       if (artifact.caption !== undefined && artifact.caption !== null) block.caption = requireString(artifact.caption, `${path}.caption`);
       if (artifact.note !== undefined && artifact.note !== null) block.note = requireString(artifact.note, `${path}.note`);
+      if (artifact.stretch === true) block.stretch = true;
       return block;
     }
     case "divider":

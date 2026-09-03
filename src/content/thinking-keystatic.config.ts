@@ -42,6 +42,7 @@ const editorialBlocks = fields.blocks(
         src: media("Image file"),
         alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
         caption: fields.text({ label: "Caption" }),
+        stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
       }),
     },
     artifact: {
@@ -51,6 +52,7 @@ const editorialBlocks = fields.blocks(
         alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
         caption: fields.text({ label: "Caption" }),
         note: fields.text({ label: "Note" }),
+        stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
       }),
     },
     divider: { label: "Divider", schema: fields.empty() },
@@ -75,6 +77,7 @@ const dialogueArtifacts = fields.blocks(
         line: fields.text({ label: "Short line", validation: { isRequired: true } }),
         reflection: fields.text({ label: "Reflection" }),
         href: fields.url({ label: "Internal or external link" }),
+        stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
       }),
     },
   },
@@ -131,6 +134,7 @@ const authoringFoundationSchema = {
       src: siteMedia("Media file"),
       alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
       caption: fields.text({ label: "Caption" }),
+      stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
     }),
     { label: "Media", itemLabel: (props) => props.fields.alt.value || "Media item" },
   ),
@@ -176,6 +180,7 @@ const personalArtifact = (label: string) => fields.object({
     src: fields.image({ label: "Media file", directory: "public/site-media", publicPath: "/site-media/" }),
     alt: fields.text({ label: "Alternative text", description: "Required by validation when a media file is present." }),
     caption: fields.text({ label: "Caption" }),
+    stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
   }, { label: "Optional media" }),
 }, { label });
 
@@ -204,14 +209,14 @@ const homeSchema = {
   running: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: richText({ label: "Body", description: "Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only." }),
-    surfaceHeading: requiredText("Study heading"),
-    surfaceLabel: requiredText("Study label"),
-    placeholder: requiredText("Study description", true),
-    supportingStatement: fields.text({ label: "Optional supporting statement", multiline: true }),
+    media: fields.object({
+      src: fields.image({ label: "GIF", directory: "public/site-media", publicPath: "/site-media/" }),
+      alt: fields.text({ label: "Alternative text", description: "Required by validation when a GIF is present." }),
+      stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
+    }, { label: "Optional GIF" }),
     linkLabel: requiredText("Running / Building link label"),
     linkHref: fields.url({ label: "Running / Building link target", validation: { isRequired: true } }),
-  }, { label: "Running teaser" }),
+  }, { label: "Running teaser", description: "Label, heading, a GIF placeholder, and a link — no body copy." }),
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),

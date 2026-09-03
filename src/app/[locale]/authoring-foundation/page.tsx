@@ -19,7 +19,7 @@ export default async function AuthoringFoundationPreview({ params }: Readonly<{ 
         <h1>{content.title}</h1>
         <p>{content.summary}</p>
         {content.media.map((item) => <figure key={item.src}>
-          <Image src={item.src} alt={item.alt} width={640} height={360} unoptimized />
+          <Image src={item.src} alt={item.alt} width={640} height={360} unoptimized style={{ width: "100%", height: "auto", aspectRatio: "16 / 9", objectFit: item.stretch ? "fill" : "contain" }} />
           {item.caption && <figcaption>{item.caption}</figcaption>}
         </figure>)}
         <ol>{content.items.map((item) => <li key={item.order}><a href={item.href}>{item.label}</a></li>)}</ol>

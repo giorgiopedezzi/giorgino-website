@@ -16,7 +16,7 @@
 .artifact { display: flex; flex-direction: column; justify-content: space-between; width: min(100%, 53.75rem); min-height: clamp(16rem, 38vw, 26.25rem); padding: var(--space-md); margin: 0; border: 1px solid var(--color-border); background: var(--color-background); }
 .artifact span { color: var(--color-text-muted); font-size: var(--font-size-label); font-weight: 700; letter-spacing: .108em; text-transform: uppercase; }
 .artifact p, .muted { color: var(--color-text-muted); font-size: 1rem; }
-.artifactImage { width: 100%; height: auto; max-height: 32rem; object-fit: contain; }
+.artifactImage { width: 100%; aspect-ratio: 860 / 420; max-height: 32rem; object-fit: contain; }
 .artifact figcaption { color: var(--color-text-muted); font-size: 1rem; }
 .reflect { font-size: clamp(2rem, 1.45rem + 1.6vw, 2.5rem); }
 .pizza { min-height: 41rem; }

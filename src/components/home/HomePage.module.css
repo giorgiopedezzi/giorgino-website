@@ -28,6 +28,8 @@
 .heroHeading.heroHeading { max-width: 53.75rem; font-size: clamp(3.5rem, 2.3rem + 3vw, 4.5rem); }
 .sectionHeading.sectionHeading { font-size: var(--font-size-section-heading); }
 
+.statementGroup { display: grid; gap: .25rem; }
+
 .statement.statement {
   max-width: 52rem;
   font-size: clamp(2rem, 1.7rem + 1.2vw, 2.5rem);
@@ -49,14 +51,7 @@
 .runningStack .deepLink:hover, .runningStack .deepLink:focus-visible { color: var(--color-text-inverse); }
 
 .runningHeading.runningHeading { font-size: clamp(2.5rem, 2rem + 1.8vw, 3.125rem); }
-.runningSurface { display: grid; gap: 1.375rem; width: min(100%, 53.75rem); padding: 1.75rem; border: 1px solid rgb(228 233 233 / 22%); border-radius: .875rem; background: var(--color-running-surface); color: var(--color-text-on-running-muted); }
-.visualHeader { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); color: var(--color-text-inverse); font-size: 1.125rem; }
-.visualHeader span { color: rgb(228 233 233 / 70%); font-size: .875rem; }
-.chart { position: relative; display: flex; height: 8.125rem; align-items: end; gap: .25rem; padding-bottom: .625rem; border-bottom: 1px solid rgb(228 233 233 / 35%); }
-.chartBar { flex: 1 1 0; border-radius: .2rem .2rem 0 0; background: rgb(228 233 233 / 25%); }
-.chartPoint { position: absolute; top: 3.25rem; left: 60%; width: .9375rem; height: .9375rem; border-radius: 50%; background: var(--color-running-accent); }
-.runningSurface p { max-width: 43.125rem; font-size: 1.125rem; line-height: 1.42; }
-.runningStatement { max-width: 40rem; font-size: var(--font-size-body); font-weight: 700; line-height: 1.35; }
+.gifPlaceholder { width: min(100%, 53.75rem); height: auto; aspect-ratio: 16 / 9; border: 1px dashed rgb(228 233 233 / 35%); border-radius: .875rem; background: var(--color-running-surface); object-fit: cover; }
 
 .contactHeading.contactHeading { max-width: 47.5rem; font-size: clamp(2.5rem, 2rem + 1.8vw, 3.125rem); }
 .contactDetails { display: flex; flex-wrap: wrap; gap: 1.625rem; color: var(--color-text-inverse); font-size: 1.0625rem; font-weight: 700; }

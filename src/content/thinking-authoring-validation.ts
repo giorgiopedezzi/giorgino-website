@@ -17,7 +17,7 @@ const siteContentRoot = join(process.cwd(), "src", "content", "site");
 const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
 const siteContentPath = /^src\/content\/site\/(en|it)\/(?:about|authoring-foundation|contact|home|running|site-settings)\.json$/;
-const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:jpe?g|png|webp|gif)$/i;
+const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*(?:\/[a-zA-Z0-9][a-zA-Z0-9._-]*)*\.(?:jpe?g|png|webp|gif)$/i;
 
 function parseUpdate(value: unknown): LocalUpdate {
   if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error("expected an update object");

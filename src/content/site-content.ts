@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { isLocale, type Locale } from "./locales";
 
-export type AuthoringMedia = { src: string; alt: string; caption?: string };
+export type AuthoringMedia = { src: string; alt: string; caption?: string; stretch?: boolean };
 export type AuthoringFoundation = {
   title: string;
   summary: string;
@@ -42,6 +42,7 @@ function media(value: unknown, path: string): AuthoringMedia {
   if (!src.startsWith("/site-media/") || !mediaExtensions.has(extension)) fail(`${path}.src`, "must reference a repository-owned JPEG, PNG, WebP, or GIF asset");
   const result: AuthoringMedia = { src, alt: string(entry.alt, `${path}.alt`) };
   if (entry.caption !== undefined && entry.caption !== null) result.caption = string(entry.caption, `${path}.caption`);
+  if (entry.stretch === true) result.stretch = true;
   return result;
 }
 

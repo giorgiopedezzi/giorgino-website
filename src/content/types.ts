@@ -11,14 +11,15 @@ export type SiteMedia = {
   src: string;
   alt: string;
   caption?: string;
+  stretch?: boolean;
 };
 
 export type EditorialBlock =
   | { type: "paragraph"; text: RichText }
   | { type: "heading"; text: string }
   | { type: "quote"; text: string; attribution?: string }
-  | { type: "image"; src: string; alt: string; caption?: string }
-  | { type: "artifact"; src: string; alt: string; caption?: string; note?: string }
+  | { type: "image"; src: string; alt: string; caption?: string; stretch?: boolean }
+  | { type: "artifact"; src: string; alt: string; caption?: string; note?: string; stretch?: boolean }
   | { type: "divider" }
   | { type: "note"; text: string };
 
@@ -49,6 +50,7 @@ export type DialogueArtifact = {
   line: string;
   reflection?: string;
   href?: string;
+  stretch?: boolean;
 };
 
 export type EditorialContent = {
@@ -111,13 +113,6 @@ export type HomeContent = {
     supportingText?: string;
   };
   thinking: ContentBlock & { linkLabel: string; linkHref: string };
-  running: ContentBlock & {
-    surfaceHeading: string;
-    surfaceLabel: string;
-    placeholder: string;
-    supportingStatement?: string;
-    linkLabel: string;
-    linkHref: string;
-  };
+  running: { label: string; heading: string; media?: SiteMedia; linkLabel: string; linkHref: string };
   human: ContentBlock & { linkLabel: string; linkHref: string };
 };

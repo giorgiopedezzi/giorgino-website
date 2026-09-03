@@ -3,9 +3,10 @@ import { join } from "node:path";
 
 import type { Locale } from "./locales";
 import { validateContentMetadata } from "./content-metadata";
-import type { ContentBlock, HomeContent } from "./types";
+import type { ContentBlock, HomeContent, SiteMedia } from "./types";
 import { validateRichText } from "./rich-text";
 
+const mediaExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 
 function fail(path: string, message: string): never {
   throw new Error(`Homepage content validation failed at ${path}: ${message}`);
@@ -44,6 +45,21 @@ function block(value: unknown, path: string): ContentBlock {
   return { label: text(source.label, `${path}.label`), heading: text(source.heading, `${path}.heading`), body: validateRichText(source.body, `${path}.body`) };
 }
 
+function optionalMedia(value: unknown, path: string): SiteMedia | undefined {
+  if (value === undefined || value === null) return undefined;
+  const source = record(value, path);
+  if (source.src === undefined || source.src === null || source.src === "") return undefined;
+  const src = text(source.src, `${path}.src`);
+  if (!src.startsWith("/site-media/") || !mediaExtensions.has(src.slice(src.lastIndexOf(".")).toLowerCase())) {
+    fail(`${path}.src`, "must reference a repository-owned image asset");
+  }
+  const media: SiteMedia = { src, alt: text(source.alt, `${path}.alt`) };
+  const caption = optionalText(source.caption, `${path}.caption`);
+  if (caption) media.caption = caption;
+  if (source.stretch === true) media.stretch = true;
+  return media;
+}
+
 export function validateHomeContent(value: unknown, path = "home.json"): HomeContent {
   const source = record(value, path);
   const metadata = record(source.metadata, `${path}.metadata`);
@@ -63,10 +79,8 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
     },
     thinking: { ...block(thinking, `${path}.thinking`), linkLabel: text(thinking.linkLabel, `${path}.thinking.linkLabel`), linkHref: href(thinking.linkHref, `${path}.thinking.linkHref`) },
     running: {
-      ...block(running, `${path}.running`),
-      surfaceHeading: text(running.surfaceHeading, `${path}.running.surfaceHeading`),
-      surfaceLabel: text(running.surfaceLabel, `${path}.running.surfaceLabel`),
-      placeholder: text(running.placeholder, `${path}.running.placeholder`),
+      label: text(running.label, `${path}.running.label`),
+      heading: text(running.heading, `${path}.running.heading`),
       linkLabel: text(running.linkLabel, `${path}.running.linkLabel`),
       linkHref: href(running.linkHref, `${path}.running.linkHref`),
     },
@@ -74,10 +88,10 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
   };
   const closingThought = optionalText(darkMatter.closingThought, `${path}.darkMatter.closingThought`);
   const darkSupportingText = optionalText(darkMatter.supportingText, `${path}.darkMatter.supportingText`);
-  const runningSupportingStatement = optionalText(running.supportingStatement, `${path}.running.supportingStatement`);
+  const runningMedia = optionalMedia(running.media, `${path}.running.media`);
   if (closingThought) result.darkMatter.closingThought = closingThought;
   if (darkSupportingText) result.darkMatter.supportingText = darkSupportingText;
-  if (runningSupportingStatement) result.running.supportingStatement = runningSupportingStatement;
+  if (runningMedia) result.running.media = runningMedia;
   return result;
 }
 
