@@ -14,121 +14,46 @@
       "content": [
         {
           "type": "paragraph",
+          "attrs": {
+            "role": null
+          },
           "content": [
             {
               "type": "text",
-              "marks": [
-                {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "small"
-                  }
-                }
-              ],
-              "text": "label "
-            },
-            {
-              "type": "text",
-              "text": "Body "
+              "text": "Three decades "
             },
             {
               "type": "text",
               "marks": [
                 {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "large"
-                  }
+                  "type": "italic"
                 }
               ],
-              "text": "Editorial "
+              "text": "(ouch!)"
             },
             {
               "type": "text",
-              "marks": [
-                {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "emphasis"
-                  }
-                }
-              ],
-              "text": "Editorial Enphasis"
+              "text": "  in the battlefield. Taming tools, mastering technologies, connecting the dots. "
             }
           ]
         },
         {
           "type": "paragraph",
+          "attrs": {
+            "role": "humanAside"
+          },
           "content": [
             {
               "type": "text",
-              "marks": [
-                {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "small"
-                  }
-                }
-              ],
-              "text": "Three decades in the room where delivery "
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "emphasis"
-                  }
-                }
-              ],
-              "text": "actually "
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "small"
-                  }
-                }
-              ],
-              "text": "happens. "
-            },
-            {
-              "type": "text",
-              "text": "\nWhere the plan meets the people. "
+              "text": "But, above all, understanding "
             }
           ]
         },
         {
           "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "\n"
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "textStyle",
-                  "attrs": {
-                    "textSize": "large"
-                  }
-                }
-              ],
-              "text": "Mumbling about systems, judgment, people. "
-            },
-            {
-              "type": "text",
-              "text": "\n"
-            }
-          ]
-        },
-        {
-          "type": "paragraph",
+          "attrs": {
+            "role": "humanAside"
+          },
           "content": [
             {
               "type": "text",
@@ -140,7 +65,7 @@
                   }
                 }
               ],
-              "text": "And now the new era greatest question: what we must not delegate to AI?"
+              "text": "the people behind."
             }
           ]
         }
@@ -157,8 +82,8 @@
     ]
   },
   "darkMatter": {
-    "label": "Dark Matter",
-    "heading": "02 —  The work between the work.",
+    "label": "02 —Dark Matter",
+    "heading": "The work between the work.",
     "narrative": [
       "In difficult projects, you  often miss the connection the pieces that were not supposed to be disconnected in the first place. Technology and business, decisions and consequences, formal roles and real responsibility, tasks and final goal",
       "It seems that everything is ok. It's not. The system is starting to pull apart. You need... THE DARK MATTER"
@@ -174,9 +99,14 @@
       "content": [
         {
           "type": "paragraph",
-          "attrs": { "role": "editorialLead" },
+          "attrs": {
+            "role": "editorialLead"
+          },
           "content": [
-            { "type": "text", "text": "Not content. A place to follow a line of thought long enough to see where it goes." }
+            {
+              "type": "text",
+              "text": "Not content. A place to follow a line of thought long enough to see where it goes."
+            }
           ]
         }
       ]
@@ -203,11 +133,27 @@
       "content": [
         {
           "type": "paragraph",
-          "attrs": { "role": "humanAside" },
+          "attrs": {
+            "role": "humanAside"
+          },
           "content": [
-            { "type": "text", "text": "Technology is only one way I pay attention. The rest belongs to the world " },
-            { "type": "text", "marks": [{ "type": "interruption" }], "text": "beyond the screen" },
-            { "type": "text", "text": "." }
+            {
+              "type": "text",
+              "text": "Technology is only one way I pay attention. The rest belongs to the world "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "interruption"
+                }
+              ],
+              "text": "beyond the screen"
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
           ]
         }
       ]
