@@ -7,7 +7,7 @@
   },
   "nextLabel": "Next?",
   "hero": {
-    "label": "Notes from the in-between",
+    "label": "Notes from the in-between (a work in progress... always!)",
     "heading": "Technology keeps changing. The difficult part rarely does.",
     "body": {
       "type": "doc",
@@ -73,7 +73,7 @@
     }
   },
   "belief": {
-    "label": "01 — I Believe",
+    "label": "02 — I Believe",
     "statements": [
       "AI should be used. Not abused. Do not let it use you. Do not let it abuse you.",
       "Complexity deserves nuance. Decisions require clarity.",
@@ -82,7 +82,7 @@
     ]
   },
   "darkMatter": {
-    "label": "02 —Dark Matter",
+    "label": "01 —Dark Matter",
     "heading": "The work between the work.",
     "narrative": [
       "In difficult projects, you  often miss the connection the pieces that were not supposed to be disconnected in the first place. Technology and business, decisions and consequences, formal roles and real responsibility, tasks and final goal",
