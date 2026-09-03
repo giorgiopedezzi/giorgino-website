@@ -65,6 +65,29 @@ const unsupportedFormatting = structuredClone(formattedHomepage) as Record<strin
 ((((unsupportedFormatting.thinking as Record<string, unknown>).body as Record<string, unknown>).content as Array<Record<string, unknown>>)[0].content as Array<Record<string, unknown>>)[0].marks = [{ type: "link" }];
 assert.throws(() => validateHomeContent(unsupportedFormatting), /unsupported Tiptap node or mark/);
 
+const semanticRoles = structuredClone(english) as unknown as Record<string, unknown>;
+(semanticRoles.human as Record<string, unknown>).body = {
+  type: "doc",
+  content: [{
+    type: "paragraph",
+    attrs: { role: "humanAside" },
+    content: [
+      { type: "text", text: "A personal aside with an " },
+      { type: "text", text: "interruption", marks: [{ type: "interruption" }] },
+      { type: "text", text: "." },
+    ],
+  }, {
+    type: "paragraph",
+    attrs: { role: "editorialLead" },
+    content: [{ type: "text", text: "An editorial proposition." }],
+  }],
+};
+assert.doesNotThrow(() => validateHomeContent(semanticRoles), "the new semantic block roles and interruption mark must remain valid");
+
+const unsupportedRole = structuredClone(semanticRoles) as Record<string, unknown>;
+(((unsupportedRole.human as Record<string, unknown>).body as Record<string, unknown>).content as Array<Record<string, unknown>>)[0].attrs = { role: "raw-size-99" };
+assert.throws(() => validateHomeContent(unsupportedRole), /unsupported Tiptap node or mark/);
+
 const encodedHome = Buffer.from(JSON.stringify(english)).toString("base64url");
 assert.doesNotThrow(() => validateSiteAuthoringUpdate({
   additions: [{ path: "src/content/site/en/home.json", contents: encodedHome }],

@@ -169,7 +169,18 @@
   "thinking": {
     "label": "03 — Thinking",
     "heading": "Some notes worth leaving unfinished.",
-    "body": "Not content. A place to follow a line of thought long enough to see where it goes.",
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": { "role": "editorialLead" },
+          "content": [
+            { "type": "text", "text": "Not content. A place to follow a line of thought long enough to see where it goes." }
+          ]
+        }
+      ]
+    },
     "linkLabel": "Follow the thinking",
     "linkHref": "/en/thinking"
   },
@@ -187,7 +198,20 @@
   "human": {
     "label": "06 — Human",
     "heading": "I am interested in what holds — and what slips through.",
-    "body": "Technology is only one way I pay attention. The rest belongs to the world beyond the screen.",
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": { "role": "humanAside" },
+          "content": [
+            { "type": "text", "text": "Technology is only one way I pay attention. The rest belongs to the world " },
+            { "type": "text", "marks": [{ "type": "interruption" }], "text": "beyond the screen" },
+            { "type": "text", "text": "." }
+          ]
+        }
+      ]
+    },
     "linkLabel": "Really about me",
     "linkHref": "/en/really-about-me"
   }
