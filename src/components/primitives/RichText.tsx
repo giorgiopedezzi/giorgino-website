@@ -27,3 +27,8 @@ export function RichTextCopy({ value, className }: { value: RichText; className?
   const document = toRichTextDocument(value);
   return <>{document.content.map((node, index) => node.type === "paragraph" ? <ParagraphBlock role={node.attrs?.role} className={className} key={index}>{node.content?.map((child, childIndex) => child.type === "text" ? markText(child.text, child.marks, `${index}-${childIndex}`) : null)}</ParagraphBlock> : null)}</>;
 }
+
+export function RichTextInline({ value }: { value: RichText }) {
+  const document = toRichTextDocument(value);
+  return <>{document.content.flatMap((node, index) => node.type === "paragraph" ? (node.content ?? []).map((child, childIndex) => child.type === "text" ? markText(child.text, child.marks, `${index}-${childIndex}`) : null) : [])}</>;
+}

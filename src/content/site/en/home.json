@@ -75,10 +75,8 @@
   "belief": {
     "label": "02 — I Believe",
     "statements": [
-      "AI should be used. Not abused. Do not let it use you. Do not let it abuse you.",
-      "Complexity deserves nuance. Decisions require clarity.",
-      "The technology may be unprecedented. Many of the questions are not.",
-      "Information is abundant. Too much. Judgment is not. Never enough.\nGuess what belongs to AI, and what belongs to human?"
+      "Information? Not a problem anymore. Even too much. Hard skills? Same. Judgment? Never enough",
+      "Guess what belongs to AI, and what belongs to human?"
     ]
   },
   "darkMatter": {
@@ -105,7 +103,7 @@
           "content": [
             {
               "type": "text",
-              "text": "Not content. A place to follow a line of thought long enough to see where it goes."
+              "text": "Just follow the line of thought to see where it goes."
             }
           ]
         }

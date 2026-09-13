@@ -1,3 +1,5 @@
+import { richTextToPlainText, type RichText } from "../../content/rich-text";
+
 export type DarkMatterPhase = "idle" | "narrative" | "restoring" | "final";
 
 export function scrambleWord(word: string): string {
@@ -14,8 +16,8 @@ export function scrambleText(text: string): string {
   return text.split(/(\s+)/).map((part) => (/^\s+$/.test(part) ? part : scrambleWord(part))).join("");
 }
 
-export function prepareNarrative(narrative: string[]) {
-  const canonical = narrative.join("\n\n");
+export function prepareNarrative(narrative: RichText[]) {
+  const canonical = narrative.map(richTextToPlainText).join("\n\n");
   const stripped = canonical
     .replace(/[^\p{L}\p{N}\s]/gu, "")
     .toLocaleLowerCase()

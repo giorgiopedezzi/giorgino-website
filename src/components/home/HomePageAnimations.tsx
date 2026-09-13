@@ -10,6 +10,8 @@ import {
   Section,
   SectionLabel,
 } from "@/components/primitives/Editorial";
+import { RichTextCopy, RichTextInline } from "@/components/primitives/RichText";
+import { richTextToPlainText, type RichText } from "@/content/rich-text";
 
 import styles from "./HomePage.module.css";
 import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative, scrambleText, scrambleWord, type DarkMatterPhase } from "./home-animation";
@@ -17,9 +19,9 @@ import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative, scramb
 type DarkMatterContent = {
   label: string;
   heading: string;
-  narrative: string[];
-  closingThought?: string;
-  supportingText?: string;
+  narrative: RichText[];
+  closingThought?: RichText;
+  supportingText?: RichText;
 };
 
 type Props = {
@@ -173,7 +175,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   }, []);
 
   const transitionTextCharacters = useMemo(
-    () => Array.from(darkMatter.closingThought ?? ""),
+    () => Array.from(darkMatter.closingThought ? richTextToPlainText(darkMatter.closingThought) : ""),
     [darkMatter.closingThought],
   );
 
@@ -203,9 +205,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
 
   const animatedBelief = reducedMotion || beliefCharacters === null ? beliefText : beliefText.slice(0, beliefCharacters);
   const effectiveDarkPhase = effectiveDarkMatterPhase(reducedMotion, darkPhase);
-  const visibleNarrative = effectiveDarkPhase === "idle" || effectiveDarkPhase === "final"
-    ? darkText.canonical
-    : scrambleText(darkText.stripped).slice(0, darkCharacters);
+  const visibleNarrative = scrambleText(darkText.stripped).slice(0, darkCharacters);
   const visibleTransition = transitionTextCharacters.slice(0, transitionCharacterCount).join("");
   const displayedRestoredWords = transitionTextCharacters.length === 0 ? darkText.words.length : restoredWords;
   const showDarkMatter = isDarkMatterVisible(reducedMotion, darkPhase);
@@ -225,11 +225,13 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
                     <span className={index < displayedRestoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{index < displayedRestoredWords ? word : scrambleWord(word)}{index < darkText.words.length - 1 ? " " : ""}</span>
                   ))}
                 </BodyCopy>
+              ) : effectiveDarkPhase === "idle" || effectiveDarkPhase === "final" ? (
+                darkMatter.narrative.map((paragraph, index) => <RichTextCopy key={index} value={paragraph} />)
               ) : visibleNarrative.split("\n\n").map((paragraph, index) => <BodyCopy key={index}>{paragraph}</BodyCopy>)}
             </div>
             {darkMatter.closingThought && effectiveDarkPhase === "restoring" && <DisplayHeading as="h3" className={styles.closingThought}>{visibleTransition}</DisplayHeading>}
-            {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}>{darkMatter.closingThought}</DisplayHeading>}
-            {darkMatter.supportingText && effectiveDarkPhase === "final" && <BodyCopy className={styles.supportingText}>{darkMatter.supportingText}</BodyCopy>}
+            {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}><RichTextInline value={darkMatter.closingThought} /></DisplayHeading>}
+            {darkMatter.supportingText && effectiveDarkPhase === "final" && <RichTextCopy value={darkMatter.supportingText} className={styles.supportingText} />}
             {effectiveDarkPhase === "final" && <NextLink>{nextLabel}</NextLink>}
           </div>
         </PageContainer>

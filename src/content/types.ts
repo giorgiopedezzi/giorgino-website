@@ -108,9 +108,9 @@ export type HomeContent = {
   darkMatter: {
     label: string;
     heading: string;
-    narrative: string[];
-    closingThought?: string;
-    supportingText?: string;
+    narrative: RichText[];
+    closingThought?: RichText;
+    supportingText?: RichText;
   };
   thinking: ContentBlock & { linkLabel: string; linkHref: string };
   running: { label: string; heading: string; media?: SiteMedia; linkLabel: string; linkHref: string };

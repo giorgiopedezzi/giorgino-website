@@ -60,6 +60,15 @@ export function toRichTextDocument(value: RichText): RichTextDocument {
   return typeof value === "string" ? plainTextToRichText(value) : value;
 }
 
+function nodeToPlainText(node: RichTextNode): string {
+  if (node.type === "text") return node.text;
+  return (node.content ?? []).map(nodeToPlainText).join("");
+}
+
+export function richTextToPlainText(value: RichText): string {
+  return toRichTextDocument(value).content.map(nodeToPlainText).join("\n\n");
+}
+
 export function validateRichText(value: unknown, path: string, required = true): RichText {
   if (typeof value === "string") {
     if (required && value.trim() === "") throw new Error(`Rich text validation failed at ${path}: expected a non-empty string`);

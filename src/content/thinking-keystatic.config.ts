@@ -195,9 +195,12 @@ const homeSchema = {
   darkMatter: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    narrative: textList("Narrative paragraphs", 1, 4),
-    closingThought: fields.text({ label: "Optional closing thought", multiline: true }),
-    supportingText: fields.text({ label: "Optional supporting text", multiline: true }),
+    narrative: fields.array(
+      richText({ label: "Paragraph", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
+      { label: "Narrative paragraphs", validation: { length: { min: 1, max: 4 } }, description: "Order drives the scramble and restoration animation." },
+    ),
+    closingThought: richText({ label: "Optional closing thought", description: "Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
+    supportingText: richText({ label: "Optional supporting text", description: "Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
   }, { label: "Dark Matter", description: "Narrative order drives the scramble and restoration animation." }),
   thinking: fields.object({
     label: requiredText("Section label"),
