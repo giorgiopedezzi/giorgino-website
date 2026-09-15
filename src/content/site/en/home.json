@@ -33,7 +33,7 @@
             },
             {
               "type": "text",
-              "text": "  in the battlefield. Taming tools, mastering technologies, connecting the dots. "
+              "text": "  on the battlefield. Taming tools, mastering technologies, connecting the dots. "
             }
           ]
         },
@@ -45,14 +45,132 @@
           "content": [
             {
               "type": "text",
-              "text": "But, above all, understanding "
+              "text": "But, above all, understanding  "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "textSize": "emphasis"
+                  }
+                }
+              ],
+              "text": "the people behind them."
             }
           ]
-        },
+        }
+      ]
+    }
+  },
+  "human": {
+    "label": "01 — Human",
+    "heading": "Interested in what holds. And what slips through.",
+    "body": {
+      "type": "doc",
+      "content": [
         {
           "type": "paragraph",
           "attrs": {
             "role": "humanAside"
+          },
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "italic"
+                }
+              ],
+              "text": "Technology is behind the screen. But it comes from "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "italic"
+                },
+                {
+                  "type": "interruption"
+                }
+              ],
+              "text": "what is beyond it: the real world. Not perfect. Human."
+            }
+          ]
+        }
+      ]
+    },
+    "linkLabel": "Really about me",
+    "linkHref": "/en/really-about-me"
+  },
+  "darkMatter": {
+    "label": "02 —Dark Matter",
+    "heading": "The work between the work.",
+    "narrative": [
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "In difficult projects, you  often miss the connection between pieces that were not supposed to be disconnected in the first place. Technology and business, decisions and consequences, formal roles and real responsibility, tasks and THE final goal."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": "humanAside"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "It seems like everything is ok. It's not. The system is starting to pull apart. Unless you have what I call "
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "textStyle",
+                    "attrs": {
+                      "textSize": "emphasis"
+                    }
+                  },
+                  {
+                    "type": "bold"
+                  },
+                  {
+                    "type": "italic"
+                  },
+                  {
+                    "type": "interruption"
+                  }
+                ],
+                "text": "dark matter."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "closingThought": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "role": null
           },
           "content": [
             {
@@ -65,7 +183,33 @@
                   }
                 }
               ],
-              "text": "the people behind."
+              "text": "Helping other people learn to see the whole. Clearly."
+            }
+          ]
+        }
+      ]
+    },
+    "supportingText": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "role": null
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "The dots are connected. The picture is clear. Time to leave. "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "italic"
+                }
+              ],
+              "text": "But I think they will miss Giorgino, anyway."
             }
           ]
         }
@@ -73,24 +217,25 @@
     }
   },
   "belief": {
-    "label": "02 — I Believe",
+    "label": "03 — I Believe",
     "statements": [
-      "Information? Not a problem anymore. Even too much. Hard skills? Same. Judgment? Never enough",
-      "Guess what belongs to AI, and what belongs to human?"
+      "Information? No longer a problem. We even have too much of it. Hard skills? The same. Judgment? Never enough.",
+      "Guess what belongs to AI, and what belongs to humans?"
     ]
   },
-  "darkMatter": {
-    "label": "01 —Dark Matter",
-    "heading": "The work between the work.",
-    "narrative": [
-      "In difficult projects, you  often miss the connection the pieces that were not supposed to be disconnected in the first place. Technology and business, decisions and consequences, formal roles and real responsibility, tasks and final goal",
-      "It seems that everything is ok. It's not. The system is starting to pull apart. I call that dark matter"
-    ],
-    "closingThought": "Help other people learning how to see the whole. Clearly",
-    "supportingText": "Now I can leave. But I think they will miss Giorgino, anyway"
+  "running": {
+    "label": "04 — The Running Project",
+    "heading": "Human concept, AI execution.",
+    "media": {
+      "src": "/site-media/running/media/src.jpg",
+      "alt": "the running project",
+      "stretch": true
+    },
+    "linkLabel": "How I deep dive into AI coding agents. See the experiment",
+    "linkHref": "/en/running"
   },
   "thinking": {
-    "label": "03 — Thinking",
+    "label": "05 — Thinking",
     "heading": "Some notes worth leaving unfinished.",
     "body": {
       "type": "doc",
@@ -98,7 +243,7 @@
         {
           "type": "paragraph",
           "attrs": {
-            "role": "editorialLead"
+            "role": "humanAside"
           },
           "content": [
             {
@@ -111,52 +256,5 @@
     },
     "linkLabel": "Follow the thinking",
     "linkHref": "/en/thinking"
-  },
-  "running": {
-    "label": "04 — The Running Project",
-    "heading": "Human concept, AI jobs",
-    "media": {
-      "src": "/site-media/running/media/src.jpg",
-      "alt": "the running project",
-      "stretch": true
-    },
-    "linkLabel": "See the experiment",
-    "linkHref": "/en/running"
-  },
-  "human": {
-    "label": "06 — Human",
-    "heading": "I am interested in what holds — and what slips through.",
-    "body": {
-      "type": "doc",
-      "content": [
-        {
-          "type": "paragraph",
-          "attrs": {
-            "role": "humanAside"
-          },
-          "content": [
-            {
-              "type": "text",
-              "text": "Technology is only one way I pay attention. The rest belongs to the world "
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "interruption"
-                }
-              ],
-              "text": "beyond the screen"
-            },
-            {
-              "type": "text",
-              "text": "."
-            }
-          ]
-        }
-      ]
-    },
-    "linkLabel": "Really about me",
-    "linkHref": "/en/really-about-me"
   }
 }

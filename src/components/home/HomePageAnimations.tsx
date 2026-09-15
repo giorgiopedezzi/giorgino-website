@@ -11,7 +11,7 @@ import {
   SectionLabel,
 } from "@/components/primitives/Editorial";
 import { RichTextCopy, RichTextInline } from "@/components/primitives/RichText";
-import { richTextToPlainText, type RichText } from "@/content/rich-text";
+import { richTextToPlainText, toRichTextDocument, type RichText, type RichTextDocument } from "@/content/rich-text";
 
 import styles from "./HomePage.module.css";
 import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative, scrambleText, scrambleWord, type DarkMatterPhase } from "./home-animation";
@@ -39,7 +39,43 @@ const DARK_MATTER_NARRATIVE_PAUSE_MS = 4_000;
 const DARK_MATTER_TRANSITION_TICK_MS = 70;
 const DARK_MATTER_FINAL_PAUSE_MS = 3_000;
 const DARK_MATTER_CHARACTERS_PER_TICK = 2;
-const DARK_MATTER_VIEWPORT_THRESHOLD = 0.85;
+const BELIEF_VIEWPORT_THRESHOLD = 0.8;
+const VIEWPORT_OBSERVER_THRESHOLDS = Array.from({ length: 101 }, (_, index) => index / 100);
+
+function fillsViewport(entry: IntersectionObserverEntry) {
+  const viewportHeight = entry.rootBounds?.height ?? window.innerHeight;
+  return entry.isIntersecting && (
+    entry.intersectionRatio >= 0.999
+    || entry.intersectionRect.height >= viewportHeight - 1
+  );
+}
+
+function reachesViewportThreshold(entry: IntersectionObserverEntry, threshold: number) {
+  return entry.isIntersecting && entry.intersectionRatio >= threshold;
+}
+
+function truncateRichText(value: RichText, characterCount: number): RichTextDocument {
+  let remaining = characterCount;
+  const document = toRichTextDocument(value);
+  return {
+    type: "doc",
+    content: document.content.map((paragraph, paragraphIndex) => {
+      if (paragraph.type === "text") {
+        const text = Array.from(paragraph.text).slice(0, Math.max(remaining, 0)).join("");
+        remaining -= Array.from(text).length;
+        return { ...paragraph, text };
+      }
+      const content = (paragraph.content ?? []).flatMap((node) => {
+        if (node.type !== "text" || remaining <= 0) return [];
+        const text = Array.from(node.text).slice(0, remaining).join("");
+        remaining -= Array.from(text).length;
+        return text ? [{ ...node, text }] : [];
+      });
+      if (paragraphIndex < document.content.length - 1) remaining -= 2;
+      return { ...paragraph, content };
+    }),
+  };
+}
 
 function usePrefersReducedMotion() {
   const [reducedMotion, setReducedMotion] = useState<boolean | null>(null);
@@ -76,6 +112,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   const [beliefCharacters, setBeliefCharacters] = useState<number | null>(null);
   const [darkPhase, setDarkPhase] = useState<DarkMatterPhase>("idle");
   const [isDarkMatterInView, setIsDarkMatterInView] = useState(false);
+  const [isBeliefInView, setIsBeliefInView] = useState(false);
   const [darkCharacters, setDarkCharacters] = useState(0);
   const [transitionCharacterCount, setTransitionCharacterCount] = useState(0);
   const [restoredWords, setRestoredWords] = useState(0);
@@ -95,14 +132,17 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     if (reducedMotion === null) return;
     if (reducedMotion) return;
 
+    if (darkPhase !== "final") return;
+
     const observer = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
+      if (!entries.some((entry) => reachesViewportThreshold(entry, BELIEF_VIEWPORT_THRESHOLD))) return;
       observer.disconnect();
       setBeliefCharacters(0);
-    }, { threshold: 0.35 });
+      setIsBeliefInView(true);
+    }, { threshold: VIEWPORT_OBSERVER_THRESHOLDS });
     if (beliefRef.current) observer.observe(beliefRef.current);
     return () => observer.disconnect();
-  }, [reducedMotion]);
+  }, [darkPhase, reducedMotion]);
 
   useEffect(() => {
     if (beliefCharacters === null || beliefCharacters >= beliefText.length) return;
@@ -115,10 +155,10 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   useEffect(() => {
     if (reducedMotion === null || reducedMotion) return;
     const observer = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
+      if (!entries.some(fillsViewport)) return;
       observer.disconnect();
       setIsDarkMatterInView(true);
-    }, { threshold: DARK_MATTER_VIEWPORT_THRESHOLD });
+    }, { threshold: VIEWPORT_OBSERVER_THRESHOLDS });
     if (darkMatterRef.current) observer.observe(darkMatterRef.current);
     return () => observer.disconnect();
   }, [reducedMotion]);
@@ -182,12 +222,12 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   useEffect(() => {
     if (darkPhase !== "restoring") return;
     if (transitionTextCharacters.length === 0) {
-      const timer = window.setTimeout(() => setDarkPhase("final"), DARK_MATTER_FINAL_PAUSE_MS);
-      return () => window.clearTimeout(timer);
+      setDarkPhase("pauseBeforeRestore");
+      return;
     }
     if (transitionCharacterCount >= transitionTextCharacters.length) {
-      const timer = window.setTimeout(() => setDarkPhase("final"), DARK_MATTER_FINAL_PAUSE_MS);
-      return () => window.clearTimeout(timer);
+      setDarkPhase("pauseBeforeRestore");
+      return;
     }
     const timer = window.setTimeout(() => {
       setTransitionCharacterCount((count) => {
@@ -199,14 +239,29 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
     return () => window.clearTimeout(timer);
   }, [darkPhase, darkText.words.length, transitionCharacterCount, transitionTextCharacters.length]);
 
+  useEffect(() => {
+    if (darkPhase !== "pauseBeforeRestore") return;
+    const timer = window.setTimeout(() => setDarkPhase("restored"), DARK_MATTER_FINAL_PAUSE_MS);
+    return () => window.clearTimeout(timer);
+  }, [darkPhase]);
+
+  useEffect(() => {
+    if (darkPhase !== "restored") return;
+    const timer = window.setTimeout(() => setDarkPhase("final"), DARK_MATTER_FINAL_PAUSE_MS);
+    return () => window.clearTimeout(timer);
+  }, [darkPhase]);
+
   useEffect(() => () => {
     void audioContextRef.current?.close();
   }, []);
 
-  const animatedBelief = reducedMotion || beliefCharacters === null ? beliefText : beliefText.slice(0, beliefCharacters);
+  const animatedBelief = reducedMotion ? beliefText : beliefCharacters === null ? "" : beliefText.slice(0, beliefCharacters);
   const effectiveDarkPhase = effectiveDarkMatterPhase(reducedMotion, darkPhase);
   const visibleNarrative = scrambleText(darkText.stripped).slice(0, darkCharacters);
-  const visibleTransition = transitionTextCharacters.slice(0, transitionCharacterCount).join("");
+  const visibleClosingThought = useMemo(
+    () => darkMatter.closingThought ? truncateRichText(darkMatter.closingThought, transitionCharacterCount) : null,
+    [darkMatter.closingThought, transitionCharacterCount],
+  );
   const displayedRestoredWords = transitionTextCharacters.length === 0 ? darkText.words.length : restoredWords;
   const showDarkMatter = isDarkMatterVisible(reducedMotion, darkPhase);
 
@@ -216,29 +271,45 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
       <Section tone="darkMatter" aria-labelledby="dark-matter-heading">
         <PageContainer>
           <div className={styles.darkMatterStack}>
-            <SectionLabel>{darkMatter.label}</SectionLabel>
-            <DisplayHeading as="h2" id="dark-matter-heading" className={styles.sectionHeading}>{darkMatter.heading}</DisplayHeading>
-            <div className={styles.narrative} aria-label={darkText.canonical}>
-              {effectiveDarkPhase === "restoring" ? (
-                <BodyCopy>
-                  {darkText.words.map((word, index) => (
-                    <span className={index < displayedRestoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{index < displayedRestoredWords ? word : scrambleWord(word)}{index < darkText.words.length - 1 ? " " : ""}</span>
-                  ))}
-                </BodyCopy>
-              ) : effectiveDarkPhase === "idle" || effectiveDarkPhase === "final" ? (
-                darkMatter.narrative.map((paragraph, index) => <RichTextCopy key={index} value={paragraph} />)
-              ) : visibleNarrative.split("\n\n").map((paragraph, index) => <BodyCopy key={index}>{paragraph}</BodyCopy>)}
+            <div className={styles.darkMatterReserve} aria-hidden="true">
+              <SectionLabel>{darkMatter.label}</SectionLabel>
+              <DisplayHeading as="h2" className={styles.sectionHeading}>{darkMatter.heading}</DisplayHeading>
+              <div className={styles.narrative}>{darkMatter.narrative.map((paragraph, index) => <RichTextCopy key={index} value={paragraph} />)}</div>
+              {darkMatter.closingThought && <DisplayHeading as="h3" className={styles.closingThought}><RichTextInline value={darkMatter.closingThought} /></DisplayHeading>}
+              {darkMatter.supportingText && <RichTextCopy value={darkMatter.supportingText} className={styles.supportingText} />}
+              <NextLink>{nextLabel}</NextLink>
             </div>
-            {darkMatter.closingThought && effectiveDarkPhase === "restoring" && <DisplayHeading as="h3" className={styles.closingThought}>{visibleTransition}</DisplayHeading>}
-            {darkMatter.closingThought && effectiveDarkPhase === "final" && <DisplayHeading as="h3" className={styles.closingThought}><RichTextInline value={darkMatter.closingThought} /></DisplayHeading>}
-            {darkMatter.supportingText && effectiveDarkPhase === "final" && <RichTextCopy value={darkMatter.supportingText} className={styles.supportingText} />}
-            {effectiveDarkPhase === "final" && <NextLink>{nextLabel}</NextLink>}
+            <div className={styles.darkMatterAnimation}>
+              <SectionLabel>{darkMatter.label}</SectionLabel>
+              <DisplayHeading as="h2" id="dark-matter-heading" className={styles.sectionHeading}>{darkMatter.heading}</DisplayHeading>
+              <div className={styles.narrativeSlot}>
+                <div className={[styles.narrative, styles.narrativeReserve].join(" ")} aria-hidden="true">{darkMatter.narrative.map((paragraph, index) => <RichTextCopy key={index} value={paragraph} />)}</div>
+                <div className={[styles.narrative, styles.narrativeAnimation].join(" ")} aria-label={darkText.canonical}>
+                  {effectiveDarkPhase === "restoring" || effectiveDarkPhase === "pauseBeforeRestore" ? (
+                    <BodyCopy>
+                      {darkText.words.map((word, index) => (
+                        <span className={index < displayedRestoredWords ? styles.restoredWord : undefined} key={`${word}-${index}`}>{index < displayedRestoredWords ? word : scrambleWord(word)}{index < darkText.words.length - 1 ? " " : ""}</span>
+                      ))}
+                    </BodyCopy>
+                  ) : effectiveDarkPhase === "idle" || effectiveDarkPhase === "restored" || effectiveDarkPhase === "final" ? (
+                    darkMatter.narrative.map((paragraph, index) => <RichTextCopy key={index} value={paragraph} />)
+                  ) : visibleNarrative.split("\n\n").map((paragraph, index) => <BodyCopy key={index}>{paragraph}</BodyCopy>)}
+                </div>
+              </div>
+              {darkMatter.closingThought && <div className={styles.closingThoughtSlot}>
+                <DisplayHeading as="h3" className={[styles.closingThought, styles.closingThoughtReserve].join(" ")} aria-hidden="true"><RichTextInline value={darkMatter.closingThought} /></DisplayHeading>
+                {visibleClosingThought && (effectiveDarkPhase === "restoring" || effectiveDarkPhase === "pauseBeforeRestore") && <DisplayHeading as="h3" className={[styles.closingThought, styles.closingThoughtAnimation].join(" ")}><RichTextInline value={visibleClosingThought} /></DisplayHeading>}
+                {(effectiveDarkPhase === "restored" || effectiveDarkPhase === "final") && <DisplayHeading as="h3" className={[styles.closingThought, styles.closingThoughtAnimation].join(" ")}><RichTextInline value={darkMatter.closingThought} /></DisplayHeading>}
+              </div>}
+              {darkMatter.supportingText && effectiveDarkPhase === "final" && <RichTextCopy value={darkMatter.supportingText} className={styles.supportingText} />}
+              {effectiveDarkPhase === "final" && <NextLink>{nextLabel}</NextLink>}
+            </div>
           </div>
         </PageContainer>
       </Section>
       </div>
 
-      <div ref={beliefRef}>
+      {(reducedMotion || darkPhase === "final") && <div ref={beliefRef} className={isBeliefInView || reducedMotion ? styles.beliefVisible : styles.beliefPending}>
       <Section className={styles.bordered} aria-labelledby="belief-heading">
         <PageContainer>
           <div className={styles.beliefStack}>
@@ -267,7 +338,8 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
         </PageContainer>
       </Section>
       </div>
-      {children}
+      }
+      {(reducedMotion || beliefCharacters === beliefText.length) && children}
     </>
   );
 }

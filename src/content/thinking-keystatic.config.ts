@@ -165,9 +165,9 @@ const runningSchema = {
   state: runningBlock("Current state"),
   liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),
 };
-const textList = (label: string, min: number, max: number) => fields.array(
+const textList = (label: string, min: number, max?: number) => fields.array(
   requiredText("Text", true),
-  { label, validation: { length: { min, max } } },
+  { label, validation: { length: max === undefined ? { min } : { min, max } } },
 );
 const homeBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
@@ -188,10 +188,6 @@ const homeSchema = {
   metadata: metadataSchema(),
   nextLabel: requiredText("Section continuation label"),
   hero: homeBlock("Hero"),
-  belief: fields.object({
-    label: requiredText("Section label"),
-    statements: textList("Belief statements", 1, 6),
-  }, { label: "Belief statements", description: "One to six statements; their order drives the typewriter animation." }),
   darkMatter: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
@@ -199,16 +195,13 @@ const homeSchema = {
       richText({ label: "Paragraph", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
       { label: "Narrative paragraphs", validation: { length: { min: 1, max: 4 } }, description: "Order drives the scramble and restoration animation." },
     ),
-    closingThought: richText({ label: "Optional closing thought", description: "Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
-    supportingText: richText({ label: "Optional supporting text", description: "Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
+    closingThought: richText({ label: "Closing thought", editorLabel: "Closing thought", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
+    supportingText: richText({ label: "Supporting text", editorLabel: "Supporting text", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
   }, { label: "Dark Matter", description: "Narrative order drives the scramble and restoration animation." }),
-  thinking: fields.object({
+  belief: fields.object({
     label: requiredText("Section label"),
-    heading: requiredText("Heading"),
-    body: richText({ label: "Introduction", description: "Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only." }),
-    linkLabel: requiredText("Thinking link label"),
-    linkHref: fields.url({ label: "Thinking link target", validation: { isRequired: true } }),
-  }, { label: "Thinking" }),
+    statements: textList("Belief statements", 1, 6),
+  }, { label: "Belief statements", description: "One to six statements; their order drives the typewriter animation." }),
   running: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
@@ -220,6 +213,13 @@ const homeSchema = {
     linkLabel: requiredText("Running / Building link label"),
     linkHref: fields.url({ label: "Running / Building link target", validation: { isRequired: true } }),
   }, { label: "Running teaser", description: "Label, heading, a GIF placeholder, and a link — no body copy." }),
+  thinking: fields.object({
+    label: requiredText("Section label"),
+    heading: requiredText("Heading"),
+    body: richText({ label: "Introduction", description: "Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only." }),
+    linkLabel: requiredText("Thinking link label"),
+    linkHref: fields.url({ label: "Thinking link target", validation: { isRequired: true } }),
+  }, { label: "Thinking" }),
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
@@ -237,7 +237,7 @@ const aboutSchema = {
     thanks: requiredText("Thank-you line"),
     opening: textList("Opening lines", 7, 7),
     decadeHeading: requiredText("Decade heading"),
-    decadeEntries: textList("Decade entries", 4, 4),
+    decadeEntries: textList("Decade entries", 1),
     artifactLabel: requiredText("Artifact label"),
     missingMan: fields.object({
       heading: requiredText("Heading"),
@@ -308,7 +308,7 @@ export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishSettings", "italianSettings", "englishContact", "italianContact", "englishHome", "italianHome", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
+    navigation: ["englishHome", "englishContact", "englishSettings", "italianHome", "italianContact", "italianSettings", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
   },
   singletons: {
     englishSettings: singleton({ label: "English site settings", path: "src/content/site/en/site-settings", format: "json", schema: siteSettingsSchema }),

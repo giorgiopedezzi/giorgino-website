@@ -25,8 +25,10 @@ function text(value: unknown, path: string): string {
   return value;
 }
 
-function textArray(value: unknown, path: string, minimum: number, maximum: number): string[] {
-  if (!Array.isArray(value) || value.length < minimum || value.length > maximum) fail(path, `expected between ${minimum} and ${maximum} items`);
+function textArray(value: unknown, path: string, minimum: number, maximum?: number): string[] {
+  if (!Array.isArray(value) || value.length < minimum || (maximum !== undefined && value.length > maximum)) {
+    fail(path, maximum === undefined ? `expected at least ${minimum} items` : `expected between ${minimum} and ${maximum} items`);
+  }
   return value.map((entry, index) => text(entry, `${path}[${index}]`));
 }
 
@@ -62,7 +64,7 @@ export function validateAboutContent(value: unknown, path = "about.json"): About
       thanks: text(narrative.thanks, `${path}.personalNarrative.thanks`),
       opening: textArray(narrative.opening, `${path}.personalNarrative.opening`, 7, 7),
       decadeHeading: text(narrative.decadeHeading, `${path}.personalNarrative.decadeHeading`),
-      decadeEntries: textArray(narrative.decadeEntries, `${path}.personalNarrative.decadeEntries`, 4, 4),
+      decadeEntries: textArray(narrative.decadeEntries, `${path}.personalNarrative.decadeEntries`, 1),
       artifactLabel: text(narrative.artifactLabel, `${path}.personalNarrative.artifactLabel`),
       missingMan: { heading: text(missingMan.heading, `${path}.personalNarrative.missingMan.heading`), body: text(missingMan.body, `${path}.personalNarrative.missingMan.body`), artifact: artifact(missingMan.artifact, `${path}.personalNarrative.missingMan.artifact`), reflection: text(missingMan.reflection, `${path}.personalNarrative.missingMan.reflection`), signoff: text(missingMan.signoff, `${path}.personalNarrative.missingMan.signoff`) },
       pizza: { heading: text(pizza.heading, `${path}.personalNarrative.pizza.heading`), lines: textArray(pizza.lines, `${path}.personalNarrative.pizza.lines`, 7, 7) },

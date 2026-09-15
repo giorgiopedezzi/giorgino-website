@@ -34,7 +34,7 @@ export function ReallyAboutMe({ arc, content, locale }: { arc: AboutContent["arc
 
     <Section className={styles.bordered} aria-labelledby="ideas-heading"><PageContainer><div className={styles.stack}>
       <DisplayHeading as="h2" id="ideas-heading" className={styles.sectionHeading}>{content.decadeHeading}</DisplayHeading>
-      <div className={styles.timeline}>{content.decadeEntries.map((idea, index) => <BodyCopy className={index === 3 ? styles.timelineFinal : ""} key={idea}>{idea}</BodyCopy>)}</div>
+      <div className={styles.timeline}>{content.decadeEntries.map((idea, index) => <BodyCopy className={index === content.decadeEntries.length - 1 ? styles.timelineFinal : ""} key={idea}>{idea}</BodyCopy>)}</div>
     </div></PageContainer></Section>
 
     <Section className={styles.bordered} aria-labelledby="personal-arc-heading"><PageContainer><div className={styles.stack}>

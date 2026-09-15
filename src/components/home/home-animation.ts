@@ -1,6 +1,6 @@
 import { richTextToPlainText, type RichText } from "../../content/rich-text";
 
-export type DarkMatterPhase = "idle" | "narrative" | "restoring" | "final";
+export type DarkMatterPhase = "idle" | "narrative" | "restoring" | "pauseBeforeRestore" | "restored" | "final";
 
 export function scrambleWord(word: string): string {
   const letters = Array.from(word);

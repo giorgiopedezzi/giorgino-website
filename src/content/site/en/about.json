@@ -10,16 +10,77 @@
     ]
   },
   "personalNarrative": {
-    "label": "Really About Me", "stillHere": "Still here?", "thanks": "Thank you. From the heart.",
-    "opening": ["Not the little heart icon.", "You can't leave a like here.", "But perhaps you can leave a little bit of your heart.", "The real one.", "Because you are a real human.", "Not a plausible one.", "Real."],
-    "decadeHeading": "Every ten years, apparently, I need a new bad idea.",
-    "decadeEntries": ["Around 30 — snowboard.", "Around 40 — motorcycle.", "Around 50 — sub-3 marathon.", "Around 60 — apparently, content creator."],
+    "label": "Really About Me",
+    "stillHere": "Still here?",
+    "thanks": "Thank you. Really. From the bottom of my heart.",
+    "opening": [
+      "A real, human hear. Not the emoticon. Not a \"like\",",
+      "You can't leave a like here.",
+      "And if you're here, maybe it's more about you rather than about me.",
+      "Even better, it's about both of us. Real humans.",
+      "Not plausible ones.",
+      "... ",
+      "Real."
+    ],
+    "decadeHeading": "Evolution. And bad ideas. I think it's worsening...",
+    "decadeEntries": [
+      "Around 10 - A fat, four-eyed Zorro. More sgt. Garcia then don Diego de la Vega. But he had to defend his primary school crush",
+      "Around 20 - A little bit better. Still too shy!",
+      "Around 30 — snowboard.",
+      "Around 40 — motorcycle.",
+      "Around 50 — sub-3 marathon.",
+      "Around 60 — Content creator? Naa... Real world storyteller. Better"
+    ],
     "artifactLabel": "Personal artifact",
-    "missingMan": { "heading": "Missing Man.", "body": "When I left a long project, I posted the missing-man formation from Goose's funeral. At night. Then I left the chat. I wanted the image to be the first thing they saw the next morning.", "artifact": { "placeholder": "Original Missing Man GIF — to be added." }, "reflection": "I learned what the missing-man formation meant afterwards. I just knew it was the image I wanted.", "signoff": "I did it my way." },
-    "pizza": { "heading": "Mortadella pizza needs lemon zest.", "lines": ["The acidity cuts through the fat.", "Zest only.", "Scratch into the pith and it turns bitter.", "Change a small detail, and the meaning of the whole changes.", "And yes, I tried it.", "I loved it.", "And no, the internet didn’t tell me to."] },
-    "wait": { "heading": "WAIT WAIT WAIT", "body": "I said it often enough that two teammates put it on a T-shirt.", "artifact": { "placeholder": "The actual T-shirt belongs here." } },
-    "nonnino": { "label": "The nonnino", "heading": "The grandpa runs so fast that when he looks behind him, he sees the avant-garde approaching." },
-    "book": { "label": "The book", "heading": "One day I’d like to write a book.", "lines": ["Something that can speak when I’m not there to over-explain it.", "Preferably while I’m still around to complain about the reviews."], "signoff": "The dreams hunter runs free." },
+    "missingMan": {
+      "heading": "Missing Man.",
+      "body": "How I left a project. No words. The right image. At the right time. At least, I felt it \"right\". Mine.",
+      "artifact": {
+        "placeholder": "Original Missing Man GIF — to be added.",
+        "media": {
+          "src": "/site-media/personalNarrative/missingMan/artifact/media/src.gif",
+          "alt": "top gun missing man",
+          "stretch": false
+        }
+      },
+      "reflection": "I learned what the missing-man formation meant afterwards. I just knew it was the image I wanted.",
+      "signoff": "I did it my way."
+    },
+    "pizza": {
+      "heading": "Mortadella pizza needs lemon zest.",
+      "lines": [
+        "The acidity cuts through the fat.",
+        "Zest only.",
+        "Scratch into the pith and it turns bitter.",
+        "Change a small detail, and the meaning of the whole changes.",
+        "And yes, I tried it.",
+        "I loved it.",
+        "And no, the internet didn’t tell me to."
+      ]
+    },
+    "wait": {
+      "heading": "WAIT WAIT WAIT",
+      "body": "I said it often enough that two teammates put it on a T-shirt.",
+      "artifact": {
+        "placeholder": "The actual T-shirt belongs here.",
+        "media": {
+          "stretch": false
+        }
+      }
+    },
+    "nonnino": {
+      "label": "The nonnino",
+      "heading": "The grandpa runs so fast that when he looks behind him, he sees the avant-garde approaching."
+    },
+    "book": {
+      "label": "The book",
+      "heading": "One day I’d like to write a book.",
+      "lines": [
+        "Something that can speak when I’m not there to over-explain it.",
+        "Preferably while I’m still around to complain about the reviews."
+      ],
+      "signoff": "The dreams hunter runs free."
+    },
     "continueLabel": "Continue the conversation"
   }
 }

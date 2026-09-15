@@ -97,7 +97,7 @@ const roleLabels: Record<BlockRole | "none", string> = {
   editorialLead: "Editorial Lead",
 };
 
-export function RichTextInput({ value, onChange }: FormFieldInputProps<RichText>) {
+export function RichTextInput({ value, onChange, label }: FormFieldInputProps<RichText> & { label?: string }) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions,
@@ -120,12 +120,13 @@ export function RichTextInput({ value, onChange }: FormFieldInputProps<RichText>
   };
 
   return <div className={styles.field}>
+    {label && <p className={styles.fieldLabel}>{label}</p>}
     <div className={styles.toolbar} aria-label="Text formatting">
-      <button type="button" aria-label="Bold" aria-pressed={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><strong>B</strong></button>
-      <button type="button" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
-      <button type="button" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
-      <button type="button" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
-      <button type="button" aria-label="Interruption" aria-pressed={editor.isActive("interruption")} onClick={() => editor.chain().focus().toggleMark("interruption").run()}><span className={styles.interruption}>I</span></button>
+      <button type="button" title="Bold" aria-label="Bold" aria-pressed={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><strong>B</strong></button>
+      <button type="button" title="Italic" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
+      <button type="button" title="Underline" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
+      <button type="button" title="Strikethrough" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
+      <button type="button" title="Editorial emphasis" aria-label="Editorial emphasis" aria-pressed={editor.isActive("interruption")} onClick={() => editor.chain().focus().toggleMark("interruption").run()}><span className={styles.interruption}>E</span></button>
       <label>Typography
         <select aria-label="Typography style" value={selectedSize} onChange={(event) => applySize(event.target.value as TextSize)}>
           <option value="small">Label</option><option value="normal">Body</option><option value="large">Editorial</option><option value="emphasis">Editorial emphasis</option>

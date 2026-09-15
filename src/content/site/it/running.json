@@ -1,11 +1,80 @@
 {
-  "metadata": { "title": "Running / Building — Giorgio Pedezzi", "description": "Un piccolo linguaggio visivo per una persona in movimento.", "socialTitle": "Running / Building — Giorgio Pedezzi", "socialDescription": "Un piccolo linguaggio visivo per una persona in movimento." },
-  "hero": { "label": "Running / Costruire", "heading": "Il runner da significato ai dati.", "intro": "Senza il runner ci sono dati telemetrici. Con il runner, i dati acquistano significato." },
-  "problem": { "label": "Il problema", "heading": "Piu metriche non significano automaticamente piu comprensione.", "body": "Un piano di corsa puo sembrare preciso e comunque perdere di vista la persona che deve viverlo. L'informazione e utile solo se aiuta il runner a capire cosa sta succedendo.", "isVisible": true },
-  "restraint": { "label": "Una scelta di misura", "heading": "Non l'ennesima dashboard da obbedire.", "body": "Non e un tentativo di riprodurre ogni metrica, costruire un coach universale o trasformare la corsa in un esercizio di conformita. Lascia spazio all'interpretazione, senza perdere di vista la direzione.", "isVisible": true },
-  "principles": { "label": "Principi", "heading": "Un sistema dovrebbe assistere senza togliere il runner dal centro.", "items": [{ "order": 1, "text": "Segnale prima del rumore." }, { "order": 2, "text": "Piani flessibili prima della falsa perfezione." }, { "order": 3, "text": "Adattamento senza perdere l'obiettivo." }, { "order": 4, "text": "Assistenza senza resa." }, { "order": 5, "text": "Il runner resta al centro." }] },
-  "object": { "label": "L'oggetto", "heading": "Un piccolo linguaggio visivo per un essere umano in movimento.", "body": "Lo studio visivo qui sotto non e una dashboard di prodotto. Spiega l'idea: l'intensita della frequenza cardiaca passa dal rosa al rosso; una pausa lunga fa collassare il runner, una breve lo mantiene in movimento.", "isVisible": true, "study": { "title": "Un corpo, non un foglio di calcolo", "label": "Uno studio visivo", "body": "La figura restituisce un soggetto alla telemetria. I dati restano, ma non fingono piu di essere tutta la storia." }, "media": [] },
-  "build": { "label": "Come si sta costruendo", "heading": "Agenti di coding AI, sotto direzione umana.", "body": "L'implementazione e spesso delegata ad agenti di coding AI. Concetto, vincoli, priorita e decisioni restano lavoro umano. Questa divisione fa parte dell'esperimento.", "isVisible": true },
-  "state": { "label": "Stato attuale", "heading": "Un esperimento vivo.", "body": "Il progetto sta ancora prendendo forma in frammenti pubblici. Questa pagina ne raccoglie il pensiero senza rivendicare un prodotto finito dove ancora non c'e.", "isVisible": true },
-  "liveApp": { "label": "Vuoi provarlo un po'?", "href": "https://run.the-dreamshunter-runs-free.com", "isVisible": false }
+  "metadata": {
+    "title": "Running / Building — Giorgio Pedezzi",
+    "description": "Un piccolo linguaggio visivo per una persona in movimento.",
+    "socialTitle": "Running / Building — Giorgio Pedezzi",
+    "socialDescription": "Un piccolo linguaggio visivo per una persona in movimento."
+  },
+  "hero": {
+    "label": "Running / Lavori in corso",
+    "heading": "I dati aiutano. Ma tutti quei chilometri li devi fare tu",
+    "intro": "I dati sono lì per te. Usali, ti aiutano. Ma il padrone sei tu. E quello che senti, lo senti tu. Non l dati."
+  },
+  "problem": {
+    "label": "Il problema",
+    "heading": "Hai savvero bisogno di tutti quei dati?",
+    "body": "Un approccio coerente. Dati dati dati. Fagocitiamo dati, informazioni, pensando di sapere. Ma sappiamo usarli. O ne siamo semplicemente travolti? I dati che servono. Un piano. Ma adattabile.\nTraduci in inglese",
+    "isVisible": true
+  },
+  "restraint": {
+    "label": "Una scelta di misura",
+    "heading": "Non l'ennesima dashboard da obbedire.",
+    "body": "Non e un tentativo di riprodurre ogni metrica, costruire un coach universale o trasformare la corsa in un esercizio di conformita. Lascia spazio all'interpretazione, senza perdere di vista la direzione.",
+    "isVisible": true
+  },
+  "principles": {
+    "label": "Principi",
+    "heading": "Un sistema dovrebbe assistere senza togliere il runner dal centro.",
+    "items": [
+      {
+        "order": 1,
+        "text": "Segnale prima del rumore."
+      },
+      {
+        "order": 2,
+        "text": "Piani flessibili prima della falsa perfezione."
+      },
+      {
+        "order": 3,
+        "text": "Adattamento senza perdere l'obiettivo."
+      },
+      {
+        "order": 4,
+        "text": "Assistenza senza resa."
+      },
+      {
+        "order": 5,
+        "text": "Il runner resta al centro."
+      }
+    ]
+  },
+  "object": {
+    "label": "L'oggetto",
+    "heading": "Un piccolo linguaggio visivo per un essere umano in movimento.",
+    "body": "Lo studio visivo qui sotto non e una dashboard di prodotto. Spiega l'idea: l'intensita della frequenza cardiaca passa dal rosa al rosso; una pausa lunga fa collassare il runner, una breve lo mantiene in movimento.",
+    "isVisible": true,
+    "study": {
+      "title": "Un corpo, non un foglio di calcolo",
+      "label": "Uno studio visivo",
+      "body": "La figura restituisce un soggetto alla telemetria. I dati restano, ma non fingono piu di essere tutta la storia."
+    },
+    "media": []
+  },
+  "build": {
+    "label": "Come si sta costruendo",
+    "heading": "Agenti di coding AI, sotto direzione umana.",
+    "body": "L'implementazione e spesso delegata ad agenti di coding AI. Concetto, vincoli, priorita e decisioni restano lavoro umano. Questa divisione fa parte dell'esperimento.",
+    "isVisible": true
+  },
+  "state": {
+    "label": "Stato attuale",
+    "heading": "Un esperimento vivo.",
+    "body": "Il progetto sta ancora prendendo forma in frammenti pubblici. Questa pagina ne raccoglie il pensiero senza rivendicare un prodotto finito dove ancora non c'e.",
+    "isVisible": true
+  },
+  "liveApp": {
+    "label": "Vuoi provarlo un po'?",
+    "href": "https://run.the-dreamshunter-runs-free.com",
+    "isVisible": false
+  }
 }

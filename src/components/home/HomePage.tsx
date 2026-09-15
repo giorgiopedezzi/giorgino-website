@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import {
   DisplayHeading,
@@ -15,13 +16,13 @@ import type { ContactContent } from "@/content/contact";
 import { HomePageAnimations } from "./HomePageAnimations";
 import styles from "./HomePage.module.css";
 
-type HomePageProps = { content: HomeContent; contact: ContactContent };
+type HomePageProps = { content: HomeContent; contact: ContactContent; footer: ReactNode };
 
 function DeepLink({ href, children }: { href: string; children: string }) {
   return <Link className={styles.deepLink} href={href}>{children} <span aria-hidden="true">→</span></Link>;
 }
 
-export function HomePage({ content, contact }: HomePageProps) {
+export function HomePage({ content, contact, footer }: HomePageProps) {
   return (
     <main>
       <Section className={styles.hero} aria-labelledby="hero-heading">
@@ -47,18 +48,6 @@ export function HomePage({ content, contact }: HomePageProps) {
           supportingText: content.darkMatter.supportingText,
         }}
       >
-
-      <Section className={styles.bordered} aria-labelledby="thinking-heading">
-        <PageContainer>
-          <div className={styles.thinkingStack}>
-            <SectionLabel>{content.thinking.label}</SectionLabel>
-            <DisplayHeading as="h2" id="thinking-heading" className={styles.sectionHeading}>{content.thinking.heading}</DisplayHeading>
-            <RichTextCopy value={content.thinking.body} />
-            <DeepLink href={content.thinking.linkHref}>{content.thinking.linkLabel}</DeepLink>
-          </div>
-        </PageContainer>
-      </Section>
-
       <Section tone="running" aria-labelledby="running-heading">
         <PageContainer>
           <div className={styles.runningStack}>
@@ -68,6 +57,17 @@ export function HomePage({ content, contact }: HomePageProps) {
               ? <Image className={styles.gifPlaceholder} style={content.running.media.stretch ? { objectFit: "fill" } : undefined} src={content.running.media.src} alt={content.running.media.alt} width={860} height={484} unoptimized />
               : <div className={styles.gifPlaceholder} aria-hidden="true" />}
             <DeepLink href={content.running.linkHref}>{content.running.linkLabel}</DeepLink>
+          </div>
+        </PageContainer>
+      </Section>
+
+      <Section className={styles.bordered} aria-labelledby="thinking-heading">
+        <PageContainer>
+          <div className={styles.thinkingStack}>
+            <SectionLabel>{content.thinking.label}</SectionLabel>
+            <DisplayHeading as="h2" id="thinking-heading" className={styles.sectionHeading}>{content.thinking.heading}</DisplayHeading>
+            <RichTextCopy value={content.thinking.body} />
+            <DeepLink href={content.thinking.linkHref}>{content.thinking.linkLabel}</DeepLink>
           </div>
         </PageContainer>
       </Section>
@@ -93,6 +93,7 @@ export function HomePage({ content, contact }: HomePageProps) {
           </div>
         </PageContainer>
       </Section>
+      {footer}
       </HomePageAnimations>
     </main>
   );

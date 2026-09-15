@@ -38,8 +38,21 @@
 }
 
 .narrative { display: grid; gap: var(--space-md); max-width: 40.625rem; }
+.narrativeSlot,
+.closingThoughtSlot { display: grid; }
+.narrativeReserve,
+.narrativeAnimation,
+.closingThoughtReserve,
+.closingThoughtAnimation { grid-area: 1 / 1; }
+.narrativeReserve,
+.closingThoughtReserve { visibility: hidden; }
+.darkMatterReserve,
+.darkMatterAnimation { display: grid; grid-area: 1 / 1; align-items: start; gap: 1.75rem; }
+.darkMatterReserve { visibility: hidden; }
 .darkMatterPending { opacity: 0; pointer-events: none; }
 .darkMatterVisible { opacity: 1; transition: opacity .8s ease; }
+.beliefPending { opacity: 0; pointer-events: none; }
+.beliefVisible { opacity: 1; transition: opacity .8s ease; }
 .restoredWord { display: inline; background: #000; color: #fff; box-decoration-break: clone; padding-inline: .08em; }
 .closingThought.closingThought { max-width: 47.5rem; font-family: var(--font-display); font-size: clamp(2rem, 1.5rem + 1.4vw, 2.5rem); font-weight: 400; line-height: 1.14; letter-spacing: -0.02em; }
 .supportingText { max-width: 38.75rem; }
