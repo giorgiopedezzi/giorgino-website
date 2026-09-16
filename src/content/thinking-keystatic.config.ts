@@ -159,19 +159,19 @@ const runningSchema = {
   hero: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), intro: richText({ label: "Introduction" }) }, { label: "Hero" }),
   problem: runningBlock("Problem"),
   restraint: runningBlock("Deliberate restraint"),
-  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle" }) }), { label: "Ordered principles", validation: { length: { min: 1, max: 8 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
+  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle" }) }), { label: "Ordered principles", description: "Recommended: 3–8 principles. Order is preserved in the numbered reading sequence.", validation: { length: { min: 1 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
   object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title" }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object({ src: siteMedia("Media file"), alt: requiredText("Alternative text"), caption: fields.text({ label: "Caption" }) }), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Media item" }) }, { label: "Object and visual study" }),
   build: runningBlock("How it is being built"),
   state: runningBlock("Current state"),
   liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),
 };
-const textList = (label: string, min: number, max?: number) => fields.array(
+const textList = (label: string, min: number, max?: number, description?: string) => fields.array(
   requiredText("Text", true),
-  { label, validation: { length: max === undefined ? { min } : { min, max } } },
+  { label, description, validation: { length: max === undefined ? { min } : { min, max } } },
 );
-const richTextList = (label: string, min: number, max?: number) => fields.array(
+const richTextList = (label: string, min: number, max?: number, description?: string) => fields.array(
   richText({ label: "Text" }),
-  { label, validation: { length: max === undefined ? { min } : { min, max } } },
+  { label, description, validation: { length: max === undefined ? { min } : { min, max } } },
 );
 const homeBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
@@ -197,15 +197,15 @@ const homeSchema = {
     heading: requiredText("Heading"),
     narrative: fields.array(
       richText({ label: "Paragraph", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
-      { label: "Narrative paragraphs", validation: { length: { min: 1, max: 4 } }, description: "Order drives the scramble and restoration animation." },
+      { label: "Narrative paragraphs", validation: { length: { min: 1 } }, description: "Recommended: 1–4 paragraphs. Order drives the scramble and restoration animation, which supports any non-empty ordered sequence." },
     ),
     closingThought: richText({ label: "Closing thought", editorLabel: "Closing thought", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
     supportingText: richText({ label: "Supporting text", editorLabel: "Supporting text", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
   }, { label: "Dark Matter", description: "Narrative order drives the scramble and restoration animation." }),
   belief: fields.object({
     label: requiredText("Section label"),
-    statements: textList("Belief statements", 1, 6),
-  }, { label: "Belief statements", description: "One to six statements; their order drives the typewriter animation." }),
+    statements: textList("Belief statements", 1, undefined, "Recommended: 3–6 statements. Their order drives the typewriter animation."),
+  }, { label: "Belief statements", description: "Order drives the typewriter animation; additional statements remain editable and render in sequence." }),
   running: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
@@ -234,12 +234,13 @@ const homeSchema = {
 };
 
 const aboutSchema = {
-  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), timeline: richTextList("Timeline entries", 1, 6) }, { label: "Personal arc" }),
+  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), timeline: richTextList("Timeline entries", 1, undefined, "Recommended: 3–6 entries. Entries render as an ordered editorial timeline.") }, { label: "Personal arc" }),
   personalNarrative: fields.object({
     label: requiredText("Section label"),
     stillHere: richText({ label: "Opening heading" }),
     thanks: richText({ label: "Thank-you line" }),
-    opening: richTextList("Opening lines", 7, 7),
+    // This is a deliberate 4 + 2 + 1 visual composition, not a historical content limit.
+    opening: richTextList("Opening lines", 7, 7, "Exactly seven lines: this bespoke opening is intentionally choreographed as 4 + 2 + 1 visual groups."),
     decadeHeading: richText({ label: "Decade heading" }),
     decadeEntries: richTextList("Decade entries", 1),
     artifactLabel: requiredText("Artifact label"),
@@ -252,7 +253,7 @@ const aboutSchema = {
     }, { label: "Missing Man" }),
     pizza: fields.object({
       heading: richText({ label: "Heading" }),
-      lines: richTextList("Lines", 7, 7),
+      lines: richTextList("Lines", 1, undefined, "Recommended: 5–8 lines. The composition rebalances its visual split for any non-empty ordered list."),
     }, { label: "Pizza" }),
     wait: fields.object({
       heading: richText({ label: "Heading" }),
@@ -266,7 +267,7 @@ const aboutSchema = {
     book: fields.object({
       label: requiredText("Section label"),
       heading: richText({ label: "Heading" }),
-      lines: richTextList("Lines", 2, 2),
+      lines: richTextList("Lines", 1, undefined, "Recommended: 2–4 lines. Each line is rendered in reading order."),
       signoff: richText({ label: "Signoff" }),
     }, { label: "Book" }),
     continueLabel: requiredText("Continue link label"),

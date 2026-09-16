@@ -59,6 +59,10 @@ assert.throws(
 const running = getRunningContent("en");
 assert.equal(getRunningContent("it").hero.label, "Running / Lavori in corso");
 assert.deepEqual(running.principles.items.map((item) => item.order), [1, 2, 3, 4, 5]);
+assert.doesNotThrow(
+  () => validateRunningContent({ ...running, principles: { ...running.principles, items: Array.from({ length: 9 }, (_, index) => ({ order: index + 1, text: `Principle ${index + 1}` })) } }),
+  "principle-count guidance must not block saving a ninth ordered item",
+);
 assert.throws(
   () => validateRunningContent({ ...running, liveApp: { ...running.liveApp, href: "javascript:alert(1)" } }),
   /internal path or an http\(s\) URL/,

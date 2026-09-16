@@ -59,7 +59,7 @@ export function validateRunningContent(value: unknown, path = "running.json"): R
   const principles = record(source.principles, `${path}.principles`);
   const object = record(source.object, `${path}.object`);
   const study = record(object.study, `${path}.object.study`);
-  if (!Array.isArray(principles.items) || principles.items.length < 1 || principles.items.length > 8) fail(`${path}.principles.items`, "expected between 1 and 8 items");
+  if (!Array.isArray(principles.items) || principles.items.length < 1) fail(`${path}.principles.items`, "expected at least 1 item");
   if (!Array.isArray(object.media)) fail(`${path}.object.media`, "expected an array");
   const items = principles.items.map((value, index) => {
     const item = record(value, `${path}.principles.items[${index}]`);

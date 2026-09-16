@@ -57,7 +57,7 @@ export function validateAboutContent(value: unknown, path = "about.json"): About
   const nonnino = record(narrative.nonnino, `${path}.personalNarrative.nonnino`);
   const book = record(narrative.book, `${path}.personalNarrative.book`);
   return {
-    arc: { label: text(arc.label, `${path}.arc.label`), heading: rich(arc.heading, `${path}.arc.heading`), timeline: richArray(arc.timeline, `${path}.arc.timeline`, 1, 6) },
+    arc: { label: text(arc.label, `${path}.arc.label`), heading: rich(arc.heading, `${path}.arc.heading`), timeline: richArray(arc.timeline, `${path}.arc.timeline`, 1) },
     personalNarrative: {
       label: text(narrative.label, `${path}.personalNarrative.label`),
       stillHere: rich(narrative.stillHere, `${path}.personalNarrative.stillHere`),
@@ -67,10 +67,10 @@ export function validateAboutContent(value: unknown, path = "about.json"): About
       decadeEntries: richArray(narrative.decadeEntries, `${path}.personalNarrative.decadeEntries`, 1),
       artifactLabel: text(narrative.artifactLabel, `${path}.personalNarrative.artifactLabel`),
       missingMan: { heading: rich(missingMan.heading, `${path}.personalNarrative.missingMan.heading`), body: rich(missingMan.body, `${path}.personalNarrative.missingMan.body`), artifact: artifact(missingMan.artifact, `${path}.personalNarrative.missingMan.artifact`), reflection: rich(missingMan.reflection, `${path}.personalNarrative.missingMan.reflection`), signoff: rich(missingMan.signoff, `${path}.personalNarrative.missingMan.signoff`) },
-      pizza: { heading: rich(pizza.heading, `${path}.personalNarrative.pizza.heading`), lines: richArray(pizza.lines, `${path}.personalNarrative.pizza.lines`, 7, 7) },
+      pizza: { heading: rich(pizza.heading, `${path}.personalNarrative.pizza.heading`), lines: richArray(pizza.lines, `${path}.personalNarrative.pizza.lines`, 1) },
       wait: { heading: rich(wait.heading, `${path}.personalNarrative.wait.heading`), body: rich(wait.body, `${path}.personalNarrative.wait.body`), artifact: artifact(wait.artifact, `${path}.personalNarrative.wait.artifact`) },
       nonnino: { label: text(nonnino.label, `${path}.personalNarrative.nonnino.label`), heading: rich(nonnino.heading, `${path}.personalNarrative.nonnino.heading`) },
-      book: { label: text(book.label, `${path}.personalNarrative.book.label`), heading: rich(book.heading, `${path}.personalNarrative.book.heading`), lines: richArray(book.lines, `${path}.personalNarrative.book.lines`, 2, 2), signoff: rich(book.signoff, `${path}.personalNarrative.book.signoff`) },
+      book: { label: text(book.label, `${path}.personalNarrative.book.label`), heading: rich(book.heading, `${path}.personalNarrative.book.heading`), lines: richArray(book.lines, `${path}.personalNarrative.book.lines`, 1), signoff: rich(book.signoff, `${path}.personalNarrative.book.signoff`) },
       continueLabel: text(narrative.continueLabel, `${path}.personalNarrative.continueLabel`),
     },
   };

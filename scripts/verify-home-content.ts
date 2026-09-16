@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 
 import { getHomeContent, validateHomeContent } from "../src/content/home";
-import { getAboutContent } from "../src/content/about";
+import { getAboutContent, validateAboutContent } from "../src/content/about";
 import { validateSiteAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative } from "../src/components/home/home-animation";
 import { richTextToPlainText } from "../src/content/rich-text";
@@ -25,6 +25,26 @@ assert.equal("arc" in english, false, "Home must not retain the personal arc");
 assert.equal("personalNarrative" in english, false, "Home must not retain the full personal narrative");
 assert.equal(richTextToPlainText(englishAbout.personalNarrative.missingMan.body), "How I left a project. No words. The right image. At the right time. At least, I felt it \"right\". Mine.");
 assert.equal(richTextToPlainText(italianAbout.personalNarrative.book.heading), "Un giorno vorrei scrivere un libro.");
+
+const flexibleAbout = structuredClone(englishAbout) as unknown as Record<string, unknown>;
+const flexibleNarrative = flexibleAbout.personalNarrative as Record<string, unknown>;
+const flexiblePizza = flexibleNarrative.pizza as Record<string, unknown>;
+const flexibleBook = flexibleNarrative.book as Record<string, unknown>;
+const flexibleArc = flexibleAbout.arc as Record<string, unknown>;
+flexiblePizza.lines = Array.from({ length: 8 }, (_, index) => (englishAbout.personalNarrative.pizza.lines[index % englishAbout.personalNarrative.pizza.lines.length]));
+flexibleBook.lines = Array.from({ length: 3 }, (_, index) => (englishAbout.personalNarrative.book.lines[index % englishAbout.personalNarrative.book.lines.length]));
+flexibleArc.timeline = Array.from({ length: 7 }, (_, index) => (englishAbout.arc.timeline[index % englishAbout.arc.timeline.length]));
+assert.doesNotThrow(() => validateAboutContent(flexibleAbout), "Pizza, Book, and Personal arc must accept counts above the recommended range");
+
+const minimalAbout = structuredClone(englishAbout) as unknown as Record<string, unknown>;
+const minimalNarrative = minimalAbout.personalNarrative as Record<string, unknown>;
+(minimalNarrative.pizza as Record<string, unknown>).lines = [englishAbout.personalNarrative.pizza.lines[0]];
+(minimalNarrative.book as Record<string, unknown>).lines = [englishAbout.personalNarrative.book.lines[0]];
+assert.doesNotThrow(() => validateAboutContent(minimalAbout), "Pizza and Book must render from a single editorial line without placeholders");
+
+const brokenOpening = structuredClone(englishAbout) as unknown as Record<string, unknown>;
+(brokenOpening.personalNarrative as Record<string, unknown>).opening = englishAbout.personalNarrative.opening.slice(0, 6);
+assert.throws(() => validateAboutContent(brokenOpening), /unexpected number of items/, "the bespoke 4 + 2 + 1 opening composition must remain protected");
 const editedNarrative = prepareNarrative(["An editorial edit, with punctuation.", "A second paragraph."]);
 assert.equal(editedNarrative.canonical, "An editorial edit, with punctuation.\n\nA second paragraph.");
 assert.equal(editedNarrative.stripped, "an editorial edit with punctuation a second paragraph");
@@ -35,7 +55,11 @@ assert.equal(isDarkMatterVisible(false, "narrative"), true, "normal motion revea
 
 const tooManyBeliefs = structuredClone(english) as unknown as Record<string, unknown>;
 (tooManyBeliefs.belief as Record<string, unknown>).statements = Array.from({ length: 7 }, (_, index) => `Belief ${index}`);
-assert.throws(() => validateHomeContent(tooManyBeliefs), /between 1 and 6 items/);
+assert.doesNotThrow(() => validateHomeContent(tooManyBeliefs), "belief guidance must not block saving a seventh statement");
+
+const additionalNarrative = structuredClone(english) as unknown as Record<string, unknown>;
+(additionalNarrative.darkMatter as Record<string, unknown>).narrative = Array.from({ length: 5 }, (_, index) => `Paragraph ${index}`);
+assert.doesNotThrow(() => validateHomeContent(additionalNarrative), "the ordered Dark Matter animation must accept additional narrative paragraphs");
 
 const legacyHomepage = structuredClone(english) as unknown as Record<string, unknown>;
 (legacyHomepage.hero as Record<string, unknown>).body = "Existing plain homepage prose.";
@@ -99,4 +123,4 @@ assert.throws(() => validateSiteAuthoringUpdate({
   deletions: [],
 }), /outside approved site content and media directories/);
 
-console.log("Verified localized homepage loading, canonical personal narrative, constrained animation inputs, optional media accessibility, and guarded authoring updates.");
+console.log("Verified localized homepage loading, canonical personal narrative, flexible ordered animation inputs, optional media accessibility, and guarded authoring updates.");

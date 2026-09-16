@@ -33,16 +33,16 @@ function href(value: unknown, path: string): string {
   return valueAsText;
 }
 
-function textArray(value: unknown, path: string, minimum: number, maximum: number): string[] {
-  if (!Array.isArray(value) || value.length < minimum || value.length > maximum) {
-    fail(path, `expected between ${minimum} and ${maximum} items`);
+function textArray(value: unknown, path: string, minimum: number): string[] {
+  if (!Array.isArray(value) || value.length < minimum) {
+    fail(path, `expected at least ${minimum} items`);
   }
   return value.map((entry, index) => text(entry, `${path}[${index}]`));
 }
 
-function richTextArray(value: unknown, path: string, minimum: number, maximum: number): RichText[] {
-  if (!Array.isArray(value) || value.length < minimum || value.length > maximum) {
-    fail(path, `expected between ${minimum} and ${maximum} items`);
+function richTextArray(value: unknown, path: string, minimum: number): RichText[] {
+  if (!Array.isArray(value) || value.length < minimum) {
+    fail(path, `expected at least ${minimum} items`);
   }
   return value.map((entry, index) => validateRichText(entry, `${path}[${index}]`));
 }
@@ -83,11 +83,11 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
     metadata: validateContentMetadata(metadata, `${path}.metadata`),
     nextLabel: text(source.nextLabel, `${path}.nextLabel`),
     hero: block(source.hero, `${path}.hero`),
-    belief: { label: text(belief.label, `${path}.belief.label`), statements: textArray(belief.statements, `${path}.belief.statements`, 1, 6) },
+    belief: { label: text(belief.label, `${path}.belief.label`), statements: textArray(belief.statements, `${path}.belief.statements`, 1) },
     darkMatter: {
       label: text(darkMatter.label, `${path}.darkMatter.label`),
       heading: text(darkMatter.heading, `${path}.darkMatter.heading`),
-      narrative: richTextArray(darkMatter.narrative, `${path}.darkMatter.narrative`, 1, 4),
+      narrative: richTextArray(darkMatter.narrative, `${path}.darkMatter.narrative`, 1),
     },
     thinking: { ...block(thinking, `${path}.thinking`), linkLabel: text(thinking.linkLabel, `${path}.thinking.linkLabel`), linkHref: href(thinking.linkHref, `${path}.thinking.linkHref`) },
     running: {

@@ -7,6 +7,18 @@ import type { AboutContent } from "@/content/about";
 import type { PersonalArtifact, PersonalNarrative } from "@/content/types";
 import styles from "./ReallyAboutMe.module.css";
 
+const openingComposition = { heart: 4, human: 2, conclusion: 1 } as const;
+
+function arrangeOpening(opening: PersonalNarrative["opening"]) {
+  const { heart, human, conclusion } = openingComposition;
+  if (opening.length !== heart + human + conclusion) throw new Error("Really About Me opening must retain its intentional 4 + 2 + 1 composition");
+  return {
+    heart: opening.slice(0, heart),
+    human: opening.slice(heart, heart + human),
+    conclusion: opening.at(-1)!,
+  };
+}
+
 function Artifact({artifact, label, dark = false}: { artifact: PersonalArtifact; label: string; dark?: boolean }) {
   return <figure className={[styles.artifact, dark ? styles.artifactDark : ""].filter(Boolean).join(" ")}>
     <span>{label}</span>{artifact.media ? <><Image className={styles.artifactImage}
@@ -23,6 +35,8 @@ export function ReallyAboutMe({arc, content, locale}: {
 }) {
   const basePath = `/${locale}`;
   const copy = (value: import("@/content/rich-text").RichText, className?: string, key?: string | number) => <RichTextCopy key={key} value={value} className={className}/>;
+  const opening = arrangeOpening(content.opening);
+  const pizzaEmphasisStart = Math.ceil(content.pizza.lines.length / 2);
   return <>
     <Section className={styles.hero} aria-labelledby="about-heading"><PageContainer>
       <div className={styles.heroStack}><SectionLabel>{content.label}</SectionLabel><DisplayHeading
@@ -30,10 +44,10 @@ export function ReallyAboutMe({arc, content, locale}: {
                                                                                                        className={styles.thanks}><RichTextInline
         value={content.thanks}/></DisplayHeading>
         <div
-          className={styles.heart}>{content.opening.slice(0, 4).map((line, index) => copy(line, String(index), index))}</div>
+          className={styles.heart}>{opening.heart.map((line, index) => copy(line, String(index), index))}</div>
         <div
-          className={styles.human}>{content.opening.slice(4, 6).map((line, index) => copy(line, String(index), index))}<DisplayHeading
-          as="p"><RichTextInline value={content.opening[6]}/></DisplayHeading></div>
+          className={styles.human}>{opening.human.map((line, index) => copy(line, String(index), index))}<DisplayHeading
+          as="p"><RichTextInline value={opening.conclusion}/></DisplayHeading></div>
       </div>
     </PageContainer></Section>
     <Section className={styles.bordered} aria-labelledby="ideas-heading"><PageContainer>
@@ -65,7 +79,7 @@ export function ReallyAboutMe({arc, content, locale}: {
     <Section className={styles.pizza} aria-labelledby="pizza-heading"><PageContainer>
       <div className={styles.pizzaStack}><DisplayHeading as="h2" id="pizza-heading"
                                                          className={styles.sectionHeading}><RichTextInline
-        value={content.pizza.heading}/></DisplayHeading>{content.pizza.lines.map((line, index) => copy(line, index > 3 ? styles.pizzaEnd : String(index), index))}
+        value={content.pizza.heading}/></DisplayHeading>{content.pizza.lines.map((line, index) => copy(line, index >= pizzaEmphasisStart ? styles.pizzaEnd : String(index), index))}
       </div>
     </PageContainer></Section>
     <Section tone="running" aria-labelledby="wait-heading"><PageContainer>
