@@ -9,7 +9,7 @@ import {
   Section,
   SectionLabel,
 } from "@/components/primitives/Editorial";
-import { RichTextCopy } from "@/components/primitives/RichText";
+import { RichTextCopy, RichTextInline } from "@/components/primitives/RichText";
 import type { HomeContent } from "@/content/types";
 import type { ContactContent } from "@/content/contact";
 
@@ -87,9 +87,9 @@ export function HomePage({ content, contact, footer }: HomePageProps) {
         <PageContainer>
           <div className={styles.contactStack}>
             <SectionLabel>{contact.label}</SectionLabel>
-            <DisplayHeading as="h2" id="contact-heading" className={styles.contactHeading}>{contact.heading}</DisplayHeading>
-            <div className={styles.contactDetails}>{contact.details.map((detail) => <p key={detail}>{detail}</p>)}</div>
-            {contact.supportingText && <p className={styles.contactSupporting}>{contact.supportingText}</p>}
+            <DisplayHeading as="h2" id="contact-heading" className={styles.contactHeading}><RichTextInline value={contact.heading} /></DisplayHeading>
+            <div className={styles.contactDetails}>{contact.details.map((detail, index) => <RichTextCopy key={index} value={detail} />)}</div>
+            {contact.supportingText && <div className={styles.contactSupporting}><RichTextCopy value={contact.supportingText} /></div>}
           </div>
         </PageContainer>
       </Section>

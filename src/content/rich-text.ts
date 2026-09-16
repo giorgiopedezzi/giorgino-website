@@ -32,7 +32,7 @@ function isBlockRole(value: unknown): value is BlockRole {
 function isMark(value: unknown): value is RichTextMark {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
   const mark = value as Record<string, unknown>;
-  if (mark.type === "bold" || mark.type === "italic" || mark.type === "underline" || mark.type === "strike" || mark.type === "interruption") return true;
+  if (mark.type === "bold" || mark.type === "italic" || mark.type === "underline" || mark.type === "strike" || mark.type === "interruption") return Object.keys(mark).every((key) => key === "type");
   if (mark.type !== "textStyle") return false;
   if (mark.attrs === undefined) return true;
   if (typeof mark.attrs !== "object" || mark.attrs === null || Array.isArray(mark.attrs)) return false;
@@ -43,13 +43,17 @@ function isMark(value: unknown): value is RichTextMark {
 function isNode(value: unknown): value is RichTextNode {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
   const node = value as Record<string, unknown>;
-  if (node.type === "text") return typeof node.text === "string" && (node.marks === undefined || (Array.isArray(node.marks) && node.marks.every(isMark)));
+  if (node.type === "text") return typeof node.text === "string" && Object.keys(node).every((key) => key === "type" || key === "text" || key === "marks") && (node.marks === undefined || (Array.isArray(node.marks) && node.marks.every(isMark)));
   if (node.type !== "paragraph") return false;
-  if (node.content !== undefined && !(Array.isArray(node.content) && node.content.every(isNode))) return false;
+  if (node.content !== undefined && !(Array.isArray(node.content) && node.content.every((child) => isRecordTextNode(child)))) return false;
   if (node.attrs === undefined) return true;
   if (typeof node.attrs !== "object" || node.attrs === null || Array.isArray(node.attrs)) return false;
   const role = (node.attrs as Record<string, unknown>).role;
   return role === undefined || role === null || isBlockRole(role);
+}
+
+function isRecordTextNode(value: unknown): value is Extract<RichTextNode, { type: "text" }> {
+  return isNode(value) && value.type === "text";
 }
 
 export function plainTextToRichText(value: string): RichTextDocument {

@@ -16,12 +16,12 @@ export type SiteMedia = {
 
 export type EditorialBlock =
   | { type: "paragraph"; text: RichText }
-  | { type: "heading"; text: string }
-  | { type: "quote"; text: string; attribution?: string }
+  | { type: "heading"; text: RichText }
+  | { type: "quote"; text: RichText; attribution?: string }
   | { type: "image"; src: string; alt: string; caption?: string; stretch?: boolean }
   | { type: "artifact"; src: string; alt: string; caption?: string; note?: string; stretch?: boolean }
   | { type: "divider" }
-  | { type: "note"; text: string };
+  | { type: "note"; text: RichText };
 
 export type EditorialLink = {
   label: string;
@@ -56,15 +56,15 @@ export type DialogueArtifact = {
 export type EditorialContent = {
   metadata: ContentMetadata;
   label: string;
-  heading: string;
-  introduction: string;
+  heading: RichText;
+  introduction: RichText;
   articles: EditorialArticle[];
   dialogueArtifacts: DialogueArtifact[];
   dialogues: {
     metadata: ContentMetadata;
     label: string;
-    heading: string;
-    introduction: string;
+    heading: RichText;
+    introduction: RichText;
     emptyLabel: string;
   };
   articleLabels: {
@@ -80,23 +80,23 @@ export type PersonalArtifact = {
 
 export type PersonalNarrative = {
   label: string;
-  stillHere: string;
-  thanks: string;
-  opening: string[];
-  decadeHeading: string;
-  decadeEntries: string[];
+  stillHere: RichText;
+  thanks: RichText;
+  opening: RichText[];
+  decadeHeading: RichText;
+  decadeEntries: RichText[];
   artifactLabel: string;
   missingMan: {
-    heading: string;
-    body: string;
+    heading: RichText;
+    body: RichText;
     artifact: PersonalArtifact;
-    reflection: string;
-    signoff: string;
+    reflection: RichText;
+    signoff: RichText;
   };
-  pizza: { heading: string; lines: string[] };
-  wait: { heading: string; body: string; artifact: PersonalArtifact };
-  nonnino: { label: string; heading: string };
-  book: { label: string; heading: string; lines: string[]; signoff: string };
+  pizza: { heading: RichText; lines: RichText[] };
+  wait: { heading: RichText; body: RichText; artifact: PersonalArtifact };
+  nonnino: { label: string; heading: RichText };
+  book: { label: string; heading: RichText; lines: RichText[]; signoff: RichText };
   continueLabel: string;
 };
 

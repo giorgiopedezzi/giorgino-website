@@ -6,6 +6,7 @@ import { getRunningContent, validateRunningContent } from "../src/content/runnin
 import { getContactContent, validateContactContent } from "../src/content/contact";
 import { getSiteSettings, validateSiteSettings } from "../src/content/site-settings";
 import { getLocaleMetadata } from "../src/content/locale-metadata";
+import { richTextToPlainText } from "../src/content/rich-text";
 
 const foundation = getAuthoringFoundation("en");
 assert.equal(foundation.title, "Local authoring foundation");
@@ -23,7 +24,7 @@ assert.equal(getSiteSettings("it").navigation.contact, "Contatti");
 assert.throws(() => validateSiteSettings({ ...settings, socialLinks: [{ label: "Unsafe", href: "javascript:alert(1)" }] }), /http\(s\) or mailto URL/);
 assert.throws(() => validateSiteSettings({ ...settings, metadata: { ...settings.metadata, socialImage: "/outside/image.jpg" } }), /repository-owned/);
 const contact = getContactContent("en");
-assert.equal(getContactContent("it").heading, "Continuiamo la conversazione.");
+assert.equal(richTextToPlainText(getContactContent("it").heading), "Continuiamo la conversazione.");
 assert.throws(() => validateContactContent({ ...contact, details: [] }), /between 1 and 6/);
 const metadata = getLocaleMetadata("en", "/en/contact", { ...contact.metadata, socialTitle: "Social Contact", socialImage: "/site-media/animated-authoring-proof.gif" });
 assert.equal(metadata.alternates?.canonical, "/en/contact");
@@ -56,7 +57,7 @@ assert.throws(
 );
 
 const running = getRunningContent("en");
-assert.equal(getRunningContent("it").hero.label, "Running / Costruire");
+assert.equal(getRunningContent("it").hero.label, "Running / Lavori in corso");
 assert.deepEqual(running.principles.items.map((item) => item.order), [1, 2, 3, 4, 5]);
 assert.throws(
   () => validateRunningContent({ ...running, liveApp: { ...running.liveApp, href: "javascript:alert(1)" } }),

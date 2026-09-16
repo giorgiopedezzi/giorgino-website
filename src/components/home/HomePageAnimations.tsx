@@ -118,14 +118,7 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   const [restoredWords, setRestoredWords] = useState(0);
 
   const beliefText = beliefStatements.join("\n");
-  const beliefRanges = useMemo(() => {
-    let offset = 0;
-    return beliefStatements.map((statement) => {
-      const start = offset;
-      offset += statement.length + 1;
-      return { start, length: statement.length };
-    });
-  }, [beliefStatements]);
+  const beliefRanges = useMemo(() => beliefStatements.reduce<{ start: number; length: number }[]>((ranges, statement) => [...ranges, { start: (ranges.at(-1)?.start ?? -1) + (ranges.at(-1)?.length ?? 0) + 1, length: statement.length }], []), [beliefStatements]);
   const darkText = useMemo(() => prepareNarrative(darkMatter.narrative), [darkMatter.narrative]);
 
   useEffect(() => {
@@ -222,12 +215,12 @@ export function HomePageAnimations({ beliefLabel, beliefStatements, darkMatter, 
   useEffect(() => {
     if (darkPhase !== "restoring") return;
     if (transitionTextCharacters.length === 0) {
-      setDarkPhase("pauseBeforeRestore");
-      return;
+      const timer = window.setTimeout(() => setDarkPhase("pauseBeforeRestore"), 0);
+      return () => window.clearTimeout(timer);
     }
     if (transitionCharacterCount >= transitionTextCharacters.length) {
-      setDarkPhase("pauseBeforeRestore");
-      return;
+      const timer = window.setTimeout(() => setDarkPhase("pauseBeforeRestore"), 0);
+      return () => window.clearTimeout(timer);
     }
     const timer = window.setTimeout(() => {
       setTransitionCharacterCount((count) => {

@@ -1,7 +1,23 @@
 {
   "arc": {
     "label": "A Short Personal Arc",
-    "heading": "Experience matters only if it doesn’t stop you learning again.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "role": "humanAside"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "Experience matters only if it doesn’t stop you learning again."
+            }
+          ]
+        }
+      ]
+    },
     "timeline": [
       "1980s — Started programming, because a machine that followed instructions was too interesting to ignore.",
       "Later — Moved through several generations of technology, from small companies to large consulting environments.",
@@ -24,7 +40,7 @@
     ],
     "decadeHeading": "Evolution. And bad ideas. I think it's worsening...",
     "decadeEntries": [
-      "Around 10 - A fat, four-eyed Zorro. More sgt. Garcia then don Diego de la Vega. But he had to defend his primary school crush",
+      "Around 10 - A fat, four-eyed Zorro. More sgt. Garcia than don Diego de la Vega. But he had to defend his primary school crush.",
       "Around 20 - A little bit better. Still too shy!",
       "Around 30 — snowboard.",
       "Around 40 — motorcycle.",

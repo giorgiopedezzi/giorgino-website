@@ -105,10 +105,10 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
       return { type, text: validateRichText(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
     case "heading":
     case "note":
-      return { type, text: requireString(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
+      return { type, text: validateRichText(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
     case "quote": {
       const quote = isRecord(blockValue) ? blockValue : value;
-      const block: Extract<EditorialBlock, { type: "quote" }> = { type, text: requireString(quote.text, `${path}.text`) };
+      const block: Extract<EditorialBlock, { type: "quote" }> = { type, text: validateRichText(quote.text, `${path}.text`) };
       if (quote.attribution !== undefined && quote.attribution !== null) block.attribution = requireString(quote.attribution, `${path}.attribution`);
       return block;
     }
@@ -147,14 +147,14 @@ function validateIndex(value: unknown, path: string): ThinkingIndexFile {
   return {
     metadata: validateContentMetadata(value.metadata, `${path}.metadata`),
     label: requireString(value.label, `${path}.label`),
-    heading: requireString(value.heading, `${path}.heading`),
-    introduction: requireString(value.introduction, `${path}.introduction`),
+    heading: validateRichText(value.heading, `${path}.heading`),
+    introduction: validateRichText(value.introduction, `${path}.introduction`),
     dialogueArtifacts: validateDialogueArtifacts(value.dialogueArtifacts, `${path}.dialogueArtifacts`),
     dialogues: {
       metadata: validateContentMetadata(isRecord(value.dialogues) ? value.dialogues.metadata : undefined, `${path}.dialogues.metadata`),
       label: requireString(isRecord(value.dialogues) ? value.dialogues.label : undefined, `${path}.dialogues.label`),
-      heading: requireString(isRecord(value.dialogues) ? value.dialogues.heading : undefined, `${path}.dialogues.heading`),
-      introduction: requireString(isRecord(value.dialogues) ? value.dialogues.introduction : undefined, `${path}.dialogues.introduction`),
+      heading: validateRichText(isRecord(value.dialogues) ? value.dialogues.heading : undefined, `${path}.dialogues.heading`),
+      introduction: validateRichText(isRecord(value.dialogues) ? value.dialogues.introduction : undefined, `${path}.dialogues.introduction`),
       emptyLabel: requireString(isRecord(value.dialogues) ? value.dialogues.emptyLabel : undefined, `${path}.dialogues.emptyLabel`),
     },
     articleLabels: {

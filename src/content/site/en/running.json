@@ -7,69 +7,329 @@
   },
   "hero": {
     "label": "Running / Building",
-    "heading": "The runner enlightens the data.",
-    "intro": "Without the runner, there is telemetry. With the runner, the data acquires meaning."
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "The runner enlightens the data."
+            }
+          ]
+        }
+      ]
+    },
+    "intro": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Without the runner, there is telemetry. With the runner, the data acquires meaning."
+            }
+          ]
+        }
+      ]
+    }
   },
   "problem": {
     "label": "The problem",
-    "heading": "Do you really need all that data?",
-    "body": "A consistent approach. \nData, data, data. We swallow data and information, thinking we know. But do we know how to use them? Or are we simply overwhelmed by them? The data that matters. A plan. But an adaptable one.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Do you really need all that data?"
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "A consistent approach. \nData, data, data. We swallow data and information, thinking we know. But do we know how to use them? Or are we simply overwhelmed by them? The data that matters. A plan. But an adaptable one."
+            }
+          ]
+        }
+      ]
+    },
     "isVisible": true
   },
   "restraint": {
     "label": "A deliberate restraint",
-    "heading": "Not another dashboard asking to be obeyed.",
-    "body": "This is not an attempt to reproduce every metric, build a universal coach, or turn running into a compliance exercise. It makes room for interpretation while keeping the objective in view.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Not another dashboard asking to be obeyed."
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is not an attempt to reproduce every metric, build a universal coach, or turn running into a compliance exercise. It makes room for interpretation while keeping the objective in view."
+            }
+          ]
+        }
+      ]
+    },
     "isVisible": true
   },
   "principles": {
     "label": "Principles",
-    "heading": "A system should assist without taking the runner out of the picture.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "A system should assist without taking the runner out of the picture."
+            }
+          ]
+        }
+      ]
+    },
     "items": [
       {
         "order": 1,
-        "text": "Signal over noise."
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Signal over noise."
+                }
+              ]
+            }
+          ]
+        }
       },
       {
         "order": 2,
-        "text": "Flexible plans over false perfection."
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Flexible plans over false perfection."
+                }
+              ]
+            }
+          ]
+        }
       },
       {
         "order": 3,
-        "text": "Adaptation without losing the objective."
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Adaptation without losing the objective."
+                }
+              ]
+            }
+          ]
+        }
       },
       {
         "order": 4,
-        "text": "Assistance without surrender."
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Assistance without surrender."
+                }
+              ]
+            }
+          ]
+        }
       },
       {
         "order": 5,
-        "text": "The runner remains at the centre."
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "The runner remains at the centre."
+                }
+              ]
+            }
+          ]
+        }
       }
     ]
   },
   "object": {
     "label": "The object",
-    "heading": "A small visual language for a moving human being.",
-    "body": "The visual study below is not a product dashboard. It explains the idea: heart-rate intensity moves from pink towards red; a long pause lets the runner collapse, while a short one keeps them jogging in place.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "A small visual language for a moving human being."
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "The visual study below is not a product dashboard. It explains the idea: heart-rate intensity moves from pink towards red; a long pause lets the runner collapse, while a short one keeps them jogging in place."
+            }
+          ]
+        }
+      ]
+    },
     "isVisible": true,
     "study": {
-      "title": "A body, not a spreadsheet",
+      "title": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A body, not a spreadsheet"
+              }
+            ]
+          }
+        ]
+      },
       "label": "A visual study",
-      "body": "The figure gives the telemetry a subject. The data is still there, but it no longer pretends to be the whole story."
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "The figure gives the telemetry a subject. The data is still there, but it no longer pretends to be the whole story."
+              }
+            ]
+          }
+        ]
+      }
     },
     "media": []
   },
   "build": {
     "label": "How it is being built",
-    "heading": "AI coding agents, under human direction.",
-    "body": "The implementation is often delegated to AI coding agents. The concept, constraints, priorities and decisions remain human work. That division is part of the experiment.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "AI coding agents, under human direction."
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "The implementation is often delegated to AI coding agents. The concept, constraints, priorities and decisions remain human work. That division is part of the experiment."
+            }
+          ]
+        }
+      ]
+    },
     "isVisible": true
   },
   "state": {
     "label": "Current state",
-    "heading": "A living experiment.",
-    "body": "The project is still being shaped in public-facing fragments. This page records the thinking behind it without claiming a finished product where one does not yet exist.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "A living experiment."
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "The project is still being shaped in public-facing fragments. This page records the thinking behind it without claiming a finished product where one does not yet exist."
+            }
+          ]
+        }
+      ]
+    },
     "isVisible": true
   },
   "liveApp": {

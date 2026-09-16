@@ -2,17 +2,18 @@ import { readFileSync } from "node:fs";
 import { extname, join } from "node:path";
 
 import type { Locale } from "./locales";
+import { validateRichText, type RichText } from "./rich-text";
 import { validateContentMetadata, type ContentMetadata } from "./content-metadata";
 
 export type RunningMedia = { src: string; alt: string; caption?: string };
-export type RunningBlock = { label: string; heading: string; body: string; isVisible: boolean };
+export type RunningBlock = { label: string; heading: RichText; body: RichText; isVisible: boolean };
 export type RunningContent = {
   metadata: ContentMetadata;
-  hero: { label: string; heading: string; intro: string };
+  hero: { label: string; heading: RichText; intro: RichText };
   problem: RunningBlock;
   restraint: RunningBlock;
-  principles: { label: string; heading: string; items: Array<{ order: number; text: string }> };
-  object: RunningBlock & { study: { title: string; label: string; body: string }; media: RunningMedia[] };
+  principles: { label: string; heading: RichText; items: Array<{ order: number; text: RichText }> };
+  object: RunningBlock & { study: { title: RichText; label: string; body: RichText }; media: RunningMedia[] };
   build: RunningBlock;
   state: RunningBlock;
   liveApp: { label: string; href: string; isVisible: boolean };
@@ -28,6 +29,7 @@ function text(value: unknown, path: string) {
   if (typeof value !== "string" || value.trim() === "") fail(path, "expected a non-empty string");
   return value;
 }
+function rich(value: unknown, path: string): RichText { return validateRichText(value, path); }
 function visible(value: unknown, path: string) {
   if (typeof value !== "boolean") fail(path, "expected a boolean");
   return value;
@@ -39,7 +41,7 @@ function href(value: unknown, path: string) {
 }
 function block(value: unknown, path: string): RunningBlock {
   const source = record(value, path);
-  return { label: text(source.label, `${path}.label`), heading: text(source.heading, `${path}.heading`), body: text(source.body, `${path}.body`), isVisible: visible(source.isVisible, `${path}.isVisible`) };
+  return { label: text(source.label, `${path}.label`), heading: rich(source.heading, `${path}.heading`), body: rich(source.body, `${path}.body`), isVisible: visible(source.isVisible, `${path}.isVisible`) };
 }
 function media(value: unknown, path: string): RunningMedia {
   const source = record(value, path);
@@ -62,16 +64,16 @@ export function validateRunningContent(value: unknown, path = "running.json"): R
   const items = principles.items.map((value, index) => {
     const item = record(value, `${path}.principles.items[${index}]`);
     if (typeof item.order !== "number" || !Number.isInteger(item.order) || item.order < 1) fail(`${path}.principles.items[${index}].order`, "must be a positive integer");
-    return { order: item.order, text: text(item.text, `${path}.principles.items[${index}].text`) };
+    return { order: item.order, text: rich(item.text, `${path}.principles.items[${index}].text`) };
   });
   if (new Set(items.map((item) => item.order)).size !== items.length) fail(`${path}.principles.items`, "orders must be unique");
   const result = {
     metadata: validateContentMetadata(metadata, `${path}.metadata`),
-    hero: { label: text(hero.label, `${path}.hero.label`), heading: text(hero.heading, `${path}.hero.heading`), intro: text(hero.intro, `${path}.hero.intro`) },
+    hero: { label: text(hero.label, `${path}.hero.label`), heading: rich(hero.heading, `${path}.hero.heading`), intro: rich(hero.intro, `${path}.hero.intro`) },
     problem: block(source.problem, `${path}.problem`),
     restraint: block(source.restraint, `${path}.restraint`),
-    principles: { label: text(principles.label, `${path}.principles.label`), heading: text(principles.heading, `${path}.principles.heading`), items: items.sort((left, right) => left.order - right.order) },
-    object: { ...block(object, `${path}.object`), study: { title: text(study.title, `${path}.object.study.title`), label: text(study.label, `${path}.object.study.label`), body: text(study.body, `${path}.object.study.body`) }, media: object.media.map((value, index) => media(value, `${path}.object.media[${index}]`)) },
+    principles: { label: text(principles.label, `${path}.principles.label`), heading: rich(principles.heading, `${path}.principles.heading`), items: items.sort((left, right) => left.order - right.order) },
+    object: { ...block(object, `${path}.object`), study: { title: rich(study.title, `${path}.object.study.title`), label: text(study.label, `${path}.object.study.label`), body: rich(study.body, `${path}.object.study.body`) }, media: object.media.map((value, index) => media(value, `${path}.object.media[${index}]`)) },
     build: block(source.build, `${path}.build`),
     state: block(source.state, `${path}.state`),
     liveApp: (() => { const app = record(source.liveApp, `${path}.liveApp`); return { label: text(app.label, `${path}.liveApp.label`), href: href(app.href, `${path}.liveApp.href`), isVisible: visible(app.isVisible, `${path}.liveApp.isVisible`) }; })(),

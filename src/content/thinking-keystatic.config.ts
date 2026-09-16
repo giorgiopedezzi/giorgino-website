@@ -108,14 +108,14 @@ const metadataSchema = (label = "Metadata") => fields.object({
 const indexSchema = {
   metadata: metadataSchema("Thinking index metadata"),
   label: fields.text({ label: "Section label", validation: { isRequired: true } }),
-  heading: fields.text({ label: "Heading", validation: { isRequired: true } }),
-  introduction: fields.text({ label: "Introduction", multiline: true, validation: { isRequired: true } }),
+  heading: richText({ label: "Heading" }),
+  introduction: richText({ label: "Introduction" }),
   dialogueArtifacts,
   dialogues: fields.object({
     metadata: metadataSchema("Dialogues metadata"),
     label: fields.text({ label: "Dialogue section label", validation: { isRequired: true } }),
-    heading: fields.text({ label: "Dialogue heading", validation: { isRequired: true } }),
-    introduction: fields.text({ label: "Dialogue introduction", multiline: true, validation: { isRequired: true } }),
+    heading: richText({ label: "Dialogue heading" }),
+    introduction: richText({ label: "Dialogue introduction" }),
     emptyLabel: fields.text({ label: "Empty dialogue message", validation: { isRequired: true } }),
   }, { label: "Dialogues page copy" }),
   articleLabels: fields.object({
@@ -150,23 +150,27 @@ const authoringFoundationSchema = {
 
 const runningBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
-  heading: requiredText("Heading"),
-  body: requiredText("Body", true),
+  heading: richText({ label: "Heading" }),
+  body: richText({ label: "Body" }),
   isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
 }, { label });
 const runningSchema = {
   metadata: metadataSchema(),
-  hero: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), intro: requiredText("Introduction", true) }, { label: "Hero" }),
+  hero: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), intro: richText({ label: "Introduction" }) }, { label: "Hero" }),
   problem: runningBlock("Problem"),
   restraint: runningBlock("Deliberate restraint"),
-  principles: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: requiredText("Principle", true) }), { label: "Ordered principles", validation: { length: { min: 1, max: 8 } }, itemLabel: (props) => props.fields.text.value || "Principle" }) }, { label: "Principles" }),
-  object: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), body: requiredText("Body", true), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: requiredText("Study title"), label: requiredText("Study label"), body: requiredText("Study explanation", true) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object({ src: siteMedia("Media file"), alt: requiredText("Alternative text"), caption: fields.text({ label: "Caption" }) }), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Media item" }) }, { label: "Object and visual study" }),
+  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle" }) }), { label: "Ordered principles", validation: { length: { min: 1, max: 8 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
+  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title" }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object({ src: siteMedia("Media file"), alt: requiredText("Alternative text"), caption: fields.text({ label: "Caption" }) }), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Media item" }) }, { label: "Object and visual study" }),
   build: runningBlock("How it is being built"),
   state: runningBlock("Current state"),
   liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),
 };
 const textList = (label: string, min: number, max?: number) => fields.array(
   requiredText("Text", true),
+  { label, validation: { length: max === undefined ? { min } : { min, max } } },
+);
+const richTextList = (label: string, min: number, max?: number) => fields.array(
+  richText({ label: "Text" }),
   { label, validation: { length: max === undefined ? { min } : { min, max } } },
 );
 const homeBlock = (label: string) => fields.object({
@@ -230,40 +234,40 @@ const homeSchema = {
 };
 
 const aboutSchema = {
-  arc: fields.object({ label: requiredText("Section label"), heading: requiredText("Heading"), timeline: textList("Timeline entries", 1, 6) }, { label: "Personal arc" }),
+  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), timeline: richTextList("Timeline entries", 1, 6) }, { label: "Personal arc" }),
   personalNarrative: fields.object({
     label: requiredText("Section label"),
-    stillHere: requiredText("Opening heading"),
-    thanks: requiredText("Thank-you line"),
-    opening: textList("Opening lines", 7, 7),
-    decadeHeading: requiredText("Decade heading"),
-    decadeEntries: textList("Decade entries", 1),
+    stillHere: richText({ label: "Opening heading" }),
+    thanks: richText({ label: "Thank-you line" }),
+    opening: richTextList("Opening lines", 7, 7),
+    decadeHeading: richText({ label: "Decade heading" }),
+    decadeEntries: richTextList("Decade entries", 1),
     artifactLabel: requiredText("Artifact label"),
     missingMan: fields.object({
-      heading: requiredText("Heading"),
-      body: requiredText("Body", true),
+      heading: richText({ label: "Heading" }),
+      body: richText({ label: "Body" }),
       artifact: personalArtifact("Missing Man artifact"),
-      reflection: requiredText("Reflection", true),
-      signoff: requiredText("Signoff"),
+      reflection: richText({ label: "Reflection" }),
+      signoff: richText({ label: "Signoff" }),
     }, { label: "Missing Man" }),
     pizza: fields.object({
-      heading: requiredText("Heading"),
-      lines: textList("Lines", 7, 7),
+      heading: richText({ label: "Heading" }),
+      lines: richTextList("Lines", 7, 7),
     }, { label: "Pizza" }),
     wait: fields.object({
-      heading: requiredText("Heading"),
-      body: requiredText("Body", true),
+      heading: richText({ label: "Heading" }),
+      body: richText({ label: "Body" }),
       artifact: personalArtifact("T-shirt artifact"),
     }, { label: "Wait" }),
     nonnino: fields.object({
       label: requiredText("Section label"),
-      heading: requiredText("Heading", true),
+      heading: richText({ label: "Heading" }),
     }, { label: "Nonnino" }),
     book: fields.object({
       label: requiredText("Section label"),
-      heading: requiredText("Heading"),
-      lines: textList("Lines", 2, 2),
-      signoff: requiredText("Signoff"),
+      heading: richText({ label: "Heading" }),
+      lines: richTextList("Lines", 2, 2),
+      signoff: richText({ label: "Signoff" }),
     }, { label: "Book" }),
     continueLabel: requiredText("Continue link label"),
   }, { label: "Personal narrative", description: "Canonical content for Really About Me." }),
@@ -298,10 +302,10 @@ const siteSettingsSchema = {
 const contactSchema = {
   metadata: metadataSchema(),
   label: requiredText("Section label"),
-  heading: requiredText("Heading"),
-  body: requiredText("Page introduction", true),
-  details: textList("Contact details", 1, 6),
-  supportingText: fields.text({ label: "Optional supporting text", multiline: true }),
+  heading: richText({ label: "Heading" }),
+  body: richText({ label: "Page introduction" }),
+  details: richTextList("Contact details", 1, 6),
+  supportingText: richText({ label: "Optional supporting text", required: false }),
 };
 
 export default config({

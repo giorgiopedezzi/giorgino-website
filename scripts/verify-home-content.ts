@@ -4,6 +4,7 @@ import { getHomeContent, validateHomeContent } from "../src/content/home";
 import { getAboutContent } from "../src/content/about";
 import { validateSiteAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { effectiveDarkMatterPhase, isDarkMatterVisible, prepareNarrative } from "../src/components/home/home-animation";
+import { richTextToPlainText } from "../src/content/rich-text";
 
 const english = getHomeContent("en");
 const italian = getHomeContent("it");
@@ -12,7 +13,7 @@ const italianAbout = getAboutContent("it");
 
 assert.equal(english.hero.heading, "Technology keeps changing. The difficult part rarely does.");
 assert.doesNotThrow(() => validateHomeContent(english), "current structured homepage prose must remain valid");
-assert.equal(english.belief.statements.length, 4);
+assert.equal(english.belief.statements.length, 2);
 assert.equal(english.darkMatter.narrative.length, 2);
 assert.equal(english.thinking.linkLabel, "Follow the thinking");
 assert.equal(english.thinking.linkHref, "/en/thinking");
@@ -22,8 +23,8 @@ assert.equal(italian.running.linkLabel, "Guarda l'esperimento");
 assert.equal(italian.running.linkHref, "/it/running");
 assert.equal("arc" in english, false, "Home must not retain the personal arc");
 assert.equal("personalNarrative" in english, false, "Home must not retain the full personal narrative");
-assert.equal(englishAbout.personalNarrative.missingMan.body, "When I left a long project, I posted the missing-man formation from Goose's funeral. At night. Then I left the chat. I wanted the image to be the first thing they saw the next morning.");
-assert.equal(italianAbout.personalNarrative.book.heading, "Un giorno vorrei scrivere un libro.");
+assert.equal(richTextToPlainText(englishAbout.personalNarrative.missingMan.body), "How I left a project. No words. The right image. At the right time. At least, I felt it \"right\". Mine.");
+assert.equal(richTextToPlainText(italianAbout.personalNarrative.book.heading), "Un giorno vorrei scrivere un libro.");
 const editedNarrative = prepareNarrative(["An editorial edit, with punctuation.", "A second paragraph."]);
 assert.equal(editedNarrative.canonical, "An editorial edit, with punctuation.\n\nA second paragraph.");
 assert.equal(editedNarrative.stripped, "an editorial edit with punctuation a second paragraph");

@@ -3,14 +3,15 @@ import { join } from "node:path";
 
 import { validateContentMetadata, type ContentMetadata } from "./content-metadata";
 import type { Locale } from "./locales";
+import { validateRichText, type RichText } from "./rich-text";
 
 export type ContactContent = {
   metadata: ContentMetadata;
   label: string;
-  heading: string;
-  body: string;
-  details: string[];
-  supportingText?: string;
+  heading: RichText;
+  body: RichText;
+  details: RichText[];
+  supportingText?: RichText;
 };
 
 function fail(path: string, message: string): never { throw new Error(`Contact content validation failed at ${path}: ${message}`); }
@@ -18,6 +19,7 @@ function text(value: unknown, path: string) {
   if (typeof value !== "string" || value.trim() === "") fail(path, "expected a non-empty string");
   return value;
 }
+function rich(value: unknown, path: string): RichText { return validateRichText(value, path); }
 export function validateContactContent(value: unknown, path = "contact.json"): ContactContent {
   if (typeof value !== "object" || value === null || Array.isArray(value)) fail(path, "expected an object");
   const source = value as Record<string, unknown>;
@@ -25,11 +27,11 @@ export function validateContactContent(value: unknown, path = "contact.json"): C
   const result: ContactContent = {
     metadata: validateContentMetadata(source.metadata, `${path}.metadata`),
     label: text(source.label, `${path}.label`),
-    heading: text(source.heading, `${path}.heading`),
-    body: text(source.body, `${path}.body`),
-    details: source.details.map((value, index) => text(value, `${path}.details[${index}]`)),
+    heading: rich(source.heading, `${path}.heading`),
+    body: rich(source.body, `${path}.body`),
+    details: source.details.map((value, index) => rich(value, `${path}.details[${index}]`)),
   };
-  if (source.supportingText !== undefined && source.supportingText !== null && source.supportingText !== "") result.supportingText = text(source.supportingText, `${path}.supportingText`);
+  if (source.supportingText !== undefined && source.supportingText !== null && source.supportingText !== "") result.supportingText = rich(source.supportingText, `${path}.supportingText`);
   return result;
 }
 export function getContactContent(locale: Locale) {

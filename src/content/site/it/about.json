@@ -1,25 +1,557 @@
 {
   "arc": {
     "label": "Un breve arco personale",
-    "heading": "L'esperienza conta solo se non ti impedisce di imparare di nuovo.",
+    "heading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "L'esperienza conta solo se non ti impedisce di imparare di nuovo."
+            }
+          ]
+        }
+      ]
+    },
     "timeline": [
-      "Anni '80 — Ho iniziato a programmare, perché una macchina capace di seguire istruzioni era troppo interessante per ignorarla.",
-      "Poi — Ho attraversato diverse generazioni tecnologiche, dalle piccole aziende ai grandi ambienti di consulenza.",
-      "Intorno ai 50 — Ho iniziato a correre maratone; dalla prima in 3:24 sono arrivato a 2:57 osservando, modellando, sperimentando, misurando e adattando.",
-      "Ora — Costruisco con l'AI mentre rifletto con più attenzione sul lavoro umano che le macchine non dovrebbero mai sostituire."
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Anni '80 — Ho iniziato a programmare, perché una macchina capace di seguire istruzioni era troppo interessante per ignorarla."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Poi — Ho attraversato diverse generazioni tecnologiche, dalle piccole aziende ai grandi ambienti di consulenza."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Intorno ai 50 — Ho iniziato a correre maratone; dalla prima in 3:24 sono arrivato a 2:57 osservando, modellando, sperimentando, misurando e adattando."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Ora — Costruisco con l'AI mentre rifletto con più attenzione sul lavoro umano che le macchine non dovrebbero mai sostituire."
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "personalNarrative": {
-    "label": "Davvero di me", "stillHere": "Sei ancora qui?", "thanks": "Grazie. Dal cuore.",
-    "opening": ["Non l'iconcina del cuore.", "Qui non puoi lasciare un like.", "Ma forse puoi lasciare un pezzetto del tuo cuore.", "Quello vero.", "Perché sei un essere umano vero.", "Non uno plausibile.", "Vero."],
-    "decadeHeading": "A quanto pare, ogni dieci anni ho bisogno di una nuova cattiva idea.",
-    "decadeEntries": ["Verso i 30 — snowboard.", "Verso i 40 — moto.", "Verso i 50 — maratona sotto le 3 ore.", "Verso i 60 — a quanto pare, content creator."],
+    "label": "Davvero di me",
+    "stillHere": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Sei ancora qui?"
+            }
+          ]
+        }
+      ]
+    },
+    "thanks": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Grazie. Dal cuore."
+            }
+          ]
+        }
+      ]
+    },
+    "opening": [
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Non l'iconcina del cuore."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Qui non puoi lasciare un like."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Ma forse puoi lasciare un pezzetto del tuo cuore."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Quello vero."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Perché sei un essere umano vero."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Non uno plausibile."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Vero."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "decadeHeading": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "A quanto pare, ogni dieci anni ho bisogno di una nuova cattiva idea."
+            }
+          ]
+        }
+      ]
+    },
+    "decadeEntries": [
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Verso i 30 — snowboard."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Verso i 40 — moto."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Verso i 50 — maratona sotto le 3 ore."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Verso i 60 — a quanto pare, content creator."
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "artifactLabel": "Personal artifact",
-    "missingMan": { "heading": "Missing Man.", "body": "Quando ho lasciato un progetto lungo, ho pubblicato la formazione Missing Man del funerale di Goose. Di notte. Poi sono uscito dalla chat. Volevo che fosse la prima immagine vista la mattina dopo.", "artifact": { "placeholder": "GIF originale Missing Man — da aggiungere." }, "reflection": "Ho scoperto dopo cosa significasse la formazione Missing Man. Sapevo solo che era l'immagine che volevo.", "signoff": "L'ho fatto a modo mio." },
-    "pizza": { "heading": "La pizza con mortadella ha bisogno di scorza di limone.", "lines": ["L'acidità taglia il grasso.", "Solo scorza.", "Arrivi all'albedo e diventa amara.", "Cambi un piccolo dettaglio e cambia il senso dell'insieme.", "E sì, l'ho provata.", "Mi è piaciuta.", "E no, non me l'ha detto internet."] },
-    "wait": { "heading": "ASPETTA ASPETTA ASPETTA", "body": "L'ho detto così spesso che due colleghi l'hanno messo su una maglietta.", "artifact": { "placeholder": "Qui ci va la maglietta vera." } },
-    "nonnino": { "label": "Il nonnino", "heading": "Il nonno corre così forte che, guardandosi indietro, vede arrivare l'avanguardia." },
-    "book": { "label": "Il libro", "heading": "Un giorno vorrei scrivere un libro.", "lines": ["Qualcosa che possa parlare quando non ci sono per spiegarlo troppo.", "Preferibilmente mentre sono ancora qui a lamentarmi delle recensioni."], "signoff": "Il cacciatore di sogni corre libero." },
+    "missingMan": {
+      "heading": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Missing Man."
+              }
+            ]
+          }
+        ]
+      },
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Quando ho lasciato un progetto lungo, ho pubblicato la formazione Missing Man del funerale di Goose. Di notte. Poi sono uscito dalla chat. Volevo che fosse la prima immagine vista la mattina dopo."
+              }
+            ]
+          }
+        ]
+      },
+      "artifact": {
+        "placeholder": "GIF originale Missing Man — da aggiungere."
+      },
+      "reflection": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Ho scoperto dopo cosa significasse la formazione Missing Man. Sapevo solo che era l'immagine che volevo."
+              }
+            ]
+          }
+        ]
+      },
+      "signoff": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "L'ho fatto a modo mio."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "pizza": {
+      "heading": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "La pizza con mortadella ha bisogno di scorza di limone."
+              }
+            ]
+          }
+        ]
+      },
+      "lines": [
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "L'acidità taglia il grasso."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Solo scorza."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Arrivi all'albedo e diventa amara."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Cambi un piccolo dettaglio e cambia il senso dell'insieme."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "E sì, l'ho provata."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Mi è piaciuta."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "E no, non me l'ha detto internet."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "wait": {
+      "heading": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "ASPETTA ASPETTA ASPETTA"
+              }
+            ]
+          }
+        ]
+      },
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "L'ho detto così spesso che due colleghi l'hanno messo su una maglietta."
+              }
+            ]
+          }
+        ]
+      },
+      "artifact": {
+        "placeholder": "Qui ci va la maglietta vera."
+      }
+    },
+    "nonnino": {
+      "label": "Il nonnino",
+      "heading": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Il nonno corre così forte che, guardandosi indietro, vede arrivare l'avanguardia." }] }] }
+    },
+    "book": {
+      "label": "Il libro",
+      "heading": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Un giorno vorrei scrivere un libro."
+              }
+            ]
+          }
+        ]
+      },
+      "lines": [
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Qualcosa che possa parlare quando non ci sono per spiegarlo troppo."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Preferibilmente mentre sono ancora qui a lamentarmi delle recensioni."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "signoff": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Il cacciatore di sogni corre libero."
+              }
+            ]
+          }
+        ]
+      }
+    },
     "continueLabel": "Continuiamo la conversazione"
   }
 }

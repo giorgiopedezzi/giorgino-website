@@ -1,10 +1,51 @@
 {
   "metadata": {
-    "title": "Contatti \u2014 Giorgio Pedezzi",
+    "title": "Contatti — Giorgio Pedezzi",
     "description": "Come continuare la conversazione con Giorgio Pedezzi."
   },
   "label": "Contatti",
-  "heading": "Continuiamo la conversazione.",
-  "body": "I dettagli di contatto confermati appariranno qui.",
-  "details": ["I contatti saranno forniti e confermati prima della pubblicazione."]
+  "heading": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Continuiamo la conversazione."
+          }
+        ]
+      }
+    ]
+  },
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "I dettagli di contatto confermati appariranno qui."
+          }
+        ]
+      }
+    ]
+  },
+  "details": [
+    {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "I contatti saranno forniti e confermati prima della pubblicazione."
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
