@@ -151,7 +151,7 @@ const authoringFoundationSchema = {
 const runningBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
   heading: richText({ label: "Heading" }),
-  body: richText({ label: "Body" }),
+  body: richText({ label: "Body", description: "Optional editorial body copy. The section heading remains visible when omitted.", required: false }),
   isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
 }, { label });
 const runningSchema = {
@@ -220,14 +220,14 @@ const homeSchema = {
   thinking: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: richText({ label: "Introduction", description: "Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only." }),
+    body: richText({ label: "Introduction", description: "Optional. Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only.", required: false }),
     linkLabel: requiredText("Thinking link label"),
     linkHref: fields.url({ label: "Thinking link target", validation: { isRequired: true } }),
   }, { label: "Thinking" }),
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: richText({ label: "Body", description: "Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only." }),
+    body: richText({ label: "Body", description: "Optional. Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only.", required: false }),
     linkLabel: requiredText("Really About Me link label"),
     linkHref: fields.url({ label: "Really About Me link target", validation: { isRequired: true } }),
   }, { label: "Human" }),
@@ -248,8 +248,8 @@ const aboutSchema = {
       heading: richText({ label: "Heading" }),
       body: richText({ label: "Body", presentationControls: ["scale", "measure", "tone"] }),
       artifact: personalArtifact("Missing Man artifact"),
-      reflection: richText({ label: "Reflection", presentationControls: ["scale"] }),
-      signoff: richText({ label: "Signoff" }),
+      reflection: richText({ label: "Reflection", description: "Optional editorial reflection beneath the artifact.", presentationControls: ["scale"], required: false }),
+      signoff: richText({ label: "Signoff", description: "Optional muted closing line.", required: false }),
     }, { label: "Missing Man" }),
     pizza: fields.object({
       heading: richText({ label: "Heading" }),

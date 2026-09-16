@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import type { Locale } from "./locales";
 import { validateContentMetadata } from "./content-metadata";
-import type { ContentBlock, HomeContent, SiteMedia } from "./types";
+import type { ContentBlock, HomeContent, LinkedContentBlock, SiteMedia } from "./types";
 import { validateRichText, type RichText } from "./rich-text";
 
 const mediaExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
@@ -57,6 +57,19 @@ function block(value: unknown, path: string): ContentBlock {
   return { label: text(source.label, `${path}.label`), heading: text(source.heading, `${path}.heading`), body: validateRichText(source.body, `${path}.body`) };
 }
 
+function linkedBlock(value: unknown, path: string): LinkedContentBlock {
+  const source = record(value, path);
+  const result: LinkedContentBlock = {
+    label: text(source.label, `${path}.label`),
+    heading: text(source.heading, `${path}.heading`),
+    linkLabel: text(source.linkLabel, `${path}.linkLabel`),
+    linkHref: href(source.linkHref, `${path}.linkHref`),
+  };
+  const body = optionalRichText(source.body, `${path}.body`);
+  if (body) result.body = body;
+  return result;
+}
+
 function optionalMedia(value: unknown, path: string): SiteMedia | undefined {
   if (value === undefined || value === null) return undefined;
   const source = record(value, path);
@@ -89,14 +102,14 @@ export function validateHomeContent(value: unknown, path = "home.json"): HomeCon
       heading: text(darkMatter.heading, `${path}.darkMatter.heading`),
       narrative: richTextArray(darkMatter.narrative, `${path}.darkMatter.narrative`, 1),
     },
-    thinking: { ...block(thinking, `${path}.thinking`), linkLabel: text(thinking.linkLabel, `${path}.thinking.linkLabel`), linkHref: href(thinking.linkHref, `${path}.thinking.linkHref`) },
+    thinking: linkedBlock(thinking, `${path}.thinking`),
     running: {
       label: text(running.label, `${path}.running.label`),
       heading: text(running.heading, `${path}.running.heading`),
       linkLabel: text(running.linkLabel, `${path}.running.linkLabel`),
       linkHref: href(running.linkHref, `${path}.running.linkHref`),
     },
-    human: { ...block(source.human, `${path}.human`), linkLabel: text(record(source.human, `${path}.human`).linkLabel, `${path}.human.linkLabel`), linkHref: href(record(source.human, `${path}.human`).linkHref, `${path}.human.linkHref`) },
+    human: linkedBlock(source.human, `${path}.human`),
   };
   const closingThought = optionalRichText(darkMatter.closingThought, `${path}.darkMatter.closingThought`);
   const darkSupportingText = optionalRichText(darkMatter.supportingText, `${path}.darkMatter.supportingText`);

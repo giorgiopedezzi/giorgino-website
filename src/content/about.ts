@@ -27,6 +27,10 @@ function text(value: unknown, path: string): string {
 }
 
 function rich(value: unknown, path: string): RichText { return validateRichText(value, path); }
+function optionalRich(value: unknown, path: string): RichText | undefined {
+  if (value === undefined || value === null || value === "") return undefined;
+  return rich(value, path);
+}
 function richArray(value: unknown, path: string, minimum: number, maximum?: number): RichText[] {
   if (!Array.isArray(value) || value.length < minimum || (maximum !== undefined && value.length > maximum)) fail(path, "unexpected number of items");
   return value.map((entry, index) => rich(entry, `${path}[${index}]`));
@@ -66,7 +70,13 @@ export function validateAboutContent(value: unknown, path = "about.json"): About
       decadeHeading: rich(narrative.decadeHeading, `${path}.personalNarrative.decadeHeading`),
       decadeEntries: richArray(narrative.decadeEntries, `${path}.personalNarrative.decadeEntries`, 1),
       artifactLabel: text(narrative.artifactLabel, `${path}.personalNarrative.artifactLabel`),
-      missingMan: { heading: rich(missingMan.heading, `${path}.personalNarrative.missingMan.heading`), body: rich(missingMan.body, `${path}.personalNarrative.missingMan.body`), artifact: artifact(missingMan.artifact, `${path}.personalNarrative.missingMan.artifact`), reflection: rich(missingMan.reflection, `${path}.personalNarrative.missingMan.reflection`), signoff: rich(missingMan.signoff, `${path}.personalNarrative.missingMan.signoff`) },
+      missingMan: {
+        heading: rich(missingMan.heading, `${path}.personalNarrative.missingMan.heading`),
+        body: rich(missingMan.body, `${path}.personalNarrative.missingMan.body`),
+        artifact: artifact(missingMan.artifact, `${path}.personalNarrative.missingMan.artifact`),
+        reflection: optionalRich(missingMan.reflection, `${path}.personalNarrative.missingMan.reflection`),
+        signoff: optionalRich(missingMan.signoff, `${path}.personalNarrative.missingMan.signoff`),
+      },
       pizza: { heading: rich(pizza.heading, `${path}.personalNarrative.pizza.heading`), lines: richArray(pizza.lines, `${path}.personalNarrative.pizza.lines`, 1) },
       wait: { heading: rich(wait.heading, `${path}.personalNarrative.wait.heading`), body: rich(wait.body, `${path}.personalNarrative.wait.body`), artifact: artifact(wait.artifact, `${path}.personalNarrative.wait.artifact`) },
       nonnino: { label: text(nonnino.label, `${path}.personalNarrative.nonnino.label`), heading: rich(nonnino.heading, `${path}.personalNarrative.nonnino.heading`) },

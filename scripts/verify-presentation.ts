@@ -28,6 +28,7 @@ assert.throws(() => validateRichText({ text: "x", presentation: { scale: "24px" 
 
 for (const locale of ["en", "it"] as const) {
   const reflection = getAboutContent(locale).personalNarrative.missingMan.reflection;
+  assert.ok(reflection, `${locale} bundled Missing Man reflection remains present`);
   assert.deepEqual(richTextPresentation(reflection), { scale: "medium" }, `${locale} Missing Man reflection has a local medium override`);
 }
 const renderer = readFileSync("src/components/primitives/RichText.module.css", "utf8");

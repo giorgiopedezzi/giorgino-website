@@ -6,7 +6,7 @@ import { validateRichText, type RichText } from "./rich-text";
 import { validateContentMetadata, type ContentMetadata } from "./content-metadata";
 
 export type RunningMedia = { src: string; alt: string; caption?: string };
-export type RunningBlock = { label: string; heading: RichText; body: RichText; isVisible: boolean };
+export type RunningBlock = { label: string; heading: RichText; body?: RichText; isVisible: boolean };
 export type RunningContent = {
   metadata: ContentMetadata;
   hero: { label: string; heading: RichText; intro: RichText };
@@ -30,6 +30,10 @@ function text(value: unknown, path: string) {
   return value;
 }
 function rich(value: unknown, path: string): RichText { return validateRichText(value, path); }
+function optionalRich(value: unknown, path: string): RichText | undefined {
+  if (value === undefined || value === null || value === "") return undefined;
+  return rich(value, path);
+}
 function visible(value: unknown, path: string) {
   if (typeof value !== "boolean") fail(path, "expected a boolean");
   return value;
@@ -41,7 +45,10 @@ function href(value: unknown, path: string) {
 }
 function block(value: unknown, path: string): RunningBlock {
   const source = record(value, path);
-  return { label: text(source.label, `${path}.label`), heading: rich(source.heading, `${path}.heading`), body: rich(source.body, `${path}.body`), isVisible: visible(source.isVisible, `${path}.isVisible`) };
+  const result: RunningBlock = { label: text(source.label, `${path}.label`), heading: rich(source.heading, `${path}.heading`), isVisible: visible(source.isVisible, `${path}.isVisible`) };
+  const body = optionalRich(source.body, `${path}.body`);
+  if (body) result.body = body;
+  return result;
 }
 function media(value: unknown, path: string): RunningMedia {
   const source = record(value, path);

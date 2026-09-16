@@ -7,6 +7,12 @@ export type ContentBlock = {
   body: RichText;
 };
 
+export type LinkedContentBlock = Omit<ContentBlock, "body"> & {
+  body?: RichText;
+  linkLabel: string;
+  linkHref: string;
+};
+
 export type SiteMedia = {
   src: string;
   alt: string;
@@ -90,8 +96,8 @@ export type PersonalNarrative = {
     heading: RichText;
     body: RichText;
     artifact: PersonalArtifact;
-    reflection: RichText;
-    signoff: RichText;
+    reflection?: RichText;
+    signoff?: RichText;
   };
   pizza: { heading: RichText; lines: RichText[] };
   wait: { heading: RichText; body: RichText; artifact: PersonalArtifact };
@@ -112,7 +118,7 @@ export type HomeContent = {
     closingThought?: RichText;
     supportingText?: RichText;
   };
-  thinking: ContentBlock & { linkLabel: string; linkHref: string };
+  thinking: LinkedContentBlock;
   running: { label: string; heading: string; media?: SiteMedia; linkLabel: string; linkHref: string };
-  human: ContentBlock & { linkLabel: string; linkHref: string };
+  human: LinkedContentBlock;
 };

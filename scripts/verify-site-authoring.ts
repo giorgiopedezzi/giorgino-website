@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { validateSiteAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { getAuthoringFoundation, validateAuthoringFoundation } from "../src/content/site-content";
 import { getRunningContent, validateRunningContent } from "../src/content/running";
+import { getHomeContent, validateHomeContent } from "../src/content/home";
+import { getAboutContent, validateAboutContent } from "../src/content/about";
 import { getContactContent, validateContactContent } from "../src/content/contact";
 import { getSiteSettings, validateSiteSettings } from "../src/content/site-settings";
 import { getLocaleMetadata } from "../src/content/locale-metadata";
@@ -57,6 +59,11 @@ assert.throws(
 );
 
 const running = getRunningContent("en");
+const home = getHomeContent("en");
+const about = getAboutContent("en");
+assert.doesNotThrow(() => validateHomeContent({ ...home, thinking: { ...home.thinking, body: undefined }, human: { ...home.human, body: undefined } }), "optional Home section bodies must be removable");
+assert.doesNotThrow(() => validateAboutContent({ ...about, personalNarrative: { ...about.personalNarrative, missingMan: { ...about.personalNarrative.missingMan, reflection: undefined, signoff: undefined } } }), "optional Missing Man reflection and signoff must be removable");
+assert.doesNotThrow(() => validateRunningContent({ ...running, problem: { ...running.problem, body: undefined }, object: { ...running.object, body: undefined } }), "optional Running section bodies must be removable");
 assert.equal(getRunningContent("it").hero.label, "Running / Lavori in corso");
 assert.deepEqual(running.principles.items.map((item) => item.order), [1, 2, 3, 4, 5]);
 assert.doesNotThrow(

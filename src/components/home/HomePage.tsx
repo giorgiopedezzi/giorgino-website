@@ -66,7 +66,7 @@ export function HomePage({ content, contact, footer }: HomePageProps) {
           <div className={styles.thinkingStack}>
             <SectionLabel>{content.thinking.label}</SectionLabel>
             <DisplayHeading as="h2" id="thinking-heading" className={styles.sectionHeading}>{content.thinking.heading}</DisplayHeading>
-            <RichTextCopy value={content.thinking.body} />
+            {content.thinking.body && <RichTextCopy value={content.thinking.body} />}
             <DeepLink href={content.thinking.linkHref}>{content.thinking.linkLabel}</DeepLink>
           </div>
         </PageContainer>
@@ -77,7 +77,7 @@ export function HomePage({ content, contact, footer }: HomePageProps) {
           <div className={styles.humanStack}>
             <SectionLabel>{content.human.label}</SectionLabel>
             <DisplayHeading as="h2" id="human-heading" className={styles.sectionHeading}>{content.human.heading}</DisplayHeading>
-            <RichTextCopy value={content.human.body} />
+            {content.human.body && <RichTextCopy value={content.human.body} />}
             <DeepLink href={content.human.linkHref}>{content.human.linkLabel}</DeepLink>
           </div>
         </PageContainer>
