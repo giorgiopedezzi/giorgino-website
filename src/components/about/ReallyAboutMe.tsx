@@ -58,7 +58,7 @@ export function ReallyAboutMe({arc, content, locale}: {
         value={content.missingMan.heading}/></DisplayHeading>{copy(content.missingMan.body)}<Artifact
         artifact={content.missingMan.artifact} label={content.artifactLabel}/><DisplayHeading as="h3"
                                                                                               className={styles.reflect}><RichTextInline
-        value={content.missingMan.reflection}/>a</DisplayHeading>
+        value={content.missingMan.reflection}/></DisplayHeading>
         <div className={styles.muted}>{copy(content.missingMan.signoff)}</div>
       </div>
     </PageContainer></Section>
