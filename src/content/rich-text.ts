@@ -14,7 +14,8 @@ export type RichTextMark =
   | { type: "underline" }
   | { type: "strike" }
   | { type: "textStyle"; attrs?: { textSize?: TextSize | null } }
-  | { type: "interruption" };
+  | { type: "interruption" }
+  | { type: "humanAside" };
 
 export type RichTextNode =
   | { type: "text"; text: string; marks?: RichTextMark[] }
@@ -40,7 +41,7 @@ function isBlockRole(value: unknown): value is BlockRole {
 function isMark(value: unknown): value is RichTextMark {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
   const mark = value as Record<string, unknown>;
-  if (mark.type === "bold" || mark.type === "italic" || mark.type === "underline" || mark.type === "strike" || mark.type === "interruption") return Object.keys(mark).every((key) => key === "type");
+  if (mark.type === "bold" || mark.type === "italic" || mark.type === "underline" || mark.type === "strike" || mark.type === "interruption" || mark.type === "humanAside") return Object.keys(mark).every((key) => key === "type");
   if (mark.type !== "textStyle") return false;
   if (mark.attrs === undefined) return true;
   if (typeof mark.attrs !== "object" || mark.attrs === null || Array.isArray(mark.attrs)) return false;

@@ -38,3 +38,9 @@
   line-height: 1;
   vertical-align: baseline;
 }
+
+.inlineHumanAside {
+  font-family: var(--font-body);
+  font-size: 1.05em;
+  font-style: italic;
+}

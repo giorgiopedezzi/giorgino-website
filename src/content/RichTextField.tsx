@@ -54,6 +54,16 @@ const InterruptionExtension = Mark.create({
   },
 });
 
+const InlineHumanAsideExtension = Mark.create({
+  name: "humanAside",
+  parseHTML() {
+    return [{ tag: "span[data-human-aside]" }];
+  },
+  renderHTML() {
+    return ["span", { "data-human-aside": "true" }, 0];
+  },
+});
+
 const extensions = [
   StarterKit.configure({
     blockquote: false,
@@ -74,6 +84,7 @@ const extensions = [
   TextSizeExtension,
   BlockRoleExtension,
   InterruptionExtension,
+  InlineHumanAsideExtension,
 ];
 
 function activeSize(editor: ReturnType<typeof useEditor>): TextSize {
@@ -89,7 +100,7 @@ function activeRole(editor: ReturnType<typeof useEditor>): BlockRole | "none" {
 const typographyLabels: Record<TextSize, string> = {
   small: "Label",
   normal: "Body",
-  large: "Editorial",
+  large: "Editorial (Lift)",
   emphasis: "Editorial emphasis",
 };
 
@@ -142,10 +153,11 @@ export function RichTextInput({ value, onChange, label, presentationControls = [
       <button type="button" title="Italic" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
       <button type="button" title="Underline" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
       <button type="button" title="Strikethrough" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
-      <button type="button" title="Editorial emphasis" aria-label="Editorial emphasis" aria-pressed={editor.isActive("interruption")} onClick={() => editor.chain().focus().toggleMark("interruption").run()}><span className={styles.interruption}>E</span></button>
+      <button type="button" title="Human Aside" aria-label="Human Aside" aria-pressed={editor.isActive("humanAside")} onClick={() => editor.chain().focus().toggleMark("humanAside").run()}><span className={styles.humanAside}>A</span></button>
+      <button type="button" title="Interruption" aria-label="Interruption" aria-pressed={editor.isActive("interruption")} onClick={() => editor.chain().focus().toggleMark("interruption").run()}><span className={styles.interruption}>I</span></button>
       <label>Typography
         <select aria-label="Typography style" value={selectedSize} onChange={(event) => applySize(event.target.value as TextSize)}>
-          <option value="small">Label</option><option value="normal">Body</option><option value="large">Editorial</option><option value="emphasis">Editorial emphasis</option>
+          <option value="small">Label</option><option value="normal">Body</option><option value="large">Editorial (Lift)</option><option value="emphasis">Editorial emphasis</option>
         </select>
         <span className={[styles.typePreview, styles[`typePreview${selectedSize[0].toUpperCase()}${selectedSize.slice(1)}`]].join(" ")} aria-hidden="true">{typographyLabels[selectedSize]}</span>
       </label>

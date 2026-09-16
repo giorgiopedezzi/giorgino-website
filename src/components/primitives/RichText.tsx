@@ -14,6 +14,7 @@ function markText(text: string, marks: RichTextMark[] | undefined, key: string):
     if (mark.type === "strike") result = <s key={`${key}-strike`}>{result}</s>;
     if (mark.type === "textStyle" && mark.attrs?.textSize) result = <span className={styles[`size${mark.attrs.textSize[0].toUpperCase()}${mark.attrs.textSize.slice(1)}` as `size${Capitalize<TextSize>}`]} key={`${key}-size`}>{result}</span>;
     if (mark.type === "interruption") result = <span className={styles.interruption} key={`${key}-interruption`}>{result}</span>;
+    if (mark.type === "humanAside") result = <span className={styles.inlineHumanAside} key={`${key}-human-aside`}>{result}</span>;
   }
   return result;
 }
