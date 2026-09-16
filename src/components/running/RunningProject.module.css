@@ -16,6 +16,8 @@
 .study figcaption span, .study > p { color: var(--color-text-on-running-muted); font-size: 1rem; }
 .study > p { max-width: 42rem; line-height: 1.42; }
 .media { display: grid; gap: .625rem; width: min(100%, 54rem); margin: var(--space-sm) 0 0; }
+.mediaWide { width: 100%; }
+.mediaFull { width: 100%; max-width: none; }
 .media img { width: 100%; height: auto; border: 1px solid rgb(228 233 233 / 26%); border-radius: .875rem; }
 .media figcaption { color: var(--color-text-on-running-muted); font-size: 1rem; }
 .telemetry { position: relative; min-height: 18rem; overflow: hidden; border-top: 1px solid rgb(228 233 233 / 23%); border-bottom: 1px solid rgb(228 233 233 / 23%); }

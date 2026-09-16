@@ -17,15 +17,20 @@ export type SiteMedia = {
   src: string;
   alt: string;
   caption?: string;
+  decorative?: boolean;
+  presentation?: MediaPresentation;
   stretch?: boolean;
 };
+
+/** Curated visual roles for author-owned editorial images. */
+export type MediaPresentation = "default" | "wide" | "full";
 
 export type EditorialBlock =
   | { type: "paragraph"; text: RichText }
   | { type: "heading"; text: RichText }
   | { type: "quote"; text: RichText; attribution?: string }
-  | { type: "image"; src: string; alt: string; caption?: string; stretch?: boolean }
-  | { type: "artifact"; src: string; alt: string; caption?: string; note?: string; stretch?: boolean }
+  | { type: "image"; src: string; alt: string; caption?: string; decorative?: boolean; presentation?: MediaPresentation; stretch?: boolean }
+  | { type: "artifact"; src: string; alt: string; caption?: string; note?: string; decorative?: boolean; presentation?: MediaPresentation; stretch?: boolean }
   | { type: "divider" }
   | { type: "note"; text: RichText };
 

@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { locales, type Locale } from "./locales";
 import { validateContentMetadata } from "./content-metadata";
-import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialContent, EditorialLink, EditorialMetadata } from "./types";
+import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialContent, EditorialLink, EditorialMetadata, MediaPresentation } from "./types";
 import { validateRichText } from "./rich-text";
 
 type ThinkingIndexFile = Pick<EditorialContent, "metadata" | "label" | "heading" | "introduction" | "dialogueArtifacts" | "dialogues" | "articleLabels">;
@@ -48,6 +48,20 @@ function requireThinkingMedia(value: unknown, path: string) {
   const src = requireString(value, path);
   if (!src.startsWith("/thinking-media/")) fail(path, "must reference a repository-owned /thinking-media/ asset");
   return src;
+}
+
+function imageAccessibility(value: Record<string, unknown>, path: string) {
+  const decorative = value.decorative === true;
+  const alt = value.alt;
+  if (decorative && alt !== undefined && alt !== null && alt !== "") fail(`${path}.alt`, "must be empty when decorative is selected");
+  if (!decorative && (typeof alt !== "string" || alt.trim() === "")) fail(`${path}.alt`, "is required for informative images");
+  return { alt: decorative ? "" : alt as string, ...(decorative ? { decorative: true } : {}) };
+}
+
+function imagePresentation(value: unknown, path: string): MediaPresentation | undefined {
+  if (value === undefined || value === null || value === "default") return undefined;
+  if (value === "wide" || value === "full") return value;
+  fail(path, "must be a supported semantic presentation value");
 }
 
 function isKeystaticBlock(value: unknown): value is { discriminant: string; value: unknown } {
@@ -117,9 +131,11 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
       const block: Extract<EditorialBlock, { type: "image" }> = {
         type: "image",
         src: requireThinkingMedia(image.src, `${path}.src`),
-        alt: requireString(image.alt, `${path}.alt`),
+        ...imageAccessibility(image, path),
       };
       if (image.caption !== undefined && image.caption !== null) block.caption = requireString(image.caption, `${path}.caption`);
+      const presentation = imagePresentation(image.presentation, `${path}.presentation`);
+      if (presentation) block.presentation = presentation;
       if (image.stretch === true) block.stretch = true;
       return block;
     }
@@ -128,10 +144,12 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
       const block: Extract<EditorialBlock, { type: "artifact" }> = {
         type: "artifact",
         src: requireThinkingMedia(artifact.src, `${path}.src`),
-        alt: requireString(artifact.alt, `${path}.alt`),
+        ...imageAccessibility(artifact, path),
       };
       if (artifact.caption !== undefined && artifact.caption !== null) block.caption = requireString(artifact.caption, `${path}.caption`);
       if (artifact.note !== undefined && artifact.note !== null) block.note = requireString(artifact.note, `${path}.note`);
+      const presentation = imagePresentation(artifact.presentation, `${path}.presentation`);
+      if (presentation) block.presentation = presentation;
       if (artifact.stretch === true) block.stretch = true;
       return block;
     }

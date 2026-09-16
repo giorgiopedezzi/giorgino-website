@@ -27,7 +27,7 @@ function EditorialBody({ blocks }: { blocks: EditorialBlock[] }) {
       case "paragraph": return <RichTextCopy key={index} value={block.text} />;
       case "heading": return <EditorialHeading as="h2" key={index}><RichTextInline value={block.text} /></EditorialHeading>;
       case "quote": return <blockquote key={index}><RichTextInline value={block.text} />{block.attribution && <footer>— {block.attribution}</footer>}</blockquote>;
-      case "image": case "artifact": return <figure key={index}><Image src={block.src} alt={block.alt} width={960} height={640} style={block.stretch ? { objectFit: "fill" } : undefined} />{(block.caption || (block.type === "artifact" && block.note)) && <figcaption>{block.caption}{block.type === "artifact" && block.note && <span>{block.note}</span>}</figcaption>}</figure>;
+      case "image": case "artifact": return <figure key={index} className={styles[`media${(block.presentation ?? "default")[0].toUpperCase()}${(block.presentation ?? "default").slice(1)}`]}><Image src={block.src} alt={block.decorative ? "" : block.alt} width={960} height={640} style={block.stretch ? { objectFit: "fill" } : undefined} />{(block.caption || (block.type === "artifact" && block.note)) && <figcaption>{block.caption}{block.type === "artifact" && block.note && <span>{block.note}</span>}</figcaption>}</figure>;
       case "divider": return <hr key={index} />;
       case "note": return <aside key={index}><RichTextInline value={block.text} /></aside>;
     }

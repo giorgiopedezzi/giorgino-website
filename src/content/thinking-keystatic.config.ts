@@ -19,6 +19,25 @@ const media = (label: string, directory = "public/thinking-media", publicPath = 
 
 const siteMedia = (label: string) => media(label, "public/site-media", "/site-media/");
 
+const mediaPresentation = fields.select({
+  label: "Presentation",
+  defaultValue: "default",
+  options: [
+    { label: "Default", value: "default" },
+    { label: "Wide", value: "wide" },
+    { label: "Full", value: "full" },
+  ],
+});
+
+const editorialImageFields = (fileLabel: string, source = media) => ({
+  src: source(fileLabel),
+  alt: fields.text({ label: "Alternative text", description: "Describe informative images. Leave blank only when this image is explicitly decorative." }),
+  decorative: fields.checkbox({ label: "Decorative image", description: "Decorative images render with an empty alt attribute and must not have alternative text.", defaultValue: false }),
+  caption: fields.text({ label: "Caption" }),
+  presentation: mediaPresentation,
+  stretch: fields.checkbox({ label: "Stretch to fill", description: "Legacy option for existing media. Prefer Presentation for new images.", defaultValue: false }),
+});
+
 const editorialBlocks = fields.blocks(
   {
     paragraph: {
@@ -38,21 +57,12 @@ const editorialBlocks = fields.blocks(
     },
     image: {
       label: "Image",
-      schema: fields.object({
-        src: media("Image file"),
-        alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
-        caption: fields.text({ label: "Caption" }),
-        stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
-      }),
+      schema: fields.object(editorialImageFields("Image file")),
     },
     artifact: {
       label: "Artifact",
-      schema: fields.object({
-        src: media("Artifact file"),
-        alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
-        caption: fields.text({ label: "Caption" }),
+      schema: fields.object({ ...editorialImageFields("Artifact file"),
         note: fields.text({ label: "Note" }),
-        stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
       }),
     },
     divider: { label: "Divider", schema: fields.empty() },
@@ -130,12 +140,7 @@ const authoringFoundationSchema = {
   isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
   link: fields.url({ label: "Optional internal or external link" }),
   media: fields.array(
-    fields.object({
-      src: siteMedia("Media file"),
-      alt: fields.text({ label: "Alternative text", validation: { isRequired: true } }),
-      caption: fields.text({ label: "Caption" }),
-      stretch: fields.checkbox({ label: "Stretch to fill", description: "Fill the frame exactly, ignoring the image's own proportions.", defaultValue: false }),
-    }),
+    fields.object(editorialImageFields("Media file", siteMedia)),
     { label: "Media", itemLabel: (props) => props.fields.alt.value || "Media item" },
   ),
   items: fields.array(
@@ -160,7 +165,7 @@ const runningSchema = {
   problem: runningBlock("Problem"),
   restraint: runningBlock("Deliberate restraint"),
   principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle" }) }), { label: "Ordered principles", description: "Recommended: 3–8 principles. Order is preserved in the numbered reading sequence.", validation: { length: { min: 1 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
-  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title" }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object({ src: siteMedia("Media file"), alt: requiredText("Alternative text"), caption: fields.text({ label: "Caption" }) }), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Media item" }) }, { label: "Object and visual study" }),
+  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title" }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object(editorialImageFields("Media file", siteMedia)), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Decorative media" }) }, { label: "Object and visual study" }),
   build: runningBlock("How it is being built"),
   state: runningBlock("Current state"),
   liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),

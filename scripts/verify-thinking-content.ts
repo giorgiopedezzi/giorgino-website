@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import { validateThinkingAuthoringUpdate } from "../src/content/thinking-authoring-validation";
 import { getEditorialArticle, getThinkingContent, getTranslatedThinkingSlug, validateThinkingRepository } from "../src/content/thinking";
@@ -52,7 +53,13 @@ expectValidationFailure({ status: "scheduled" }, "unsupported status");
 expectValidationFailure({ slug: "Not a valid slug" }, "lowercase URL slug");
 expectValidationFailure({ translationKey: "Not a valid identity" }, "stable identity");
 expectValidationFailure({ body: [{ type: "not-a-block" }] }, "unsupported block type");
-expectValidationFailure({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "" } }] }, "expected a non-empty string");
+expectValidationFailure({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "" } }] }, "required for informative images");
+expectValidationFailure({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "Not empty", decorative: true } }] }, "must be empty when decorative");
+expectValidationFailure({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "Decorative", presentation: "720px" } }] }, "supported semantic presentation");
+assert.deepEqual(
+  validateThinkingRepository(indexes, pairedArticles({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "", decorative: true, presentation: "wide" } }] })).articles[0].body[0],
+  { type: "image", src: "/thinking-media/example.png", alt: "", decorative: true, presentation: "wide" },
+);
 expectValidationFailure({ body: [{ discriminant: "paragraph", value: "" }] }, "expected a non-empty string");
 expectValidationFailure({ metadata: { title: "", description: "Description" } }, "metadata.title");
 expectValidationFailure({ references: [{ label: "Unsafe", href: "javascript:alert(1)" }] }, "internal path or an http(s) URL");
@@ -61,6 +68,12 @@ assert.throws(
   () => validateThinkingRepository(indexes, [pairedArticles()[0]]),
   (error: unknown) => error instanceof Error && error.message.includes("every supported locale"),
 );
+
+const editorialRenderer = readFileSync("src/components/thinking/EditorialSystem.tsx", "utf8");
+const editorialStyles = readFileSync("src/components/thinking/EditorialSystem.module.css", "utf8");
+assert.match(editorialRenderer, /block\.decorative \? "" : block\.alt/, "decorative images render with empty alt text");
+assert.match(editorialStyles, /\.mediaWide/);
+assert.match(editorialStyles, /\.mediaFull/);
 assert.throws(
   () => validateThinkingRepository({
     ...indexes,

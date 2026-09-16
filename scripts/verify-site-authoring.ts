@@ -70,10 +70,15 @@ assert.doesNotThrow(
   () => validateRunningContent({ ...running, principles: { ...running.principles, items: Array.from({ length: 9 }, (_, index) => ({ order: index + 1, text: `Principle ${index + 1}` })) } }),
   "principle-count guidance must not block saving a ninth ordered item",
 );
+assert.deepEqual(validateAuthoringFoundation({ ...foundation, media: [{ src: "/site-media/animated-proof.gif", alt: "", decorative: true, presentation: "wide" }] }).media[0], { src: "/site-media/animated-proof.gif", alt: "", decorative: true, presentation: "wide" });
+assert.throws(() => validateAuthoringFoundation({ ...foundation, media: [{ src: "/site-media/animated-proof.gif", alt: "", presentation: "wide" }] }), /required for informative images/);
+assert.throws(() => validateAuthoringFoundation({ ...foundation, media: [{ src: "/site-media/animated-proof.gif", alt: "Decorative", decorative: true }] }), /must be empty when decorative/);
+assert.throws(() => validateAuthoringFoundation({ ...foundation, media: [{ src: "/site-media/animated-proof.gif", alt: "Image", presentation: "720px" }] }), /supported semantic presentation/);
 assert.throws(
   () => validateRunningContent({ ...running, liveApp: { ...running.liveApp, href: "javascript:alert(1)" } }),
   /internal path or an http\(s\) URL/,
 );
+assert.deepEqual(validateRunningContent({ ...running, object: { ...running.object, media: [{ src: "/site-media/animated-proof.gif", alt: "", decorative: true, presentation: "full" }] } }).object.media[0], { src: "/site-media/animated-proof.gif", alt: "", decorative: true, presentation: "full" });
 assert.throws(
   () => validateRunningContent({ ...running, object: { ...running.object, media: [{ src: "/site-media/unsupported.svg", alt: "SVG" }] } }),
   /JPEG, PNG, WebP, or GIF/,

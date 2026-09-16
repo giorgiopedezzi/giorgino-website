@@ -5,7 +5,7 @@ import type { Locale } from "./locales";
 import { validateRichText, type RichText } from "./rich-text";
 import { validateContentMetadata, type ContentMetadata } from "./content-metadata";
 
-export type RunningMedia = { src: string; alt: string; caption?: string };
+export type RunningMedia = { src: string; alt: string; caption?: string; decorative?: boolean; presentation?: "default" | "wide" | "full" };
 export type RunningBlock = { label: string; heading: RichText; body?: RichText; isVisible: boolean };
 export type RunningContent = {
   metadata: ContentMetadata;
@@ -54,8 +54,16 @@ function media(value: unknown, path: string): RunningMedia {
   const source = record(value, path);
   const src = text(source.src, `${path}.src`);
   if (!src.startsWith("/site-media/") || !mediaExtensions.has(extname(src).toLowerCase())) fail(`${path}.src`, "must reference a repository-owned JPEG, PNG, WebP, or GIF asset");
-  const result: RunningMedia = { src, alt: text(source.alt, `${path}.alt`) };
+  const decorative = source.decorative === true;
+  if (decorative && source.alt !== undefined && source.alt !== null && source.alt !== "") fail(`${path}.alt`, "must be empty when decorative is selected");
+  if (!decorative && (typeof source.alt !== "string" || source.alt.trim() === "")) fail(`${path}.alt`, "is required for informative images");
+  const result: RunningMedia = { src, alt: decorative ? "" : source.alt as string };
+  if (decorative) result.decorative = true;
   if (source.caption !== undefined && source.caption !== null && source.caption !== "") result.caption = text(source.caption, `${path}.caption`);
+  if (source.presentation !== undefined && source.presentation !== null && source.presentation !== "default") {
+    if (source.presentation !== "wide" && source.presentation !== "full") fail(`${path}.presentation`, "must be a supported semantic presentation value");
+    result.presentation = source.presentation;
+  }
   return result;
 }
 

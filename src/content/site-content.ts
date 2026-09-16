@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { isLocale, type Locale } from "./locales";
 
-export type AuthoringMedia = { src: string; alt: string; caption?: string; stretch?: boolean };
+export type AuthoringMedia = { src: string; alt: string; caption?: string; decorative?: boolean; presentation?: "default" | "wide" | "full"; stretch?: boolean };
 export type AuthoringFoundation = {
   title: string;
   summary: string;
@@ -40,8 +40,16 @@ function media(value: unknown, path: string): AuthoringMedia {
   const src = string(entry.src, `${path}.src`);
   const extension = src.slice(src.lastIndexOf(".")).toLowerCase();
   if (!src.startsWith("/site-media/") || !mediaExtensions.has(extension)) fail(`${path}.src`, "must reference a repository-owned JPEG, PNG, WebP, or GIF asset");
-  const result: AuthoringMedia = { src, alt: string(entry.alt, `${path}.alt`) };
+  const decorative = entry.decorative === true;
+  if (decorative && entry.alt !== undefined && entry.alt !== null && entry.alt !== "") fail(`${path}.alt`, "must be empty when decorative is selected");
+  if (!decorative && (typeof entry.alt !== "string" || entry.alt.trim() === "")) fail(`${path}.alt`, "is required for informative images");
+  const result: AuthoringMedia = { src, alt: decorative ? "" : entry.alt as string };
+  if (decorative) result.decorative = true;
   if (entry.caption !== undefined && entry.caption !== null) result.caption = string(entry.caption, `${path}.caption`);
+  if (entry.presentation !== undefined && entry.presentation !== null && entry.presentation !== "default") {
+    if (entry.presentation !== "wide" && entry.presentation !== "full") fail(`${path}.presentation`, "must be a supported semantic presentation value");
+    result.presentation = entry.presentation;
+  }
   if (entry.stretch === true) result.stretch = true;
   return result;
 }
