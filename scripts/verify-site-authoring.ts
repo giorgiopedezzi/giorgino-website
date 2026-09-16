@@ -13,6 +13,14 @@ import { richTextToPlainText } from "../src/content/rich-text";
 const foundation = getAuthoringFoundation("en");
 assert.equal(foundation.title, "Local authoring foundation");
 assert.deepEqual(foundation.items.map((item) => item.order), [1]);
+const sections = validateAuthoringFoundation({ ...foundation, sections: [
+  { discriminant: "editorial", value: { label: "Editorial", heading: "A heading", body: { text: "A body", presentation: { measure: "narrow" } } } },
+  { discriminant: "links", value: { label: "Links", heading: "Resources", links: [{ label: "Home", href: "/en" }] } },
+] }).sections;
+assert.deepEqual(sections.map((section) => section.type), ["editorial", "links"], "block array order must be the persisted section order");
+assert.deepEqual(validateAuthoringFoundation({ ...foundation, sections: [sections[1], sections[0]] }).sections.map((section) => section.type), ["links", "editorial"], "reordered sections must survive validation/reload");
+assert.deepEqual(validateAuthoringFoundation({ ...foundation, sections: [sections[0]] }).sections.map((section) => section.type), ["editorial"], "removing a normal section must survive validation/reload");
+assert.throws(() => validateAuthoringFoundation({ ...foundation, sections: [{ type: "hero", label: "No", heading: "No" }] }), /supported normal section type/);
 
 const validMedia = { src: "/site-media/animated-proof.gif", alt: "An animated proof", caption: "GIF caption" };
 assert.deepEqual(validateAuthoringFoundation({ ...foundation, media: [validMedia] }).media, [validMedia]);

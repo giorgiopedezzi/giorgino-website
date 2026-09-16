@@ -2,6 +2,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { isLocale, type Locale } from "./locales";
+import { isNormalPageSectionType, type NormalPageSection } from "./page-sections";
+import { validateRichText } from "./rich-text";
+import type { EditorialLink } from "./types";
 
 export type AuthoringMedia = { src: string; alt: string; caption?: string; decorative?: boolean; presentation?: "default" | "wide" | "full"; stretch?: boolean };
 export type AuthoringFoundation = {
@@ -11,6 +14,7 @@ export type AuthoringFoundation = {
   link?: string;
   media: AuthoringMedia[];
   items: Array<{ order: number; label: string; href: string }>;
+  sections: NormalPageSection[];
 };
 
 const mediaExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
@@ -54,6 +58,37 @@ function media(value: unknown, path: string): AuthoringMedia {
   return result;
 }
 
+function normalSections(value: unknown, path: string): NormalPageSection[] {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value)) fail(path, "expected an array");
+  return value.map((entry, index) => {
+    const sectionPath = `${path}[${index}]`;
+    const source = record(entry, sectionPath);
+    const type = typeof source.discriminant === "string" ? source.discriminant : source.type;
+    const section = "value" in source && typeof source.value === "object" && source.value !== null ? source.value as Record<string, unknown> : source;
+    if (!isNormalPageSectionType(type)) fail(`${sectionPath}.type`, "must be a supported normal section type");
+    const label = string(section.label, `${sectionPath}.label`);
+    const heading = validateRichText(section.heading, `${sectionPath}.heading`);
+    if (type === "editorial") {
+      const result: Extract<NormalPageSection, { type: "editorial" }> = { type, label, heading, body: validateRichText(section.body, `${sectionPath}.body`) };
+      if (section.media !== undefined && section.media !== null && (section.media as Record<string, unknown>).src) result.media = media(section.media, `${sectionPath}.media`);
+      return result;
+    }
+    if (!Array.isArray(section.links)) fail(`${sectionPath}.links`, "expected an array");
+    const seen = new Set<string>();
+    const links: EditorialLink[] = section.links.map((entry, linkIndex) => {
+      const linkValue = record(entry, `${sectionPath}.links[${linkIndex}]`);
+      const href = link(linkValue.href, `${sectionPath}.links[${linkIndex}].href`);
+      if (seen.has(href)) fail(`${sectionPath}.links[${linkIndex}].href`, "must not duplicate another link in this section");
+      seen.add(href);
+      const result: EditorialLink = { label: string(linkValue.label, `${sectionPath}.links[${linkIndex}].label`), href };
+      if (linkValue.note !== undefined && linkValue.note !== null && linkValue.note !== "") result.note = string(linkValue.note, `${sectionPath}.links[${linkIndex}].note`);
+      return result;
+    });
+    return { type, label, heading, links };
+  });
+}
+
 export function validateAuthoringFoundation(value: unknown, path = "authoring-foundation.json"): AuthoringFoundation {
   const source = record(value, path);
   if (!Array.isArray(source.media) || !Array.isArray(source.items)) fail(path, "media and items must be arrays");
@@ -64,7 +99,7 @@ export function validateAuthoringFoundation(value: unknown, path = "authoring-fo
     return { order: item.order, label: string(item.label, `${path}.items[${index}].label`), href: link(item.href, `${path}.items[${index}].href`) };
   });
   if (new Set(items.map((item) => item.order)).size !== items.length) fail(`${path}.items`, "orders must be unique");
-  const result: AuthoringFoundation = { title: string(source.title, `${path}.title`), summary: string(source.summary, `${path}.summary`), isVisible: source.isVisible, media: source.media.map((value, index) => media(value, `${path}.media[${index}]`)), items: items.sort((left, right) => left.order - right.order) };
+  const result: AuthoringFoundation = { title: string(source.title, `${path}.title`), summary: string(source.summary, `${path}.summary`), isVisible: source.isVisible, media: source.media.map((value, index) => media(value, `${path}.media[${index}]`)), items: items.sort((left, right) => left.order - right.order), sections: normalSections(source.sections, `${path}.sections`) };
   if (source.link !== undefined && source.link !== null) result.link = link(source.link, `${path}.link`);
   return result;
 }

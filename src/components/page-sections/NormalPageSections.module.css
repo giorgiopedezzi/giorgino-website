@@ -1,0 +1,9 @@
+.section { display: grid; gap: var(--space-sm); }
+.section + .section { margin-top: var(--space-xl); }
+.mediaDefault { width: 100%; max-width: var(--measure-body); margin: var(--space-sm) 0 0; }
+.mediaWide { width: 100%; max-width: var(--measure-heading); margin: var(--space-sm) 0 0; }
+.mediaFull { width: 100%; margin: var(--space-sm) 0 0; }
+.mediaDefault img, .mediaWide img, .mediaFull img { display: block; width: 100%; height: auto; object-fit: contain; }
+.mediaDefault figcaption, .mediaWide figcaption, .mediaFull figcaption, .links span { display: block; margin-top: var(--space-2xs); color: var(--color-text-muted); }
+.links { display: grid; gap: var(--space-sm); margin: 0; padding-left: 1.2rem; }
+.links a { color: inherit; text-underline-offset: .2em; }

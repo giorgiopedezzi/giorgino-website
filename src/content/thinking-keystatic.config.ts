@@ -107,6 +107,30 @@ const editorialLinks = (label: string, description: string) => fields.array(
 );
 
 const requiredText = (label: string, multiline = false) => fields.text({ label, multiline, validation: { isRequired: true } });
+
+const normalPageSections = fields.blocks(
+  {
+    editorial: {
+      label: "Editorial section",
+      schema: fields.object({
+        label: requiredText("Section label"),
+        heading: richText({ label: "Heading" }),
+        body: richText({ label: "Body", description: "Use the existing rich-text and semantic presentation controls." }),
+        media: fields.object(editorialImageFields("Optional media", siteMedia), { label: "Optional media" }),
+      }),
+    },
+    links: {
+      label: "Curated links",
+      schema: fields.object({
+        label: requiredText("Section label"),
+        heading: richText({ label: "Heading" }),
+        links: editorialLinks("Links", "A deliberately curated list, not a free-form layout control."),
+      }),
+    },
+  },
+  { label: "Normal sections", description: "Add, remove, and reorder supported normal sections. Homepage and other protected compositions are not managed here." },
+);
+
 const metadataSchema = (label = "Metadata") => fields.object({
   title: requiredText("Page title"),
   description: requiredText("Page description", true),
@@ -151,6 +175,7 @@ const authoringFoundationSchema = {
     }),
     { label: "Ordered items", itemLabel: (props) => props.fields.label.value || "Item" },
   ),
+  sections: normalPageSections,
 };
 
 const runningBlock = (label: string) => fields.object({
