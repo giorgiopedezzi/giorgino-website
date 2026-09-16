@@ -59,7 +59,10 @@
           "stretch": false
         }
       },
-      "reflection": "I learned what the missing-man formation meant afterwards. I just knew it was the image I wanted.",
+      "reflection": {
+        "text": "I learned what the missing-man formation meant afterwards. I just knew it was the image I wanted.",
+        "presentation": { "scale": "medium" }
+      },
       "signoff": "I did it my way."
     },
     "pizza": {

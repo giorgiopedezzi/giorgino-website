@@ -7,7 +7,9 @@ import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/react";
 import type { FormFieldInputProps } from "@keystatic/core";
 
-import { blockRoleOptions, textSizeOptions, toRichTextDocument, type BlockRole, type RichText, type TextSize } from "./rich-text";
+import { blockRoleOptions, richTextContent, richTextPresentation, textSizeOptions, toRichTextDocument, type BlockRole, type RichText, type RichTextContent, type TextSize } from "./rich-text";
+import type { PresentationControl } from "./rich-text-field";
+import type { PresentationOverrides } from "./presentation";
 import styles from "./RichTextField.module.css";
 
 const TextSizeExtension = Extension.create({
@@ -97,12 +99,26 @@ const roleLabels: Record<BlockRole | "none", string> = {
   editorialLead: "Editorial Lead",
 };
 
-export function RichTextInput({ value, onChange, label }: FormFieldInputProps<RichText> & { label?: string }) {
+const presentationLabels = {
+  scale: { label: "Scale", options: [["default", "Default"], ["small", "Small"], ["medium", "Medium"], ["large", "Large"]] },
+  measure: { label: "Measure", options: [["default", "Default"], ["narrow", "Narrow"], ["wide", "Wide"]] },
+  tone: { label: "Tone", options: [["default", "Default"], ["quiet", "Quiet"], ["strong", "Strong"]] },
+} as const;
+
+export function RichTextInput({ value, onChange, label, presentationControls = [] }: FormFieldInputProps<RichText> & { label?: string; presentationControls?: PresentationControl[] }) {
+  const savedPresentation = richTextPresentation(value);
+  const updatePresentation = (property: PresentationControl, selected: string) => {
+    const next: PresentationOverrides = { ...savedPresentation };
+    if (selected === "default") delete next[property];
+    else next[property] = selected as never;
+    const text = richTextContent(value);
+    onChange(Object.keys(next).length ? { text, presentation: next } : text);
+  };
   const editor = useEditor({
     immediatelyRender: false,
     extensions,
     content: toRichTextDocument(value),
-    onUpdate: ({ editor }) => onChange(editor.getJSON() as RichText),
+    onUpdate: ({ editor }) => onChange(savedPresentation ? { text: editor.getJSON() as RichTextContent, presentation: savedPresentation } : editor.getJSON() as RichText),
     editorProps: { attributes: { class: styles.editor, "aria-label": "Rich text" } },
   });
 
@@ -138,6 +154,15 @@ export function RichTextInput({ value, onChange, label }: FormFieldInputProps<Ri
           <option value="none">{roleLabels.none}</option><option value="humanAside">{roleLabels.humanAside}</option><option value="editorialLead">{roleLabels.editorialLead}</option>
         </select>
       </label>
+      {presentationControls.map((property) => {
+        const control = presentationLabels[property];
+        const selected = savedPresentation?.[property] ?? "default";
+        return <label key={property}>{control.label}
+          <select aria-label={`${control.label} override`} value={selected} onChange={(event) => updatePresentation(property, event.target.value)}>
+            {control.options.map(([optionValue, optionLabel]) => <option key={optionValue} value={optionValue}>{optionLabel}</option>)}
+          </select>
+        </label>;
+      })}
     </div>
     <EditorContent editor={editor} />
   </div>;

@@ -310,8 +310,9 @@
         "placeholder": "GIF originale Missing Man — da aggiungere."
       },
       "reflection": {
-        "type": "doc",
-        "content": [
+        "text": {
+          "type": "doc",
+          "content": [
           {
             "type": "paragraph",
             "content": [
@@ -321,7 +322,9 @@
               }
             ]
           }
-        ]
+          ]
+        },
+        "presentation": { "scale": "medium" }
       },
       "signoff": {
         "type": "doc",

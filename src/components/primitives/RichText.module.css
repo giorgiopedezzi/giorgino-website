@@ -1,19 +1,33 @@
-.sizeSmall { font-size: var(--font-size-label); }
-.sizeLarge { font-size: var(--font-size-editorial); }
-.sizeEmphasis { font-family: var(--font-display); font-size: var(--font-size-editorial); line-height: 1.15; }
+.presentation { --rich-text-scale: 1; }
+.presentationScaleSmall { --rich-text-scale: .8; }
+.presentationScaleMedium { --rich-text-scale: 1; }
+.presentationScaleLarge { --rich-text-scale: 1.18; }
+.presentationMeasureNarrow { max-width: calc(var(--measure-body) * .72); }
+.presentationMeasureWide { max-width: var(--measure-heading); }
+.presentationToneQuiet { color: var(--color-text-muted); }
+.presentationToneStrong { color: inherit; }
+
+.inline.presentationScaleSmall { font-size: .8em; }
+.inline.presentationScaleMedium { font-size: .82em; }
+.inline.presentationScaleLarge { font-size: 1em; }
+
+.sizeSmall { font-size: calc(var(--font-size-label) * var(--rich-text-scale, 1)); }
+.sizeLarge { font-size: calc(var(--font-size-editorial) * var(--rich-text-scale, 1)); }
+.sizeEmphasis { font-family: var(--font-display); font-size: calc(var(--font-size-editorial) * var(--rich-text-scale, 1)); line-height: 1.15; }
+.presentationBody { font-size: calc(var(--font-size-body) * var(--rich-text-scale, 1)); }
 
 .humanAside {
   max-width: calc(var(--measure-body) * 0.75);
   font-family: var(--font-body);
   font-style: italic;
-  font-size: calc(var(--font-size-body) * 1.08);
+  font-size: calc(var(--font-size-body) * 1.08 * var(--rich-text-scale, 1));
   line-height: 1.5;
 }
 
 .editorialLead {
   max-width: var(--measure-body);
   font-family: var(--font-display);
-  font-size: var(--font-size-editorial);
+  font-size: calc(var(--font-size-editorial) * var(--rich-text-scale, 1));
   line-height: 1.3;
 }
 

@@ -245,9 +245,9 @@ const aboutSchema = {
     artifactLabel: requiredText("Artifact label"),
     missingMan: fields.object({
       heading: richText({ label: "Heading" }),
-      body: richText({ label: "Body" }),
+      body: richText({ label: "Body", presentationControls: ["scale", "measure", "tone"] }),
       artifact: personalArtifact("Missing Man artifact"),
-      reflection: richText({ label: "Reflection" }),
+      reflection: richText({ label: "Reflection", presentationControls: ["scale"] }),
       signoff: richText({ label: "Signoff" }),
     }, { label: "Missing Man" }),
     pizza: fields.object({

@@ -1,3 +1,5 @@
+import { validatePresentationOverrides, type PresentationOverrides } from "./presentation";
+
 export const textSizeOptions = ["small", "normal", "large", "emphasis"] as const;
 
 export type TextSize = (typeof textSizeOptions)[number];
@@ -19,7 +21,13 @@ export type RichTextNode =
   | { type: "paragraph"; attrs?: { role?: BlockRole | null }; content?: RichTextNode[] };
 
 export type RichTextDocument = { type: "doc"; content: RichTextNode[] };
-export type RichText = string | RichTextDocument;
+export type RichTextContent = string | RichTextDocument;
+export type RichTextPresentation = {
+  text: RichTextContent;
+  presentation?: PresentationOverrides;
+};
+/** Legacy strings/documents remain valid; presentation is opt-in per text block. */
+export type RichText = RichTextContent | RichTextPresentation;
 
 function isTextSize(value: unknown): value is TextSize {
   return typeof value === "string" && (textSizeOptions as readonly string[]).includes(value);
@@ -60,8 +68,21 @@ export function plainTextToRichText(value: string): RichTextDocument {
   return { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: value }] }] };
 }
 
+function isRichTextPresentation(value: RichText): value is RichTextPresentation {
+  return typeof value === "object" && value !== null && "text" in value && !((value as Record<string, unknown>).type === "doc");
+}
+
+export function richTextContent(value: RichText): RichTextContent {
+  return isRichTextPresentation(value) ? value.text : value;
+}
+
+export function richTextPresentation(value: RichText) {
+  return isRichTextPresentation(value) ? value.presentation : undefined;
+}
+
 export function toRichTextDocument(value: RichText): RichTextDocument {
-  return typeof value === "string" ? plainTextToRichText(value) : value;
+  const content = richTextContent(value);
+  return typeof content === "string" ? plainTextToRichText(content) : content;
 }
 
 function nodeToPlainText(node: RichTextNode): string {
@@ -80,6 +101,17 @@ export function validateRichText(value: unknown, path: string, required = true):
   }
   if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`Rich text validation failed at ${path}: expected plain text or a Tiptap document`);
   const document = value as Record<string, unknown>;
+  if ("text" in document && document.type !== "doc") {
+    if (!Object.keys(document).every((key) => key === "text" || key === "presentation")) {
+      throw new Error(`Rich text validation failed at ${path}: unsupported presentation wrapper property`);
+    }
+    const text = validateRichText(document.text, `${path}.text`, required);
+    if (typeof text === "object" && text !== null && "text" in text && !((text as Record<string, unknown>).type === "doc")) {
+      throw new Error(`Rich text validation failed at ${path}.text: nested presentation wrappers are not supported`);
+    }
+    const presentation = validatePresentationOverrides(document.presentation, `${path}.presentation`);
+    return presentation ? { text: text as RichTextContent, presentation } : text;
+  }
   if (document.type !== "doc" || !Array.isArray(document.content) || !document.content.every(isNode)) {
     throw new Error(`Rich text validation failed at ${path}: unsupported Tiptap node or mark`);
   }
