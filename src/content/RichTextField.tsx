@@ -7,8 +7,8 @@ import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/react";
 import type { FormFieldInputProps } from "@keystatic/core";
 
-import { blockRoleOptions, richTextContent, richTextPresentation, textSizeOptions, toRichTextDocument, type BlockRole, type RichText, type RichTextContent, type TextSize } from "./rich-text";
-import type { PresentationControl } from "./rich-text-field";
+import { blockRoleOptions, richTextPresentation, textSizeOptions, toRichTextDocument, withRichTextPresentation, type BlockRole, type RichText, type RichTextContent, type TextSize } from "./rich-text";
+import type { PresentationControl, RichTextCapabilities } from "./rich-text-field";
 import type { PresentationOverrides } from "./presentation";
 import styles from "./RichTextField.module.css";
 
@@ -99,7 +99,7 @@ function activeRole(editor: ReturnType<typeof useEditor>): BlockRole | "none" {
 
 const typographyLabels: Record<TextSize, string> = {
   small: "Label",
-  normal: "Body",
+  normal: "Default / Inherit",
   large: "Editorial (Lift)",
   emphasis: "Editorial emphasis",
 };
@@ -116,14 +116,13 @@ const presentationLabels = {
   tone: { label: "Tone", options: [["default", "Default"], ["quiet", "Quiet"], ["strong", "Strong"]] },
 } as const;
 
-export function RichTextInput({ value, onChange, label, presentationControls = [] }: FormFieldInputProps<RichText> & { label?: string; presentationControls?: PresentationControl[] }) {
+export function RichTextInput({ value, onChange, label, capabilities }: FormFieldInputProps<RichText> & { label?: string; capabilities: RichTextCapabilities }) {
   const savedPresentation = richTextPresentation(value);
   const updatePresentation = (property: PresentationControl, selected: string) => {
     const next: PresentationOverrides = { ...savedPresentation };
     if (selected === "default") delete next[property];
     else next[property] = selected as never;
-    const text = richTextContent(value);
-    onChange(Object.keys(next).length ? { text, presentation: next } : text);
+    onChange(withRichTextPresentation(value, next));
   };
   const editor = useEditor({
     immediatelyRender: false,
@@ -149,24 +148,26 @@ export function RichTextInput({ value, onChange, label, presentationControls = [
   return <div className={styles.field}>
     {label && <p className={styles.fieldLabel}>{label}</p>}
     <div className={styles.toolbar} aria-label="Text formatting">
-      <button type="button" title="Bold" aria-label="Bold" aria-pressed={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><strong>B</strong></button>
-      <button type="button" title="Italic" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
-      <button type="button" title="Underline" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
-      <button type="button" title="Strikethrough" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
-      <button type="button" title="Human Aside" aria-label="Human Aside" aria-pressed={editor.isActive("humanAside")} onClick={() => editor.chain().focus().toggleMark("humanAside").run()}><span className={styles.humanAside}>A</span></button>
-      <button type="button" title="Interruption" aria-label="Interruption" aria-pressed={editor.isActive("interruption")} onClick={() => editor.chain().focus().toggleMark("interruption").run()}><span className={styles.interruption}>I</span></button>
-      <label>Typography
-        <select aria-label="Typography style" value={selectedSize} onChange={(event) => applySize(event.target.value as TextSize)}>
-          <option value="small">Label</option><option value="normal">Body</option><option value="large">Editorial (Lift)</option><option value="emphasis">Editorial emphasis</option>
-        </select>
-        <span className={[styles.typePreview, styles[`typePreview${selectedSize[0].toUpperCase()}${selectedSize.slice(1)}`]].join(" ")} aria-hidden="true">{typographyLabels[selectedSize]}</span>
-      </label>
-      <label>Role
-        <select aria-label="Editorial role" value={selectedRole} onChange={(event) => applyRole(event.target.value as BlockRole | "none")}>
+      <div className={styles.toolbarGroup} aria-label="Text: selected phrase"><span>Text</span>
+        <button type="button" title="Bold" aria-label="Bold" aria-pressed={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><strong>B</strong></button>
+        <button type="button" title="Italic" aria-label="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><em>I</em></button>
+        <button type="button" title="Underline" aria-label="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><span className={styles.underline}>U</span></button>
+        <button type="button" title="Strikethrough" aria-label="Strikethrough" aria-pressed={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><span className={styles.strike}>S</span></button>
+        <button type="button" title="Human Aside" aria-label="Human Aside" aria-pressed={editor.isActive("humanAside")} onClick={() => editor.chain().focus().toggleMark("humanAside").run()}><span className={styles.humanAside}>A</span></button>
+        <button type="button" title="Interruption" aria-label="Interruption" aria-pressed={editor.isActive("interruption")} onClick={() => editor.chain().focus().toggleMark("interruption").run()}><span className={styles.interruption}>I</span></button>
+        {capabilities.inlineTypography && <label>Typography
+          <select aria-label="Typography for selected text" value={selectedSize} onChange={(event) => applySize(event.target.value as TextSize)}>
+            <option value="normal">Default / Inherit</option><option value="small">Label</option><option value="large">Editorial Lift</option><option value="emphasis">Editorial Emphasis</option>
+          </select>
+          <span className={[styles.typePreview, styles[`typePreview${selectedSize[0].toUpperCase()}${selectedSize.slice(1)}`]].join(" ")} aria-hidden="true">{typographyLabels[selectedSize]}</span>
+        </label>}
+      </div>
+      {capabilities.paragraphRole && <div className={styles.toolbarGroup} aria-label="Paragraph"><span>Paragraph</span><label>Role
+        <select aria-label="Role for this paragraph" value={selectedRole} onChange={(event) => applyRole(event.target.value as BlockRole | "none")}>
           <option value="none">{roleLabels.none}</option><option value="humanAside">{roleLabels.humanAside}</option><option value="editorialLead">{roleLabels.editorialLead}</option>
         </select>
-      </label>
-      {presentationControls.map((property) => {
+      </label></div>}
+      {capabilities.presentation.length > 0 && <div className={styles.toolbarGroup} aria-label="Whole field presentation"><span>Whole field</span>{capabilities.presentation.map((property) => {
         const control = presentationLabels[property];
         const selected = savedPresentation?.[property] ?? "default";
         return <label key={property}>{control.label}
@@ -174,7 +175,7 @@ export function RichTextInput({ value, onChange, label, presentationControls = [
             {control.options.map(([optionValue, optionLabel]) => <option key={optionValue} value={optionValue}>{optionLabel}</option>)}
           </select>
         </label>;
-      })}
+      })}</div>}
     </div>
     <EditorContent editor={editor} />
   </div>;

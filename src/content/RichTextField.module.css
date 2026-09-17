@@ -1,11 +1,13 @@
-.field { width: 100%; min-width: 20rem; border: 1px solid #535353; border-radius: .375rem; overflow: hidden; background: #1e1e1e; color: #f4f4f4; }
+.field { width: 100%; min-width: 0; border: 1px solid #535353; border-radius: .375rem; overflow: hidden; background: #1e1e1e; color: #f4f4f4; }
 .fieldLabel { margin: 0; padding: .65rem .8rem; border-bottom: 1px solid #535353; background: #252525; color: #f4f4f4; font-size: .875rem; font-weight: 700; }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; padding: .45rem; border-bottom: 1px solid #535353; background: #2a2a2a; }
 .toolbar button, .toolbar select { font: inherit; }
 .toolbar button { min-width: 2rem; min-height: 2rem; border: 1px solid #666; border-radius: .25rem; background: #353535; color: #f4f4f4; cursor: pointer; }
 .toolbar button:hover, .toolbar button:focus-visible { border-color: #f4f4f4; background: #4a4a4a; outline: none; }
 .toolbar button[aria-pressed="true"] { border-color: #f4f4f4; background: #666; }
-.toolbar label { display: flex; align-items: center; gap: .3rem; margin-left: .35rem; font-size: .875rem; }
+.toolbarGroup { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; padding-right: .45rem; border-right: 1px solid #535353; }
+.toolbarGroup > span { color: #c6c6c6; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.toolbar label { display: flex; align-items: center; gap: .3rem; font-size: .875rem; }
 .toolbar select { border: 1px solid #666; border-radius: .25rem; background: #353535; color: #f4f4f4; padding: .25rem .4rem; }
 .typePreview { min-width: 7.5rem; color: #d8d8d8; }
 .typePreviewSmall { font-size: var(--font-size-label, .8125rem); }
@@ -25,3 +27,4 @@
 .strike { text-decoration: line-through; }
 .interruption { font-family: var(--font-editorial, inherit); }
 .humanAside { font-family: var(--font-body, inherit); font-style: italic; }
+@media (max-width: 25rem) { .toolbarGroup { width: 100%; padding-right: 0; border-right: 0; } .toolbar label { flex-wrap: wrap; } .typePreview { min-width: 0; } }

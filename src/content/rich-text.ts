@@ -81,6 +81,12 @@ export function richTextPresentation(value: RichText) {
   return isRichTextPresentation(value) ? value.presentation : undefined;
 }
 
+/** Updates only whole-field presentation, preserving the authored rich-text document. */
+export function withRichTextPresentation(value: RichText, presentation: PresentationOverrides): RichText {
+  const text = richTextContent(value);
+  return Object.keys(presentation).length > 0 ? { text, presentation } : text;
+}
+
 export function toRichTextDocument(value: RichText): RichTextDocument {
   const content = richTextContent(value);
   return typeof content === "string" ? plainTextToRichText(content) : content;

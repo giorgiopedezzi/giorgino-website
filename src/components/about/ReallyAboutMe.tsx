@@ -72,7 +72,7 @@ export function ReallyAboutMe({arc, content, locale}: {
         value={content.missingMan.heading}/></DisplayHeading>{copy(content.missingMan.body)}<Artifact
         artifact={content.missingMan.artifact} label={content.artifactLabel}/>{content.missingMan.reflection && <DisplayHeading as="h3"
                                                                                               className={styles.reflect}><RichTextInline
-        value={content.missingMan.reflection} sectionDefaults={{ scale: "large" }}/></DisplayHeading>}
+        value={content.missingMan.reflection}/></DisplayHeading>}
         {content.missingMan.signoff && <div className={styles.muted}>{copy(content.missingMan.signoff)}</div>}
       </div>
     </PageContainer></Section>

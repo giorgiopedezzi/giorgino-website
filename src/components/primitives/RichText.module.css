@@ -7,9 +7,7 @@
 .presentationToneQuiet { color: var(--color-text-muted); }
 .presentationToneStrong { color: inherit; }
 
-.inline.presentationScaleSmall { font-size: .8em; }
-.inline.presentationScaleMedium { font-size: .82em; }
-.inline.presentationScaleLarge { font-size: 1em; }
+.inline.presentation { font-size: calc(1em * var(--rich-text-scale)); }
 
 .sizeSmall { font-size: calc(var(--font-size-label) * var(--rich-text-scale, 1)); }
 .sizeLarge { font-size: calc(var(--font-size-editorial) * var(--rich-text-scale, 1)); }

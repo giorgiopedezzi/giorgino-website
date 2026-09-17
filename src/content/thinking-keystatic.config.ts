@@ -1,6 +1,8 @@
 import { collection, config, fields, singleton } from "@keystatic/core";
 
-import { richText } from "./rich-text-field";
+import { richText, richTextCapabilities, type RichTextCapabilities } from "./rich-text-field";
+
+const { bodyCopyWithPresentation, inlineHeading, protectedInline } = richTextCapabilities;
 
 export const isThinkingAuthoringEnabled = process.env.NODE_ENV === "development";
 
@@ -114,8 +116,8 @@ export const normalPageSections = fields.blocks(
       label: "Editorial section",
       schema: fields.object({
         label: requiredText("Section label"),
-        heading: richText({ label: "Heading" }),
-        body: richText({ label: "Body", description: "Use the existing rich-text and semantic presentation controls." }),
+        heading: richText({ label: "Heading", capabilities: inlineHeading }),
+        body: richText({ label: "Body", description: "Use the approved text, paragraph, and whole-field presentation controls.", capabilities: bodyCopyWithPresentation }),
         media: fields.object(editorialImageFields("Optional media", siteMedia), { label: "Optional media" }),
       }),
     },
@@ -123,7 +125,7 @@ export const normalPageSections = fields.blocks(
       label: "Curated links",
       schema: fields.object({
         label: requiredText("Section label"),
-        heading: richText({ label: "Heading" }),
+        heading: richText({ label: "Heading", capabilities: inlineHeading }),
         links: editorialLinks("Links", "A deliberately curated list, not a free-form layout control."),
       }),
     },
@@ -142,13 +144,13 @@ export const metadataSchema = (label = "Metadata") => fields.object({
 const indexSchema = {
   metadata: metadataSchema("Thinking index metadata"),
   label: fields.text({ label: "Section label", validation: { isRequired: true } }),
-  heading: richText({ label: "Heading" }),
+  heading: richText({ label: "Heading", capabilities: inlineHeading }),
   introduction: richText({ label: "Introduction" }),
   dialogueArtifacts,
   dialogues: fields.object({
     metadata: metadataSchema("Dialogues metadata"),
     label: fields.text({ label: "Dialogue section label", validation: { isRequired: true } }),
-    heading: richText({ label: "Dialogue heading" }),
+    heading: richText({ label: "Dialogue heading", capabilities: inlineHeading }),
     introduction: richText({ label: "Dialogue introduction" }),
     emptyLabel: fields.text({ label: "Empty dialogue message", validation: { isRequired: true } }),
   }, { label: "Dialogues page copy" }),
@@ -180,17 +182,17 @@ const authoringFoundationSchema = {
 
 const runningBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
-  heading: richText({ label: "Heading" }),
+  heading: richText({ label: "Heading", capabilities: inlineHeading }),
   body: richText({ label: "Body", description: "Optional editorial body copy. The section heading remains visible when omitted.", required: false }),
   isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
 }, { label });
 const runningSchema = {
   metadata: metadataSchema(),
-  hero: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), intro: richText({ label: "Introduction" }) }, { label: "Hero" }),
+  hero: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), intro: richText({ label: "Introduction" }) }, { label: "Hero" }),
   problem: runningBlock("Problem"),
   restraint: runningBlock("Deliberate restraint"),
-  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle" }) }), { label: "Ordered principles", description: "Recommended: 3–8 principles. Order is preserved in the numbered reading sequence.", validation: { length: { min: 1 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
-  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title" }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object(editorialImageFields("Media file", siteMedia)), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Decorative media" }) }, { label: "Object and visual study" }),
+  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle", capabilities: inlineHeading }) }), { label: "Ordered principles", description: "Recommended: 3–8 principles. Order is preserved in the numbered reading sequence.", validation: { length: { min: 1 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
+  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title", capabilities: inlineHeading }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object(editorialImageFields("Media file", siteMedia)), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Decorative media" }) }, { label: "Object and visual study" }),
   build: runningBlock("How it is being built"),
   state: runningBlock("Current state"),
   liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),
@@ -199,8 +201,8 @@ const textList = (label: string, min: number, max?: number, description?: string
   requiredText("Text", true),
   { label, description, validation: { length: max === undefined ? { min } : { min, max } } },
 );
-const richTextList = (label: string, min: number, max?: number, description?: string) => fields.array(
-  richText({ label: "Text" }),
+const richTextList = (label: string, min: number, max?: number, description?: string, capabilities: RichTextCapabilities = richTextCapabilities.bodyCopy) => fields.array(
+  richText({ label: "Text", capabilities }),
   { label, description, validation: { length: max === undefined ? { min } : { min, max } } },
 );
 const homeBlock = (label: string) => fields.object({
@@ -229,7 +231,7 @@ const homeSchema = {
       richText({ label: "Paragraph", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
       { label: "Narrative paragraphs", validation: { length: { min: 1 } }, description: "Recommended: 1–4 paragraphs. Order drives the scramble and restoration animation, which supports any non-empty ordered sequence." },
     ),
-    closingThought: richText({ label: "Closing thought", editorLabel: "Closing thought", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
+    closingThought: richText({ label: "Closing thought", editorLabel: "Closing thought", description: "Optional. Phrase-level text styling is available; its animated composition does not support paragraph or whole-field controls.", capabilities: protectedInline, required: false }),
     supportingText: richText({ label: "Supporting text", editorLabel: "Supporting text", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
   }, { label: "Dark Matter", description: "Narrative order drives the scramble and restoration animation." }),
   belief: fields.object({
@@ -264,39 +266,39 @@ const homeSchema = {
 };
 
 const aboutSchema = {
-  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading" }), timeline: richTextList("Timeline entries", 1, undefined, "Recommended: 3–6 entries. Entries render as an ordered editorial timeline.") }, { label: "Personal arc" }),
+  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), timeline: richTextList("Timeline entries", 1, undefined, "Recommended: 3–6 entries. Entries render as an ordered editorial timeline.") }, { label: "Personal arc" }),
   personalNarrative: fields.object({
     label: requiredText("Section label"),
-    stillHere: richText({ label: "Opening heading" }),
-    thanks: richText({ label: "Thank-you line" }),
+    stillHere: richText({ label: "Opening heading", capabilities: inlineHeading }),
+    thanks: richText({ label: "Thank-you line", capabilities: inlineHeading }),
     // This is a deliberate 4 + 2 + 1 visual composition, not a historical content limit.
-    opening: richTextList("Opening lines", 7, 7, "Exactly seven lines: this bespoke opening is intentionally choreographed as 4 + 2 + 1 visual groups."),
-    decadeHeading: richText({ label: "Decade heading" }),
+    opening: richTextList("Opening lines", 7, 7, "Exactly seven lines: this bespoke opening is intentionally choreographed as 4 + 2 + 1 visual groups.", protectedInline),
+    decadeHeading: richText({ label: "Decade heading", capabilities: inlineHeading }),
     decadeEntries: richTextList("Decade entries", 1),
     artifactLabel: requiredText("Artifact label"),
     missingMan: fields.object({
-      heading: richText({ label: "Heading" }),
-      body: richText({ label: "Body", presentationControls: ["scale", "measure", "tone"] }),
+      heading: richText({ label: "Heading", capabilities: inlineHeading }),
+      body: richText({ label: "Body", capabilities: bodyCopyWithPresentation }),
       artifact: personalArtifact("Missing Man artifact"),
-      reflection: richText({ label: "Reflection", description: "Optional editorial reflection beneath the artifact.", presentationControls: ["scale"], required: false }),
+      reflection: richText({ label: "Reflection", description: "Optional editorial reflection beneath the artifact. Scale affects the whole reflection; phrase typography remains independent.", capabilities: inlineHeading, required: false }),
       signoff: richText({ label: "Signoff", description: "Optional muted closing line.", required: false }),
     }, { label: "Missing Man" }),
     pizza: fields.object({
-      heading: richText({ label: "Heading" }),
+      heading: richText({ label: "Heading", capabilities: inlineHeading }),
       lines: richTextList("Lines", 1, undefined, "Recommended: 5–8 lines. The composition rebalances its visual split for any non-empty ordered list."),
     }, { label: "Pizza" }),
     wait: fields.object({
-      heading: richText({ label: "Heading" }),
+      heading: richText({ label: "Heading", capabilities: inlineHeading }),
       body: richText({ label: "Body" }),
       artifact: personalArtifact("T-shirt artifact"),
     }, { label: "Wait" }),
     nonnino: fields.object({
       label: requiredText("Section label"),
-      heading: richText({ label: "Heading" }),
+      heading: richText({ label: "Heading", capabilities: inlineHeading }),
     }, { label: "Nonnino" }),
     book: fields.object({
       label: requiredText("Section label"),
-      heading: richText({ label: "Heading" }),
+      heading: richText({ label: "Heading", capabilities: inlineHeading }),
       lines: richTextList("Lines", 1, undefined, "Recommended: 2–4 lines. Each line is rendered in reading order."),
       signoff: richText({ label: "Signoff" }),
     }, { label: "Book" }),
@@ -333,7 +335,7 @@ const siteSettingsSchema = {
 const contactSchema = {
   metadata: metadataSchema(),
   label: requiredText("Section label"),
-  heading: richText({ label: "Heading" }),
+  heading: richText({ label: "Heading", capabilities: inlineHeading }),
   body: richText({ label: "Page introduction" }),
   details: richTextList("Contact details", 1, 6),
   supportingText: richText({ label: "Optional supporting text", required: false }),

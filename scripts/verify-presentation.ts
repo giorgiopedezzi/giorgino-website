@@ -33,8 +33,9 @@ for (const locale of ["en", "it"] as const) {
 }
 const renderer = readFileSync("src/components/primitives/RichText.module.css", "utf8");
 assert.match(renderer, /presentationScaleMedium/);
-assert.match(renderer, /inline\.presentationScaleMedium/, "display-heading inline rendering has an explicit scale composition rule");
-assert.match(readFileSync("src/components/about/ReallyAboutMe.tsx", "utf8"), /sectionDefaults=\{\{ scale: "large" \}\}/, "Missing Man keeps its large inherited default when the override is reset");
+assert.match(renderer, /\.inline\.presentation \{ font-size: calc\(1em \* var\(--rich-text-scale\)\); \}/, "inline rendering uses the shared semantic Scale multiplier");
+assert.doesNotMatch(renderer, /\.82em|\.inline\.presentationScale/, "inline rendering does not fork a contradictory Scale ladder");
+assert.doesNotMatch(readFileSync("src/components/about/ReallyAboutMe.tsx", "utf8"), /sectionDefaults=\{\{ scale:/, "Missing Man reflection reset restores its intentional CSS base without a competing section Scale");
 assert.doesNotMatch(readFileSync("src/components/about/ReallyAboutMe.tsx", "utf8"), /reflection}\/>a/, "Missing Man reflection has no stray literal suffix");
 
 console.log("Verified semantic presentation persistence, local overrides, reset-to-inheritance behavior, and inline composition.");
