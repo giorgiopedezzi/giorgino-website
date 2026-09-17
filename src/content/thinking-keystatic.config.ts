@@ -108,7 +108,7 @@ const editorialLinks = (label: string, description: string) => fields.array(
 
 const requiredText = (label: string, multiline = false) => fields.text({ label, multiline, validation: { isRequired: true } });
 
-const normalPageSections = fields.blocks(
+export const normalPageSections = fields.blocks(
   {
     editorial: {
       label: "Editorial section",
@@ -131,7 +131,7 @@ const normalPageSections = fields.blocks(
   { label: "Normal sections", description: "Add, remove, and reorder supported normal sections. Homepage and other protected compositions are not managed here." },
 );
 
-const metadataSchema = (label = "Metadata") => fields.object({
+export const metadataSchema = (label = "Metadata") => fields.object({
   title: requiredText("Page title"),
   description: requiredText("Page description", true),
   socialTitle: fields.text({ label: "Social title" }),
@@ -343,7 +343,7 @@ export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishHome", "englishContact", "englishSettings", "italianHome", "italianContact", "italianSettings", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles"],
+    navigation: ["englishHome", "englishContact", "englishSettings", "italianHome", "italianContact", "italianSettings", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles", "standardPages"],
   },
   singletons: {
     englishSettings: singleton({ label: "English site settings", path: "src/content/site/en/site-settings", format: "json", schema: siteSettingsSchema }),
@@ -362,6 +362,28 @@ export default config({
     italianIndex: singleton({ label: "Italian Thinking index", path: "src/content/thinking/it/index", format: "json", schema: indexSchema }),
   },
   collections: {
+    standardPages: collection({
+      label: "Standard pages",
+      path: "src/content/site/*/pages/*",
+      slugField: "slug",
+      format: { data: "json" },
+      columns: ["locale", "translationKey", "status", "showInNavigation", "navigationOrder"],
+      schema: {
+        slug: fields.slug({
+          name: { label: "URL slug", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use lowercase URL words separated by hyphens." } } },
+          slug: { label: "Filename", validation: { pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use lowercase URL words separated by hyphens." } } },
+        }),
+        title: fields.text({ label: "Title", validation: { isRequired: true } }),
+        locale: fields.select({ label: "Locale", defaultValue: "en", options: [...localeOptions] }),
+        translationKey: fields.text({ label: "Stable translation identity", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use the same lowercase identity in each locale." } } }),
+        metadata: metadataSchema("Page metadata"),
+        status: fields.select({ label: "Status", defaultValue: "draft", options: [{ label: "Draft", value: "draft" }, { label: "Published", value: "published" }] }),
+        navigationLabel: fields.text({ label: "Navigation label", validation: { isRequired: true } }),
+        showInNavigation: fields.checkbox({ label: "Show in navigation", defaultValue: false }),
+        navigationOrder: fields.integer({ label: "Navigation order", defaultValue: 100, validation: { isRequired: true, min: 1 } }),
+        sections: normalPageSections,
+      },
+    }),
     articles: collection({
       label: "Thinking articles",
       path: "src/content/thinking/*/articles/*",

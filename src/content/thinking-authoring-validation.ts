@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { locales, type Locale } from "./locales";
@@ -9,6 +9,7 @@ import { validateRunningContent } from "./running";
 import { validateContactContent } from "./contact";
 import { validateSiteSettings } from "./site-settings";
 import { validateThinkingRepository } from "./thinking";
+import { validateStandardPageRepository } from "./standard-pages";
 
 type LocalUpdate = { additions: Array<{ path: string; contents: string }>; deletions: Array<{ path: string }> };
 
@@ -17,6 +18,7 @@ const siteContentRoot = join(process.cwd(), "src", "content", "site");
 const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
 const siteContentPath = /^src\/content\/site\/(en|it)\/(?:about|authoring-foundation|contact|home|running|site-settings)\.json$/;
+const standardPagePath = /^src\/content\/site\/(en|it)\/pages\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/;
 const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*(?:\/[a-zA-Z0-9][a-zA-Z0-9._-]*)*\.(?:jpe?g|png|webp|gif)$/i;
 
 function parseUpdate(value: unknown): LocalUpdate {
@@ -67,13 +69,24 @@ export function validateSiteAuthoringUpdate(value: unknown) {
   const deletions = new Set(update.deletions.map((entry) => entry.path));
 
   for (const path of [...additions.keys(), ...deletions]) {
-    if (!contentPath.test(path) && !mediaPath.test(path) && !siteContentPath.test(path) && !siteMediaPath.test(path)) {
+    if (!contentPath.test(path) && !mediaPath.test(path) && !siteContentPath.test(path) && !standardPagePath.test(path) && !siteMediaPath.test(path)) {
       throw new Error(`saving ${path} is outside approved site content and media directories`);
     }
   }
 
   const touchesThinking = [...additions.keys(), ...deletions].some((path) => contentPath.test(path) || mediaPath.test(path));
   if (touchesThinking) validateThinkingAuthoringUpdate(value);
+
+  const standardPages = locales.flatMap((locale) => {
+    const directory = join(siteContentRoot, locale, "pages");
+    const paths = new Set(existsSync(directory) ? readdirSync(directory).filter((name) => name.endsWith(".json")).map((name) => `src/content/site/${locale}/pages/${name}`) : []);
+    for (const path of additions.keys()) if (path.startsWith(`src/content/site/${locale}/pages/`)) paths.add(path);
+    return [...paths].filter((path) => !deletions.has(path)).sort().map((path) => ({
+      path: path.replace("src/content/site/", ""),
+      value: additions.has(path) ? parseJsonAddition(additions.get(path)!, path) : readJson(join(directory, path.slice(path.lastIndexOf("/") + 1))),
+    }));
+  });
+  validateStandardPageRepository(standardPages);
 
   const readFoundation = (locale: Locale) => {
     const path = `src/content/site/${locale}/authoring-foundation.json`;

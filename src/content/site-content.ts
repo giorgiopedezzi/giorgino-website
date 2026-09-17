@@ -58,7 +58,7 @@ function media(value: unknown, path: string): AuthoringMedia {
   return result;
 }
 
-function normalSections(value: unknown, path: string): NormalPageSection[] {
+export function validateNormalPageSections(value: unknown, path: string): NormalPageSection[] {
   if (value === undefined || value === null) return [];
   if (!Array.isArray(value)) fail(path, "expected an array");
   return value.map((entry, index) => {
@@ -99,7 +99,7 @@ export function validateAuthoringFoundation(value: unknown, path = "authoring-fo
     return { order: item.order, label: string(item.label, `${path}.items[${index}].label`), href: link(item.href, `${path}.items[${index}].href`) };
   });
   if (new Set(items.map((item) => item.order)).size !== items.length) fail(`${path}.items`, "orders must be unique");
-  const result: AuthoringFoundation = { title: string(source.title, `${path}.title`), summary: string(source.summary, `${path}.summary`), isVisible: source.isVisible, media: source.media.map((value, index) => media(value, `${path}.media[${index}]`)), items: items.sort((left, right) => left.order - right.order), sections: normalSections(source.sections, `${path}.sections`) };
+  const result: AuthoringFoundation = { title: string(source.title, `${path}.title`), summary: string(source.summary, `${path}.summary`), isVisible: source.isVisible, media: source.media.map((value, index) => media(value, `${path}.media[${index}]`)), items: items.sort((left, right) => left.order - right.order), sections: validateNormalPageSections(source.sections, `${path}.sections`) };
   if (source.link !== undefined && source.link !== null) result.link = link(source.link, `${path}.link`);
   return result;
 }

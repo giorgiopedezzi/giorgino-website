@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { Locale } from "@/content/locales";
 import { getSiteSettings } from "@/content/site-settings";
+import { getStandardPageNavigationEntries } from "@/content/standard-pages";
 
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./SiteNavigation.module.css";
@@ -15,13 +16,14 @@ export function SiteNavigation({ locale, placement }: SiteNavigationProps) {
   const settings = getSiteSettings(locale);
   const text = settings.navigation;
   const basePath = `/${locale}`;
-  const links = [
+  const links: Array<[string, string]> = [
     [text.thinking, "thinking"],
     [text.dialogues, "thinking/dialogues"],
     [text.running, "running"],
     [text.about, "really-about-me"],
     [text.contact, "contact"],
-  ] as const;
+  ];
+  links.push(...getStandardPageNavigationEntries(locale).map(({ label, href }): [string, string] => [label, href]));
 
   if (placement === "header") {
     return (
@@ -32,7 +34,7 @@ export function SiteNavigation({ locale, placement }: SiteNavigationProps) {
           <details className={styles.menu}>
             <summary>{text.menu}</summary>
             <nav aria-label={text.menu} className={styles.menuLinks}>
-              {links.map(([label, path]) => <Link href={`${basePath}/${path}`} key={path}>{label}</Link>)}
+              {links.map(([label, path]) => <Link href={path.startsWith("/") ? path : `${basePath}/${path}`} key={path}>{label}</Link>)}
             </nav>
           </details>
         </div>
@@ -45,7 +47,7 @@ export function SiteNavigation({ locale, placement }: SiteNavigationProps) {
       <p className={styles.eyebrow}>{text.footerLabel}</p>
       <h2 id="explore-heading">{text.footerHeading}</h2>
       <nav aria-label={text.footerLabel} className={styles.footerLinks}>
-        {links.map(([label, path]) => <Link href={`${basePath}/${path}`} key={path}>{label}</Link>)}
+        {links.map(([label, path]) => <Link href={path.startsWith("/") ? path : `${basePath}/${path}`} key={path}>{label}</Link>)}
       </nav>
       <LanguageSwitcher locale={locale} copy={settings.language} />
     </footer>
