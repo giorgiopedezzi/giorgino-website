@@ -5,9 +5,12 @@
   "link": "/en",
   "media": [
     {
-      "src": "/site-media/animated-authoring-proof.gif",
+      "src": "/site-media/media/0/src.gif",
       "alt": "A small animated proof image for the local authoring renderer",
-      "caption": "Animated GIF renderer proof"
+      "decorative": false,
+      "caption": "Animated GIF renderer proof",
+      "presentation": "default",
+      "stretch": false
     }
   ],
   "items": [
@@ -15,6 +18,12 @@
       "order": 1,
       "label": "Homepage",
       "href": "/en"
+    },
+    {
+      "order": 2,
+      "label": "second",
+      "href": "/en/really-boring-about-me"
     }
-  ]
+  ],
+  "sections": []
 }

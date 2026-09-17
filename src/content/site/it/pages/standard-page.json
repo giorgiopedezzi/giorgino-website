@@ -1,0 +1,61 @@
+{
+  "slug": "standard-page",
+  "title": "standard-page",
+  "locale": "it",
+  "translationKey": "standard-page",
+  "metadata": {
+    "title": "standard page",
+    "description": "standard page description"
+  },
+  "status": "published",
+  "navigationLabel": "navigation lable",
+  "showInNavigation": true,
+  "navigationOrder": 100,
+  "sections": [
+    {
+      "discriminant": "editorial",
+      "value": {
+        "label": "section a",
+        "heading": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first part"
+                }
+              ]
+            }
+          ]
+        },
+        "body": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "second part 2"
+                }
+              ]
+            }
+          ]
+        },
+        "media": {
+          "decorative": false,
+          "presentation": "default",
+          "stretch": false
+        }
+      }
+    }
+  ]
+}

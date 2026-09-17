@@ -38,7 +38,44 @@
       "... ",
       "Real."
     ],
-    "decadeHeading": "Evolution. And bad ideas. I think it's worsening...",
+    "decadeHeading": {
+      "text": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Evolution. And bad ideas. I think it's "
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "textStyle",
+                    "attrs": {
+                      "textSize": "large"
+                    }
+                  }
+                ],
+                "text": "worsening"
+              },
+              {
+                "type": "text",
+                "text": "..."
+              }
+            ]
+          }
+        ]
+      },
+      "presentation": {
+        "scale": "small"
+      }
+    },
     "decadeEntries": [
       "Around 10 - A fat, four-eyed Zorro. More sgt. Garcia than don Diego de la Vega. But he had to defend his primary school crush.",
       "Around 20 - A little bit better. Still too shy!",

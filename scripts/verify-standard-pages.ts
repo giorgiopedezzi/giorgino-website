@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import {
   getStandardPageFromRepository,
@@ -28,6 +29,12 @@ const page = (overrides: Record<string, unknown> = {}) => ({
 
 const valid = validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page() }]);
 assert.deepEqual(valid[0].sections.map((section) => section.type), ["editorial", "links"]);
+assert.equal(valid[0].sections[0].type, "editorial");
+if (valid[0].sections[0].type === "editorial") assert.equal(valid[0].sections[0].media, undefined, "editorial media must be optional");
+const authoringConfig = readFileSync("src/content/thinking-keystatic.config.ts", "utf8");
+assert.match(authoringConfig, /editorialImageFields\("Optional media", optionalSiteMedia\)/, "the editor must not mark optional editorial media as required");
+assert.match(authoringConfig, /path: "src\/content\/site\/en\/pages\/\*"/, "English standard pages must save in their approved locale directory");
+assert.match(authoringConfig, /path: "src\/content\/site\/it\/pages\/\*"/, "Italian standard pages must save in their approved locale directory");
 assert.deepEqual(validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page({ sections: [page().sections[1], page().sections[0]] }) }])[0].sections.map((section) => section.type), ["links", "editorial"]);
 assert.throws(() => validateStandardPageRepository([{ path: "en/pages/invalid.json", value: page({ slug: "Not valid" }) }]), /lowercase URL slug/);
 for (const slug of ["authoring-foundation", "contact", "really-about-me", "running", "thinking"]) assert.throws(() => validateStandardPageRepository([{ path: `en/pages/${slug}.json`, value: page({ slug }) }]), /reserved/);

@@ -1,0 +1,138 @@
+{
+  "slug": "boring-about-me",
+  "title": "Boring about me",
+  "locale": "en",
+  "translationKey": "boring-about-me",
+  "metadata": {
+    "title": "standard",
+    "description": "Job career"
+  },
+  "status": "published",
+  "navigationLabel": "Boring about me",
+  "showInNavigation": true,
+  "navigationOrder": 2,
+  "sections": [
+    {
+      "discriminant": "editorial",
+      "value": {
+        "label": "section a",
+        "heading": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Part 1"
+                }
+              ]
+            }
+          ]
+        },
+        "body": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Part 2"
+                }
+              ]
+            }
+          ]
+        },
+        "media": {
+          "decorative": false,
+          "presentation": "default",
+          "stretch": false
+        }
+      }
+    },
+    {
+      "discriminant": "links",
+      "value": {
+        "label": "About me",
+        "heading": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "textStyle",
+                      "attrs": {
+                        "textSize": "small"
+                      }
+                    }
+                  ],
+                  "text": "Really about me"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "textStyle",
+                      "attrs": {
+                        "textSize": "large"
+                      }
+                    }
+                  ],
+                  "text": "Boring about me (one page resume)"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "textStyle",
+                      "attrs": {
+                        "textSize": "emphasis"
+                      }
+                    }
+                  ],
+                  "text": "Really boring about me (full resume)"
+                }
+              ]
+            }
+          ]
+        },
+        "links": [
+          {
+            "label": "Really about me",
+            "href": "/en/really-about-me"
+          }
+        ]
+      }
+    }
+  ]
+}

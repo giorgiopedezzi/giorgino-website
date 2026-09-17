@@ -113,13 +113,14 @@ function validateBlock(value: unknown, path: string): EditorialBlock {
   if (!isRecord(value)) fail(path, "expected an object");
   const type = requireString(isKeystaticBlock(value) ? value.discriminant : value.type, `${path}.type`);
   const blockValue = isKeystaticBlock(value) ? value.value : value;
+  const textValue = isKeystaticBlock(value) ? blockValue : isRecord(blockValue) ? blockValue.text : blockValue;
 
   switch (type) {
     case "paragraph":
-      return { type, text: validateRichText(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
+      return { type, text: validateRichText(textValue, `${path}.text`) };
     case "heading":
     case "note":
-      return { type, text: validateRichText(typeof blockValue === "string" ? blockValue : isRecord(blockValue) ? blockValue.text : undefined, `${path}.text`) };
+      return { type, text: validateRichText(textValue, `${path}.text`) };
     case "quote": {
       const quote = isRecord(blockValue) ? blockValue : value;
       const block: Extract<EditorialBlock, { type: "quote" }> = { type, text: validateRichText(quote.text, `${path}.text`) };
@@ -248,7 +249,9 @@ export function validateThinkingRepository(indexes: Record<Locale, unknown>, art
   }
 
   for (const [translationKey, translatedLocales] of translationLocales) {
-    if (translatedLocales.size !== locales.length) fail(translationKey, "must have exactly one entry for every supported locale");
+    if (translatedLocales.size !== locales.length && validatedArticles.some((article) => article.translationKey === translationKey && article.status === "published")) {
+      fail(translationKey, "must have exactly one entry for every supported locale before publication");
+    }
   }
 
   return { indexes: validatedIndexes, articles: validatedArticles };

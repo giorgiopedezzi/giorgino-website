@@ -1,11 +1,68 @@
 {
-  "translationKey": "the-humanities-belong-inside-the-ai-revolution",
-  "locale": "en",
   "slug": "the-humanities-belong-inside-the-ai-revolution",
   "title": "The humanities belong inside the AI revolution",
+  "locale": "en",
+  "translationKey": "the-humanities-belong-inside-the-ai-revolution",
   "excerpt": "Not as resistance to technology, but as part of learning how to use it.",
-  "publishedAt": null,
-  "status": "draft",
+  "metadata": {
+    "title": "s",
+    "description": "s"
+  },
+  "status": "published",
+  "publishedAt": "2026-09-17",
   "order": 4,
-  "body": []
+  "body": [
+    {
+      "discriminant": "heading",
+      "value": "heading"
+    },
+    {
+      "discriminant": "paragraph",
+      "value": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "paragraph"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "discriminant": "quote",
+      "value": {
+        "text": "quote"
+      }
+    },
+    {
+      "discriminant": "paragraph",
+      "value": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "p2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "references": [],
+  "relatedLinks": []
 }

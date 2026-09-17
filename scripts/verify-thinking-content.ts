@@ -60,13 +60,22 @@ assert.deepEqual(
   validateThinkingRepository(indexes, pairedArticles({ body: [{ discriminant: "image", value: { src: "/thinking-media/example.png", alt: "", decorative: true, presentation: "wide" } }] })).articles[0].body[0],
   { type: "image", src: "/thinking-media/example.png", alt: "", decorative: true, presentation: "wide" },
 );
+assert.deepEqual(
+  validateThinkingRepository(indexes, pairedArticles({ body: [{ discriminant: "paragraph", value: { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "A rich paragraph." }] }] } }] })).articles[0].body[0],
+  { type: "paragraph", text: { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "A rich paragraph." }] }] } },
+  "a Paragraph block saved by the editor must accept its Tiptap document directly",
+);
 expectValidationFailure({ body: [{ discriminant: "paragraph", value: "" }] }, "expected a non-empty string");
 expectValidationFailure({ metadata: { title: "", description: "Description" } }, "metadata.title");
 expectValidationFailure({ references: [{ label: "Unsafe", href: "javascript:alert(1)" }] }, "internal path or an http(s) URL");
 expectValidationFailure({ relatedLinks: [{ label: "One", href: "/thinking" }, { label: "Two", href: "/thinking" }] }, "must not duplicate another link");
-assert.throws(
+assert.doesNotThrow(
   () => validateThinkingRepository(indexes, [pairedArticles()[0]]),
-  (error: unknown) => error instanceof Error && error.message.includes("every supported locale"),
+  "a locale-specific draft must be saveable before its translation is ready",
+);
+assert.throws(
+  () => validateThinkingRepository(indexes, [{ path: "en/articles/paired-article.json", value: article({ status: "published", publishedAt: "2026-09-17" }) }]),
+  (error: unknown) => error instanceof Error && error.message.includes("every supported locale before publication"),
 );
 
 const editorialRenderer = readFileSync("src/components/thinking/EditorialSystem.tsx", "utf8");

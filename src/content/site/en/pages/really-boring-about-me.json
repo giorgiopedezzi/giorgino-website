@@ -1,0 +1,15 @@
+{
+  "slug": "really-boring-about-me",
+  "title": "Really Boring about",
+  "locale": "en",
+  "translationKey": "really-boring-about-me",
+  "metadata": {
+    "title": "Really boring about me",
+    "description": "Job career"
+  },
+  "status": "published",
+  "navigationLabel": "Really boring about me",
+  "showInNavigation": true,
+  "navigationOrder": 1,
+  "sections": []
+}
