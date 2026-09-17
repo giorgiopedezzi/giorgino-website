@@ -50,7 +50,36 @@
     "artifactLabel": "Personal artifact",
     "missingMan": {
       "heading": "Missing Man.",
-      "body": "How I left a project. No words. The right image. At the right time. At least, I felt it \"right\". Mine.",
+      "body": {
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "textStyle",
+                      "attrs": {
+                        "textSize": "emphasis"
+                      }
+                    }
+                  ],
+                  "text": "How I left a project. No words. The right image. At the right time. At least, I felt it \"right\". Mine."
+                }
+              ]
+            }
+          ]
+        },
+        "presentation": {
+          "tone": "strong"
+        }
+      },
       "artifact": {
         "placeholder": "Original Missing Man GIF — to be added.",
         "media": {
@@ -60,10 +89,52 @@
         }
       },
       "reflection": {
-        "text": "I learned what the missing-man formation meant afterwards. I just knew it was the image I wanted.",
-        "presentation": { "scale": "medium" }
+        "text": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "attrs": {
+                "role": null
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "I learned what the missing-man formation meant afterwards. I just knew it was the image I wanted."
+                }
+              ]
+            }
+          ]
+        },
+        "presentation": {
+          "scale": "small"
+        }
       },
-      "signoff": "I did it my way."
+      "signoff": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "textStyle",
+                    "attrs": {
+                      "textSize": "large"
+                    }
+                  }
+                ],
+                "text": "I did it my way."
+              }
+            ]
+          }
+        ]
+      }
     },
     "pizza": {
       "heading": "Mortadella pizza needs lemon zest.",
