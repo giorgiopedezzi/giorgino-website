@@ -77,8 +77,24 @@ function loadRepository(): StandardPage[] {
   return validateStandardPageRepository(entries);
 }
 
-function pagesFor(locale: Locale, includeDrafts: boolean) { return loadRepository().filter((page) => page.locale === locale && (includeDrafts || page.status === "published")); }
-export function getStandardPages(locale: Locale, includeDrafts = false) { return pagesFor(locale, includeDrafts); }
-export function getStandardPage(locale: Locale, slug: string, includeDrafts = false) { return pagesFor(locale, includeDrafts).find((page) => page.slug === slug); }
-export function getTranslatedStandardPageSlug(sourceLocale: Locale, sourceSlug: string, targetLocale: Locale, includeDrafts = false) { const source = getStandardPage(sourceLocale, sourceSlug, includeDrafts); return source ? getStandardPages(targetLocale, includeDrafts).find((page) => page.translationKey === source.translationKey)?.slug : undefined; }
-export function getStandardPageNavigationEntries(locale: Locale) { return getStandardPages(locale).filter((page) => page.showInNavigation).sort((a, b) => a.navigationOrder - b.navigationOrder).map((page) => ({ label: page.navigationLabel, href: `/${locale}/${page.slug}` })); }
+export function getStandardPagesFromRepository(pages: StandardPage[], locale: Locale, includeDrafts = false) {
+  return pages.filter((page) => page.locale === locale && (includeDrafts || page.status === "published"));
+}
+
+export function getStandardPageFromRepository(pages: StandardPage[], locale: Locale, slug: string, includeDrafts = false) {
+  return getStandardPagesFromRepository(pages, locale, includeDrafts).find((page) => page.slug === slug);
+}
+
+export function getTranslatedStandardPageSlugFromRepository(pages: StandardPage[], sourceLocale: Locale, sourceSlug: string, targetLocale: Locale, includeDrafts = false) {
+  const source = getStandardPageFromRepository(pages, sourceLocale, sourceSlug, includeDrafts);
+  return source ? getStandardPagesFromRepository(pages, targetLocale, includeDrafts).find((page) => page.translationKey === source.translationKey)?.slug : undefined;
+}
+
+export function getStandardPageNavigationEntriesFromRepository(pages: StandardPage[], locale: Locale) {
+  return getStandardPagesFromRepository(pages, locale).filter((page) => page.showInNavigation).sort((a, b) => a.navigationOrder - b.navigationOrder).map((page) => ({ label: page.navigationLabel, href: `/${locale}/${page.slug}` }));
+}
+
+export function getStandardPages(locale: Locale, includeDrafts = false) { return getStandardPagesFromRepository(loadRepository(), locale, includeDrafts); }
+export function getStandardPage(locale: Locale, slug: string, includeDrafts = false) { return getStandardPageFromRepository(loadRepository(), locale, slug, includeDrafts); }
+export function getTranslatedStandardPageSlug(sourceLocale: Locale, sourceSlug: string, targetLocale: Locale, includeDrafts = false) { return getTranslatedStandardPageSlugFromRepository(loadRepository(), sourceLocale, sourceSlug, targetLocale, includeDrafts); }
+export function getStandardPageNavigationEntries(locale: Locale) { return getStandardPageNavigationEntriesFromRepository(loadRepository(), locale); }
