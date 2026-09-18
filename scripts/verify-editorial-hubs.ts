@@ -65,6 +65,8 @@ for (const label of ["Page title", "Section title", "Introduction", "Body text",
 assert.doesNotMatch(authoringConfig, /description:\s*"[^"]*\b(?:copy|inline|Tiptap|renderer|CSS class|mark|persistence)\b/i, "author-facing descriptions must not expose implementation vocabulary");
 assert.match(authoringConfig, /englishThinkingIndex[\s\S]*englishThinkingArticles[\s\S]*englishDialogues/, "Thinking index, article, and Dialogues authoring are separate concepts");
 assert.match(authoringConfig, /englishAboutIndex/);
+const thinkingArticleSchema = authoringConfig.slice(authoringConfig.indexOf("const thinkingArticleCollection"), authoringConfig.indexOf("export default config"));
+assert.match(thinkingArticleSchema, /order: fields\.integer\(\{ label: "Legacy article order"/, "existing Thinking articles keep their persisted legacy order field when opened in the editor");
 
 const navigation = readFileSync("src/components/navigation/SiteNavigation.tsx", "utf8");
 assert.doesNotMatch(navigation, /text\.dialogues/, "Dialogues has no competing top-level navigation source");

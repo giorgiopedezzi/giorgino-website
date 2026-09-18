@@ -437,6 +437,7 @@ const thinkingArticleCollection = (locale: "en" | "it", label: string) => collec
     }, { label: "Localized metadata", description: "Canonical URL and locale alternates remain application-generated." }),
     status: fields.select({ label: "Status", defaultValue: "draft", options: [{ label: "Draft", value: "draft" }, { label: "Published", value: "published" }] }),
     publishedAt: fields.date({ label: "Published date" }),
+    order: fields.integer({ label: "Legacy article order", defaultValue: 1, validation: { isRequired: true, min: 1 }, description: "Preserved for existing articles. The Thinking index entry order controls the public index." }),
     body: editorialBlocks,
     references: editorialLinks("References", "Citations or source material. Add, remove, and reorder without changing the page structure."),
     relatedLinks: editorialLinks("Related links", "Related internal or external reading. Add, remove, and reorder without changing the page structure."),
