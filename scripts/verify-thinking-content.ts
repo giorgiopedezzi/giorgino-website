@@ -86,6 +86,13 @@ assert.deepEqual(
 );
 expectValidationFailure({ body: [{ discriminant: "paragraph", value: "" }] }, "expected a non-empty string");
 expectValidationFailure({ metadata: { title: "", description: "Description" } }, "metadata.title");
+assert.doesNotThrow(
+  () => validateThinkingRepository(indexes, dialogues, pairedArticles({
+    metadata: { title: "", description: "", socialTitle: "", socialDescription: "", socialImage: "" },
+    body: [{ discriminant: "divider", value: null }],
+  })),
+  "a divider can be saved when optional article metadata is still blank",
+);
 expectValidationFailure({ references: [{ label: "Unsafe", href: "javascript:alert(1)" }] }, "internal path or an http(s) URL");
 expectValidationFailure({ relatedLinks: [{ label: "One", href: "/thinking" }, { label: "Two", href: "/thinking" }] }, "must not duplicate another link");
 assert.doesNotThrow(

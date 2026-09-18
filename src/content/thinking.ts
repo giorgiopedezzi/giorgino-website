@@ -87,6 +87,7 @@ function validateLinks(value: unknown, path: string): EditorialLink[] {
 function validateMetadata(value: unknown, path: string): EditorialMetadata | undefined {
   if (value === undefined || value === null) return undefined;
   if (!isRecord(value)) fail(path, "expected an object");
+  if (Object.values(value).every((field) => field === undefined || field === null || field === "")) return undefined;
   return validateContentMetadata(value, path);
 }
 
