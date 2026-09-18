@@ -1,8 +1,6 @@
 import { collection, config, fields, singleton } from "@keystatic/core";
 
-import { richText, richTextCapabilities, type RichTextCapabilities } from "./rich-text-field";
-
-const { bodyCopyWithPresentation, inlineHeading, protectedInline } = richTextCapabilities;
+import { richText, type RichTextRendererMode } from "./rich-text-field";
 
 export const isThinkingAuthoringEnabled = process.env.NODE_ENV === "development";
 
@@ -20,6 +18,7 @@ const media = (label: string, directory = "public/thinking-media", publicPath = 
   });
 
 const siteMedia = (label: string) => media(label, "public/site-media", "/site-media/");
+const optionalSiteMedia = (label: string) => fields.image({ label, directory: "public/site-media", publicPath: "/site-media/" });
 
 const mediaPresentation = fields.select({
   label: "Presentation",
@@ -31,7 +30,8 @@ const mediaPresentation = fields.select({
   ],
 });
 
-const editorialImageFields = (fileLabel: string, source = media) => ({
+type ImageFieldFactory = (label: string) => ReturnType<typeof media> | ReturnType<typeof optionalSiteMedia>;
+const editorialImageFields = (fileLabel: string, source: ImageFieldFactory = media) => ({
   src: source(fileLabel),
   alt: fields.text({ label: "Alternative text", description: "Describe informative images. Leave blank only when this image is explicitly decorative." }),
   decorative: fields.checkbox({ label: "Decorative image", description: "Decorative images render with an empty alt attribute and must not have alternative text.", defaultValue: false }),
@@ -44,7 +44,7 @@ const editorialBlocks = fields.blocks(
   {
     paragraph: {
       label: "Paragraph",
-      schema: richText({ label: "Text", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
+      schema: richText({ label: "Text", mode: "copy", description: "Paragraphs with selected-text formatting and paragraph roles." }),
     },
     heading: {
       label: "Heading",
@@ -116,16 +116,16 @@ export const normalPageSections = fields.blocks(
       label: "Editorial section",
       schema: fields.object({
         label: requiredText("Section label"),
-        heading: richText({ label: "Heading", capabilities: inlineHeading }),
-        body: richText({ label: "Body", description: "Use the approved text, paragraph, and whole-field presentation controls.", capabilities: bodyCopyWithPresentation }),
-        media: fields.object(editorialImageFields("Optional media", siteMedia), { label: "Optional media" }),
+        heading: richText({ label: "Heading", mode: "inline" }),
+        body: richText({ label: "Body", mode: "copy", description: "Use selected-text formatting, paragraph roles, and whole-field Scale." }),
+        media: fields.object(editorialImageFields("Optional media", optionalSiteMedia), { label: "Optional media" }),
       }),
     },
     links: {
       label: "Curated links",
       schema: fields.object({
         label: requiredText("Section label"),
-        heading: richText({ label: "Heading", capabilities: inlineHeading }),
+        heading: richText({ label: "Heading", mode: "inline" }),
         links: editorialLinks("Links", "A deliberately curated list, not a free-form layout control."),
       }),
     },
@@ -144,14 +144,14 @@ export const metadataSchema = (label = "Metadata") => fields.object({
 const indexSchema = {
   metadata: metadataSchema("Thinking index metadata"),
   label: fields.text({ label: "Section label", validation: { isRequired: true } }),
-  heading: richText({ label: "Heading", capabilities: inlineHeading }),
-  introduction: richText({ label: "Introduction" }),
+  heading: richText({ label: "Heading", mode: "inline" }),
+  introduction: richText({ label: "Introduction", mode: "copy" }),
   dialogueArtifacts,
   dialogues: fields.object({
     metadata: metadataSchema("Dialogues metadata"),
     label: fields.text({ label: "Dialogue section label", validation: { isRequired: true } }),
-    heading: richText({ label: "Dialogue heading", capabilities: inlineHeading }),
-    introduction: richText({ label: "Dialogue introduction" }),
+    heading: richText({ label: "Dialogue heading", mode: "inline" }),
+    introduction: richText({ label: "Dialogue introduction", mode: "copy" }),
     emptyLabel: fields.text({ label: "Empty dialogue message", validation: { isRequired: true } }),
   }, { label: "Dialogues page copy" }),
   articleLabels: fields.object({
@@ -182,17 +182,17 @@ const authoringFoundationSchema = {
 
 const runningBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
-  heading: richText({ label: "Heading", capabilities: inlineHeading }),
-  body: richText({ label: "Body", description: "Optional editorial body copy. The section heading remains visible when omitted.", required: false }),
+  heading: richText({ label: "Heading", mode: "inline" }),
+  body: richText({ label: "Body", mode: "copy", description: "Optional editorial body copy. The section heading remains visible when omitted.", required: false }),
   isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }),
 }, { label });
 const runningSchema = {
   metadata: metadataSchema(),
-  hero: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), intro: richText({ label: "Introduction" }) }, { label: "Hero" }),
+  hero: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", mode: "inline" }), intro: richText({ label: "Introduction", mode: "copy" }) }, { label: "Hero" }),
   problem: runningBlock("Problem"),
   restraint: runningBlock("Deliberate restraint"),
-  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle", capabilities: inlineHeading }) }), { label: "Ordered principles", description: "Recommended: 3–8 principles. Order is preserved in the numbered reading sequence.", validation: { length: { min: 1 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
-  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), body: richText({ label: "Body" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title", capabilities: inlineHeading }), label: requiredText("Study label"), body: richText({ label: "Study explanation" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object(editorialImageFields("Media file", siteMedia)), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Decorative media" }) }, { label: "Object and visual study" }),
+  principles: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", mode: "inline" }), items: fields.array(fields.object({ order: fields.integer({ label: "Order", defaultValue: 1, validation: { isRequired: true, min: 1 } }), text: richText({ label: "Principle", mode: "inline" }) }), { label: "Ordered principles", description: "Recommended: 3–8 principles. Order is preserved in the numbered reading sequence.", validation: { length: { min: 1 } }, itemLabel: () => "Principle" }) }, { label: "Principles" }),
+  object: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", mode: "inline" }), body: richText({ label: "Body", mode: "copy" }), isVisible: fields.checkbox({ label: "Show this section", defaultValue: true }), study: fields.object({ title: richText({ label: "Study title", mode: "inline" }), label: requiredText("Study label"), body: richText({ label: "Study explanation", mode: "copy" }) }, { label: "Code-controlled visual study copy" }), media: fields.array(fields.object(editorialImageFields("Media file", siteMedia)), { label: "Supporting media", itemLabel: (props) => props.fields.alt.value || "Decorative media" }) }, { label: "Object and visual study" }),
   build: runningBlock("How it is being built"),
   state: runningBlock("Current state"),
   liveApp: fields.object({ label: requiredText("Link label"), href: fields.url({ label: "Live application URL", validation: { isRequired: true } }), isVisible: fields.checkbox({ label: "Show live application link", defaultValue: true }) }, { label: "Live application" }),
@@ -201,14 +201,14 @@ const textList = (label: string, min: number, max?: number, description?: string
   requiredText("Text", true),
   { label, description, validation: { length: max === undefined ? { min } : { min, max } } },
 );
-const richTextList = (label: string, min: number, max?: number, description?: string, capabilities: RichTextCapabilities = richTextCapabilities.bodyCopy) => fields.array(
-  richText({ label: "Text", capabilities }),
+const richTextList = (label: string, mode: RichTextRendererMode, min: number, max?: number, description?: string) => fields.array(
+  richText({ label: "Text", mode }),
   { label, description, validation: { length: max === undefined ? { min } : { min, max } } },
 );
 const homeBlock = (label: string) => fields.object({
   label: requiredText("Section label"),
   heading: requiredText("Heading"),
-  body: richText({ label: "Body", description: "Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only." }),
+  body: richText({ label: "Body", mode: "copy", description: "Selected-text formatting, paragraph roles, and whole-field Scale are available." }),
 }, { label });
 const personalArtifact = (label: string) => fields.object({
   placeholder: requiredText("Placeholder text", true),
@@ -228,11 +228,11 @@ const homeSchema = {
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
     narrative: fields.array(
-      richText({ label: "Paragraph", description: "Paragraphs, bold, italic, and the approved text-size variants only." }),
+      richText({ label: "Paragraph", mode: "protected-copy", description: "Selected-text formatting is available; this animated composition owns paragraph and field presentation." }),
       { label: "Narrative paragraphs", validation: { length: { min: 1 } }, description: "Recommended: 1–4 paragraphs. Order drives the scramble and restoration animation, which supports any non-empty ordered sequence." },
     ),
-    closingThought: richText({ label: "Closing thought", editorLabel: "Closing thought", description: "Optional. Phrase-level text styling is available; its animated composition does not support paragraph or whole-field controls.", capabilities: protectedInline, required: false }),
-    supportingText: richText({ label: "Supporting text", editorLabel: "Supporting text", description: "Optional. Paragraphs, bold, italic, and the approved text-size variants only.", required: false }),
+    closingThought: richText({ label: "Closing thought", mode: "protected-inline", editorLabel: "Closing thought", description: "Optional. Selected-text formatting is available; this animated composition owns paragraph and field presentation.", required: false }),
+    supportingText: richText({ label: "Supporting text", mode: "copy", editorLabel: "Supporting text", description: "Optional supporting copy.", required: false }),
   }, { label: "Dark Matter", description: "Narrative order drives the scramble and restoration animation." }),
   belief: fields.object({
     label: requiredText("Section label"),
@@ -252,55 +252,55 @@ const homeSchema = {
   thinking: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: richText({ label: "Introduction", description: "Optional. Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only.", required: false }),
+    body: richText({ label: "Introduction", mode: "copy", description: "Optional supporting copy.", required: false }),
     linkLabel: requiredText("Thinking link label"),
     linkHref: fields.url({ label: "Thinking link target", validation: { isRequired: true } }),
   }, { label: "Thinking" }),
   human: fields.object({
     label: requiredText("Section label"),
     heading: requiredText("Heading"),
-    body: richText({ label: "Body", description: "Optional. Paragraphs, bold, italic, the approved text-size variants, and the Human Aside / Editorial Lead / Interruption roles only.", required: false }),
+    body: richText({ label: "Body", mode: "copy", description: "Optional supporting copy.", required: false }),
     linkLabel: requiredText("Really About Me link label"),
     linkHref: fields.url({ label: "Really About Me link target", validation: { isRequired: true } }),
   }, { label: "Human" }),
 };
 
 const aboutSchema = {
-  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", capabilities: inlineHeading }), timeline: richTextList("Timeline entries", 1, undefined, "Recommended: 3–6 entries. Entries render as an ordered editorial timeline.") }, { label: "Personal arc" }),
+  arc: fields.object({ label: requiredText("Section label"), heading: richText({ label: "Heading", mode: "inline" }), timeline: richTextList("Timeline entries", "copy", 1, undefined, "Recommended: 3–6 entries. Entries render as an ordered editorial timeline.") }, { label: "Personal arc" }),
   personalNarrative: fields.object({
     label: requiredText("Section label"),
-    stillHere: richText({ label: "Opening heading", capabilities: inlineHeading }),
-    thanks: richText({ label: "Thank-you line", capabilities: inlineHeading }),
+    stillHere: richText({ label: "Opening heading", mode: "inline" }),
+    thanks: richText({ label: "Thank-you line", mode: "inline" }),
     // This is a deliberate 4 + 2 + 1 visual composition, not a historical content limit.
-    opening: richTextList("Opening lines", 7, 7, "Exactly seven lines: this bespoke opening is intentionally choreographed as 4 + 2 + 1 visual groups.", protectedInline),
-    decadeHeading: richText({ label: "Decade heading", capabilities: inlineHeading }),
-    decadeEntries: richTextList("Decade entries", 1),
+    opening: richTextList("Opening lines", "protected-inline", 7, 7, "Exactly seven lines: this bespoke opening is intentionally choreographed as 4 + 2 + 1 visual groups."),
+    decadeHeading: richText({ label: "Decade heading", mode: "inline" }),
+    decadeEntries: richTextList("Decade entries", "copy", 1),
     artifactLabel: requiredText("Artifact label"),
     missingMan: fields.object({
-      heading: richText({ label: "Heading", capabilities: inlineHeading }),
-      body: richText({ label: "Body", capabilities: bodyCopyWithPresentation }),
+      heading: richText({ label: "Heading", mode: "inline" }),
+      body: richText({ label: "Body", mode: "copy" }),
       artifact: personalArtifact("Missing Man artifact"),
-      reflection: richText({ label: "Reflection", description: "Optional editorial reflection beneath the artifact. Scale affects the whole reflection; phrase typography remains independent.", capabilities: inlineHeading, required: false }),
-      signoff: richText({ label: "Signoff", description: "Optional muted closing line.", required: false }),
+      reflection: richText({ label: "Reflection", mode: "inline", description: "Optional editorial reflection beneath the artifact. Scale affects the whole reflection.", required: false }),
+      signoff: richText({ label: "Signoff", mode: "copy", description: "Optional muted closing line.", required: false }),
     }, { label: "Missing Man" }),
     pizza: fields.object({
-      heading: richText({ label: "Heading", capabilities: inlineHeading }),
-      lines: richTextList("Lines", 1, undefined, "Recommended: 5–8 lines. The composition rebalances its visual split for any non-empty ordered list."),
+      heading: richText({ label: "Heading", mode: "inline" }),
+      lines: richTextList("Lines", "copy", 1, undefined, "Recommended: 5–8 lines. The composition rebalances its visual split for any non-empty ordered list."),
     }, { label: "Pizza" }),
     wait: fields.object({
-      heading: richText({ label: "Heading", capabilities: inlineHeading }),
-      body: richText({ label: "Body" }),
+      heading: richText({ label: "Heading", mode: "inline" }),
+      body: richText({ label: "Body", mode: "copy" }),
       artifact: personalArtifact("T-shirt artifact"),
     }, { label: "Wait" }),
     nonnino: fields.object({
       label: requiredText("Section label"),
-      heading: richText({ label: "Heading", capabilities: inlineHeading }),
+      heading: richText({ label: "Heading", mode: "inline" }),
     }, { label: "Nonnino" }),
     book: fields.object({
       label: requiredText("Section label"),
-      heading: richText({ label: "Heading", capabilities: inlineHeading }),
-      lines: richTextList("Lines", 1, undefined, "Recommended: 2–4 lines. Each line is rendered in reading order."),
-      signoff: richText({ label: "Signoff" }),
+      heading: richText({ label: "Heading", mode: "inline" }),
+      lines: richTextList("Lines", "copy", 1, undefined, "Recommended: 2–4 lines. Each line is rendered in reading order."),
+      signoff: richText({ label: "Signoff", mode: "copy" }),
     }, { label: "Book" }),
     continueLabel: requiredText("Continue link label"),
   }, { label: "Personal narrative", description: "Canonical content for Really About Me." }),
@@ -335,17 +335,45 @@ const siteSettingsSchema = {
 const contactSchema = {
   metadata: metadataSchema(),
   label: requiredText("Section label"),
-  heading: richText({ label: "Heading", capabilities: inlineHeading }),
-  body: richText({ label: "Page introduction" }),
-  details: richTextList("Contact details", 1, 6),
-  supportingText: richText({ label: "Optional supporting text", required: false }),
+  heading: richText({ label: "Heading", mode: "inline" }),
+  body: richText({ label: "Page introduction", mode: "copy" }),
+  details: richTextList("Contact details", "copy", 1, 6),
+  supportingText: richText({ label: "Optional supporting text", mode: "copy", required: false }),
 };
+
+const standardPagePaths = {
+  en: "src/content/site/en/pages/*",
+  it: "src/content/site/it/pages/*",
+} as const;
+
+const standardPageCollection = (locale: "en" | "it", label: string) => collection({
+  label,
+  path: standardPagePaths[locale],
+  slugField: "slug",
+  format: { data: "json" },
+  columns: ["translationKey", "status", "showInNavigation", "navigationOrder"],
+  schema: {
+    slug: fields.slug({
+      name: { label: "URL slug", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use lowercase URL words separated by hyphens." } } },
+      slug: { label: "Filename", validation: { pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use lowercase URL words separated by hyphens." } } },
+    }),
+    title: fields.text({ label: "Title", validation: { isRequired: true } }),
+    locale: fields.select({ label: "Locale", defaultValue: locale, options: localeOptions.filter((option) => option.value === locale) }),
+    translationKey: fields.text({ label: "Stable translation identity", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use the same lowercase identity in each locale." } } }),
+    metadata: metadataSchema("Page metadata"),
+    status: fields.select({ label: "Status", defaultValue: "draft", options: [{ label: "Draft", value: "draft" }, { label: "Published", value: "published" }] }),
+    navigationLabel: fields.text({ label: "Navigation label", validation: { isRequired: true } }),
+    showInNavigation: fields.checkbox({ label: "Show in navigation", defaultValue: false }),
+    navigationOrder: fields.integer({ label: "Navigation order", defaultValue: 100, validation: { isRequired: true, min: 1 } }),
+    sections: normalPageSections,
+  },
+});
 
 export default config({
   storage: { kind: "local" },
   ui: {
     brand: { name: "Site authoring" },
-    navigation: ["englishHome", "englishContact", "englishSettings", "italianHome", "italianContact", "italianSettings", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles", "standardPages"],
+    navigation: ["englishHome", "englishContact", "englishSettings", "italianHome", "italianContact", "italianSettings", "englishAbout", "italianAbout", "englishRunning", "italianRunning", "englishFoundation", "italianFoundation", "englishIndex", "italianIndex", "articles", "englishStandardPages", "italianStandardPages"],
   },
   singletons: {
     englishSettings: singleton({ label: "English site settings", path: "src/content/site/en/site-settings", format: "json", schema: siteSettingsSchema }),
@@ -364,28 +392,8 @@ export default config({
     italianIndex: singleton({ label: "Italian Thinking index", path: "src/content/thinking/it/index", format: "json", schema: indexSchema }),
   },
   collections: {
-    standardPages: collection({
-      label: "Standard pages",
-      path: "src/content/site/*/pages/*",
-      slugField: "slug",
-      format: { data: "json" },
-      columns: ["locale", "translationKey", "status", "showInNavigation", "navigationOrder"],
-      schema: {
-        slug: fields.slug({
-          name: { label: "URL slug", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use lowercase URL words separated by hyphens." } } },
-          slug: { label: "Filename", validation: { pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use lowercase URL words separated by hyphens." } } },
-        }),
-        title: fields.text({ label: "Title", validation: { isRequired: true } }),
-        locale: fields.select({ label: "Locale", defaultValue: "en", options: [...localeOptions] }),
-        translationKey: fields.text({ label: "Stable translation identity", validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Use the same lowercase identity in each locale." } } }),
-        metadata: metadataSchema("Page metadata"),
-        status: fields.select({ label: "Status", defaultValue: "draft", options: [{ label: "Draft", value: "draft" }, { label: "Published", value: "published" }] }),
-        navigationLabel: fields.text({ label: "Navigation label", validation: { isRequired: true } }),
-        showInNavigation: fields.checkbox({ label: "Show in navigation", defaultValue: false }),
-        navigationOrder: fields.integer({ label: "Navigation order", defaultValue: 100, validation: { isRequired: true, min: 1 } }),
-        sections: normalPageSections,
-      },
-    }),
+    englishStandardPages: standardPageCollection("en", "English standard pages"),
+    italianStandardPages: standardPageCollection("it", "Italian standard pages"),
     articles: collection({
       label: "Thinking articles",
       path: "src/content/thinking/*/articles/*",

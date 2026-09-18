@@ -31,10 +31,15 @@ const valid = validateStandardPageRepository([{ path: "en/pages/field-notes.json
 assert.deepEqual(valid[0].sections.map((section) => section.type), ["editorial", "links"]);
 assert.equal(valid[0].sections[0].type, "editorial");
 if (valid[0].sections[0].type === "editorial") assert.equal(valid[0].sections[0].media, undefined, "editorial media must be optional");
+const emptyOptionalMedia = validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page({ sections: [{ discriminant: "editorial", value: { label: "Editorial", heading: "A heading", body: "A body", media: { src: null, alt: "", decorative: false } } }] }) }]);
+if (emptyOptionalMedia[0].sections[0].type === "editorial") assert.equal(emptyOptionalMedia[0].sections[0].media, undefined, "an unselected optional media field must stay absent");
+assert.throws(() => validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page({ sections: [{ discriminant: "editorial", value: { label: "Editorial", heading: "A heading", body: "A body", media: { src: "/outside/image.svg", alt: "Invalid" } } }] }) }]), /repository-owned JPEG, PNG, WebP, or GIF/, "a present optional media source must still be validated strictly");
 const authoringConfig = readFileSync("src/content/thinking-keystatic.config.ts", "utf8");
 assert.match(authoringConfig, /editorialImageFields\("Optional media", optionalSiteMedia\)/, "the editor must not mark optional editorial media as required");
-assert.match(authoringConfig, /path: "src\/content\/site\/en\/pages\/\*"/, "English standard pages must save in their approved locale directory");
-assert.match(authoringConfig, /path: "src\/content\/site\/it\/pages\/\*"/, "Italian standard pages must save in their approved locale directory");
+assert.match(authoringConfig, /en: "src\/content\/site\/en\/pages\/\*"/, "English standard pages must save in their approved locale directory");
+assert.match(authoringConfig, /it: "src\/content\/site\/it\/pages\/\*"/, "Italian standard pages must save in their approved locale directory");
+assert.match(authoringConfig, /englishStandardPages: standardPageCollection\("en"/, "English page creation must use the English collection");
+assert.match(authoringConfig, /italianStandardPages: standardPageCollection\("it"/, "Italian page creation must use the Italian collection");
 assert.deepEqual(validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page({ sections: [page().sections[1], page().sections[0]] }) }])[0].sections.map((section) => section.type), ["links", "editorial"]);
 assert.throws(() => validateStandardPageRepository([{ path: "en/pages/invalid.json", value: page({ slug: "Not valid" }) }]), /lowercase URL slug/);
 for (const slug of ["authoring-foundation", "contact", "really-about-me", "running", "thinking"]) assert.throws(() => validateStandardPageRepository([{ path: `en/pages/${slug}.json`, value: page({ slug }) }]), /reserved/);
@@ -61,7 +66,8 @@ assert.equal(getStandardPageFromRepository(repository, "en", "draft-note", true)
 assert.deepEqual(getStandardPagesFromRepository(repository, "en").map((entry) => entry.slug), ["field-notes", "first-note", "hidden-note"]);
 assert.equal(getTranslatedStandardPageSlugFromRepository(repository, "en", "field-notes", "it"), "appunti");
 assert.equal(getTranslatedStandardPageSlugFromRepository(repository, "en", "first-note", "it"), undefined);
-assert.doesNotThrow(() => validateSiteAuthoringUpdate({ additions: [{ path: "src/content/site/en/pages/field-notes.json", contents: Buffer.from(JSON.stringify(page())).toString("base64url") }], deletions: [] }));
+assert.doesNotThrow(() => validateSiteAuthoringUpdate({ additions: [{ path: "src/content/site/en/pages/field-notes.json", contents: Buffer.from(JSON.stringify(page({ showInNavigation: false }))).toString("base64url") }], deletions: [] }));
+assert.doesNotThrow(() => validateSiteAuthoringUpdate({ additions: [{ path: "src/content/site/it/pages/appunti.json", contents: Buffer.from(JSON.stringify(page({ locale: "it", slug: "appunti", showInNavigation: false }))).toString("base64url") }], deletions: [] }));
 assert.throws(() => validateSiteAuthoringUpdate({ additions: [{ path: "src/content/site/en/pages/contact.json", contents: Buffer.from(JSON.stringify(page({ slug: "contact" }))).toString("base64url") }], deletions: [] }), /reserved/);
 
 console.log("Verified standard-page validation, section reuse, publication filtering, navigation, and translation identity.");

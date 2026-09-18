@@ -18,7 +18,6 @@
 .artifact p, .muted { color: var(--color-text-muted); font-size: 1rem; }
 .artifactImage { width: 100%; aspect-ratio: 860 / 420; max-height: 32rem; object-fit: contain; }
 .artifact figcaption { color: var(--color-text-muted); font-size: 1rem; }
-.reflect { font-size: clamp(2rem, 1.45rem + 1.6vw, 2.5rem); }
 .pizza { min-height: 41rem; }
 .pizzaStack { width: min(100%, 41.25rem); margin-left: auto; gap: var(--space-sm); }
 .pizzaEnd:first-of-type { margin-top: var(--space-sm); }

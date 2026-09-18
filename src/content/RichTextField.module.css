@@ -5,14 +5,10 @@
 .toolbar button { min-width: 2rem; min-height: 2rem; border: 1px solid #666; border-radius: .25rem; background: #353535; color: #f4f4f4; cursor: pointer; }
 .toolbar button:hover, .toolbar button:focus-visible { border-color: #f4f4f4; background: #4a4a4a; outline: none; }
 .toolbar button[aria-pressed="true"] { border-color: #f4f4f4; background: #666; }
-.toolbarGroup { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; padding-right: .45rem; border-right: 1px solid #535353; }
+.toolbarGroup { display: flex; flex-wrap: wrap; align-items: center; min-width: 0; gap: .3rem; padding-right: .45rem; border-right: 1px solid #535353; }
 .toolbarGroup > span { color: #c6c6c6; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .toolbar label { display: flex; align-items: center; gap: .3rem; font-size: .875rem; }
-.toolbar select { border: 1px solid #666; border-radius: .25rem; background: #353535; color: #f4f4f4; padding: .25rem .4rem; }
-.typePreview { min-width: 7.5rem; color: #d8d8d8; }
-.typePreviewSmall { font-size: var(--font-size-label, .8125rem); }
-.typePreviewLarge { font-size: var(--font-size-editorial, 1.5rem); }
-.typePreviewEmphasis { font-family: var(--font-display, inherit); font-size: var(--font-size-editorial, 1.5rem); line-height: 1; }
+.toolbar select { max-width: 100%; border: 1px solid #666; border-radius: .25rem; background: #353535; color: #f4f4f4; padding: .25rem .4rem; }
 .editor { min-height: 7rem; padding: .8rem; outline: none; color: #f4f4f4; line-height: 1.5; }
 .editor p { margin: 0 0 .75rem; }
 .editor p:last-child { margin-bottom: 0; }
@@ -26,5 +22,4 @@
 .underline { text-decoration: underline; }
 .strike { text-decoration: line-through; }
 .interruption { font-family: var(--font-editorial, inherit); }
-.humanAside { font-family: var(--font-body, inherit); font-style: italic; }
-@media (max-width: 25rem) { .toolbarGroup { width: 100%; padding-right: 0; border-right: 0; } .toolbar label { flex-wrap: wrap; } .typePreview { min-width: 0; } }
+@media (max-width: 25rem) { .toolbarGroup { width: 100%; padding-right: 0; border-right: 0; } .toolbar label { min-width: 0; flex-wrap: wrap; } }

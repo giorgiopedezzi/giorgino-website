@@ -26,16 +26,24 @@ assert.deepEqual(richTextPresentation(overridden), { scale: "medium", measure: "
 assert.equal(toRichTextDocument(overridden).content[0].type, "paragraph", "presentation does not remove inline rich-text marks");
 assert.throws(() => validateRichText({ text: "x", presentation: { scale: "24px" } }, "invalid"), /supported semantic value/);
 
+const reflectionScale = { en: "small", it: "medium" } as const;
 for (const locale of ["en", "it"] as const) {
   const reflection = getAboutContent(locale).personalNarrative.missingMan.reflection;
   assert.ok(reflection, `${locale} bundled Missing Man reflection remains present`);
-  assert.deepEqual(richTextPresentation(reflection), { scale: "medium" }, `${locale} Missing Man reflection has a local medium override`);
+  assert.deepEqual(richTextPresentation(reflection), { scale: reflectionScale[locale] }, `${locale} Missing Man reflection preserves its local Scale override`);
 }
 const renderer = readFileSync("src/components/primitives/RichText.module.css", "utf8");
+const rendererComponent = readFileSync("src/components/primitives/RichText.tsx", "utf8");
 assert.match(renderer, /presentationScaleMedium/);
 assert.match(renderer, /\.inline\.presentation \{ font-size: calc\(1em \* var\(--rich-text-scale\)\); \}/, "inline rendering uses the shared semantic Scale multiplier");
 assert.doesNotMatch(renderer, /\.82em|\.inline\.presentationScale/, "inline rendering does not fork a contradictory Scale ladder");
-assert.doesNotMatch(readFileSync("src/components/about/ReallyAboutMe.tsx", "utf8"), /sectionDefaults=\{\{ scale:/, "Missing Man reflection reset restores its intentional CSS base without a competing section Scale");
-assert.doesNotMatch(readFileSync("src/components/about/ReallyAboutMe.tsx", "utf8"), /reflection}\/>a/, "Missing Man reflection has no stray literal suffix");
+assert.match(rendererComponent, /if \(composed\.scale\) classes\.push/, "Scale classes are emitted only for explicitly composed Scale values");
+assert.match(rendererComponent, /if \(composed\.measure\) classes\.push/, "legacy Measure classes remain available only when explicitly composed");
+assert.match(rendererComponent, /if \(composed\.tone\) classes\.push/, "legacy Tone classes remain available only when explicitly composed");
+assert.doesNotMatch(rendererComponent, /resolvePresentation\(/, "rendering a Scale override must not synthesize Measure or Tone defaults");
+const aboutRenderer = readFileSync("src/components/about/ReallyAboutMe.tsx", "utf8");
+assert.match(aboutRenderer, /<EditorialHeading as="h3"><RichTextInline[^]*missingMan\.reflection/, "Missing Man reflection uses structural typography plus its local Scale");
+assert.doesNotMatch(readFileSync("src/components/about/ReallyAboutMe.module.css", "utf8"), /\.reflect\s*\{/, "Missing Man does not add a bespoke sizing path");
+assert.doesNotMatch(aboutRenderer, /reflection}\/>a/, "Missing Man reflection has no stray literal suffix");
 
 console.log("Verified semantic presentation persistence, local overrides, reset-to-inheritance behavior, and inline composition.");

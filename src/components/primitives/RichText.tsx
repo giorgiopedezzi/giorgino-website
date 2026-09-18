@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { BodyCopy } from "./Editorial";
 import styles from "./RichText.module.css";
 import { richTextPresentation, toRichTextDocument, type BlockRole, type RichText, type RichTextMark, type TextSize } from "@/content/rich-text";
-import { resolvePresentation, type PresentationOverrides } from "@/content/presentation";
+import type { PresentationOverrides } from "@/content/presentation";
 
 function markText(text: string, marks: RichTextMark[] | undefined, key: string): ReactNode {
   let result: ReactNode = text;
@@ -28,8 +28,12 @@ function ParagraphBlock({ role, className, presentation, children }: { role: Blo
 function presentationClass(value: RichText, sectionDefaults?: PresentationOverrides) {
   const override = richTextPresentation(value);
   if (!override && !sectionDefaults) return undefined;
-  const resolved = resolvePresentation(sectionDefaults, override);
-  return [styles.presentation, styles[`presentationScale${resolved.scale[0].toUpperCase()}${resolved.scale.slice(1)}` as "presentationScaleSmall"], styles[`presentationMeasure${resolved.measure[0].toUpperCase()}${resolved.measure.slice(1)}` as "presentationMeasureNarrow"], styles[`presentationTone${resolved.tone[0].toUpperCase()}${resolved.tone.slice(1)}` as "presentationToneQuiet"]].join(" ");
+  const composed = { ...sectionDefaults, ...override };
+  const classes = [styles.presentation];
+  if (composed.scale) classes.push(styles[`presentationScale${composed.scale[0].toUpperCase()}${composed.scale.slice(1)}` as "presentationScaleSmall"]);
+  if (composed.measure) classes.push(styles[`presentationMeasure${composed.measure[0].toUpperCase()}${composed.measure.slice(1)}` as "presentationMeasureNarrow"]);
+  if (composed.tone) classes.push(styles[`presentationTone${composed.tone[0].toUpperCase()}${composed.tone.slice(1)}` as "presentationToneQuiet"]);
+  return classes.join(" ");
 }
 
 export function RichTextCopy({ value, className, sectionDefaults }: { value: RichText; className?: string; sectionDefaults?: PresentationOverrides }) {

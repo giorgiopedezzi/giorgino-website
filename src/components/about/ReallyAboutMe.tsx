@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DisplayHeading, PageContainer, Section, SectionLabel } from "@/components/primitives/Editorial";
+import { BodyCopy, DisplayHeading, EditorialHeading, PageContainer, Section, SectionLabel } from "@/components/primitives/Editorial";
 import { RichTextCopy, RichTextInline } from "@/components/primitives/RichText";
 import type { Locale } from "@/content/locales";
 import type { AboutContent } from "@/content/about";
@@ -35,6 +35,7 @@ export function ReallyAboutMe({arc, content, locale}: {
 }) {
   const basePath = `/${locale}`;
   const copy = (value: import("@/content/rich-text").RichText, className?: string, key?: string | number) => <RichTextCopy key={key} value={value} className={className}/>;
+  const openingLine = (value: import("@/content/rich-text").RichText, key: number) => <BodyCopy key={key}><RichTextInline value={value}/></BodyCopy>;
   const opening = arrangeOpening(content.opening);
   const pizzaEmphasisStart = Math.ceil(content.pizza.lines.length / 2);
   return <>
@@ -44,9 +45,9 @@ export function ReallyAboutMe({arc, content, locale}: {
                                                                                                        className={styles.thanks}><RichTextInline
         value={content.thanks}/></DisplayHeading>
         <div
-          className={styles.heart}>{opening.heart.map((line, index) => copy(line, String(index), index))}</div>
+          className={styles.heart}>{opening.heart.map(openingLine)}</div>
         <div
-          className={styles.human}>{opening.human.map((line, index) => copy(line, String(index), index))}<DisplayHeading
+          className={styles.human}>{opening.human.map(openingLine)}<DisplayHeading
           as="p"><RichTextInline value={opening.conclusion}/></DisplayHeading></div>
       </div>
     </PageContainer></Section>
@@ -70,9 +71,8 @@ export function ReallyAboutMe({arc, content, locale}: {
       <div className={styles.stack}><DisplayHeading as="h2" id="missing-heading"
                                                     className={styles.sectionHeading}><RichTextInline
         value={content.missingMan.heading}/></DisplayHeading>{copy(content.missingMan.body)}<Artifact
-        artifact={content.missingMan.artifact} label={content.artifactLabel}/>{content.missingMan.reflection && <DisplayHeading as="h3"
-                                                                                              className={styles.reflect}><RichTextInline
-        value={content.missingMan.reflection}/></DisplayHeading>}
+        artifact={content.missingMan.artifact} label={content.artifactLabel}/>{content.missingMan.reflection && <EditorialHeading as="h3"><RichTextInline
+        value={content.missingMan.reflection}/></EditorialHeading>}
         {content.missingMan.signoff && <div className={styles.muted}>{copy(content.missingMan.signoff)}</div>}
       </div>
     </PageContainer></Section>

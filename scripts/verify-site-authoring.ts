@@ -12,7 +12,8 @@ import { richTextToPlainText } from "../src/content/rich-text";
 
 const foundation = getAuthoringFoundation("en");
 assert.equal(foundation.title, "Local authoring foundation");
-assert.deepEqual(foundation.items.map((item) => item.order), [1]);
+assert.deepEqual(foundation.items.map((item) => item.order), [1, 2]);
+assert.deepEqual(getAuthoringFoundation("it").items.map((item) => item.order), [1]);
 const sections = validateAuthoringFoundation({ ...foundation, sections: [
   { discriminant: "editorial", value: { label: "Editorial", heading: "A heading", body: { text: "A body", presentation: { measure: "narrow" } } } },
   { discriminant: "links", value: { label: "Links", heading: "Resources", links: [{ label: "Home", href: "/en" }] } },

@@ -39,7 +39,9 @@ function expectValidationFailure(overrides: Record<string, unknown>, evidence: s
   );
 }
 
-assert.equal(getThinkingContent("en").articles.length, 0, "draft entries must not appear in the public English index");
+const publicEnglishArticles = getThinkingContent("en").articles;
+assert.deepEqual(publicEnglishArticles.map((entry) => entry.slug), ["the-humanities-belong-inside-the-ai-revolution"], "the public English index includes the one published repository article");
+assert.ok(publicEnglishArticles.every((entry) => entry.status === "published"), "draft entries must not appear in the public English index");
 assert.equal(getThinkingContent("it").articles.length, 0, "draft entries must not appear in the public Italian index");
 assert.equal(getEditorialArticle("en", "the-tears-were-ours"), undefined, "draft detail entries must not be publicly readable");
 assert.ok(getThinkingContent("en", true).articles.some((entry) => entry.status === "draft"), "draft preview must include English draft entries");

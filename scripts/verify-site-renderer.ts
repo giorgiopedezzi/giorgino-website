@@ -1,15 +1,8 @@
 import assert from "node:assert/strict";
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 import { spawn } from "node:child_process";
 
-// A two-frame, looping 1×1 GIF. Keeping the fixture generated here makes its binary
-// provenance explicit while committing the resulting repository-owned media asset.
-const animatedGif = Buffer.from("R0lGODlhAQABAPAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAIfkEAAAAAAAsAAAAAAEAAQAAAgJEAQA7", "base64");
-const mediaDirectory = join(process.cwd(), "public", "site-media");
-const mediaPath = join(mediaDirectory, "animated-authoring-proof.gif");
-mkdirSync(mediaDirectory, { recursive: true });
-writeFileSync(mediaPath, animatedGif);
+// The authoring fixture references this repository-owned, two-frame GIF.
+const mediaPublicPath = "/site-media/media/0/src.gif";
 
 let server: ReturnType<typeof spawn> | undefined;
 
@@ -50,9 +43,9 @@ async function main() {
     const page = await fetch(`${baseUrl}/en/authoring-foundation`);
     const pageHtml = await page.text();
     assert.equal(page.status, 200);
-    assert.match(pageHtml, /animated-authoring-proof\.gif/);
+    assert.match(pageHtml, /\/site-media\/media\/0\/src\.gif/);
 
-    const image = await fetch(`${baseUrl}/site-media/animated-authoring-proof.gif`);
+    const image = await fetch(`${baseUrl}${mediaPublicPath}`);
     const bytes = Buffer.from(await image.arrayBuffer());
     assert.equal(image.headers.get("content-type"), "image/gif");
     assert.equal(bytes.subarray(0, 6).toString("ascii"), "GIF89a");
