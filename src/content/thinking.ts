@@ -48,7 +48,7 @@ function imagePresentation(value: unknown, path: string): MediaPresentation | un
   if (value === "wide" || value === "full") return value;
   fail(path, "must be a supported semantic presentation value");
 }
-function isKeystaticBlock(value: unknown): value is { discriminant: string; value: unknown } { return isRecord(value) && typeof value.discriminant === "string" && "value" in value; }
+function isKeystaticBlock(value: unknown): value is { discriminant: string; value: unknown } { return isRecord(value) && typeof value.discriminant === "string"; }
 
 function validateDialogueArtifacts(value: unknown, path: string): DialogueArtifact[] {
   if (!Array.isArray(value)) fail(path, "expected an array");

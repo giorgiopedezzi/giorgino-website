@@ -1,11 +1,57 @@
 {
-  "translationKey": "dialogues-with-ai",
-  "locale": "en",
   "slug": "dialogues-with-ai",
   "title": "Dialogues with AI",
+  "locale": "en",
+  "translationKey": "dialogues-with-ai",
   "excerpt": "Short reflections born from real conversations with AI.",
-  "publishedAt": null,
+  "metadata": {},
   "status": "draft",
   "order": 5,
-  "body": []
+  "body": [
+    {
+      "discriminant": "paragraph",
+      "value": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "a"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "discriminant": "divider"
+    },
+    {
+      "discriminant": "paragraph",
+      "value": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "p2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "references": [],
+  "relatedLinks": []
 }

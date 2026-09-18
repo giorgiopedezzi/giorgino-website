@@ -1,11 +1,54 @@
 {
-  "translationKey": "signal-noise-and-plausible-answers",
-  "locale": "en",
   "slug": "signal-noise-and-plausible-answers",
   "title": "Signal, noise and plausible answers",
+  "locale": "en",
+  "translationKey": "signal-noise-and-plausible-answers",
   "excerpt": "Why AI increases the value of judgment rather than eliminating it.",
-  "publishedAt": null,
+  "metadata": {},
   "status": "draft",
   "order": 2,
-  "body": []
+  "body": [
+    {
+      "discriminant": "paragraph",
+      "value": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "p1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "discriminant": "paragraph",
+      "value": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "role": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "p2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "references": [],
+  "relatedLinks": []
 }
