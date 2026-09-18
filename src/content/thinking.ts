@@ -162,7 +162,7 @@ function validateArticle(value: unknown, path: string): ThinkingArticleFile {
   if (!slugPattern.test(translationKey)) fail(`${path}.translationKey`, "must be a lowercase stable identity");
   const status = requireString(value.status, `${path}.status`);
   if (status !== "draft" && status !== "published") fail(`${path}.status`, `unsupported status "${status}"`);
-  const publishedAt = value.publishedAt;
+  const publishedAt = value.publishedAt ?? null;
   if (publishedAt !== null && (typeof publishedAt !== "string" || !isoDatePattern.test(publishedAt))) fail(`${path}.publishedAt`, "must be an ISO date (YYYY-MM-DD) or null");
   if (status === "published" && publishedAt === null) fail(`${path}.publishedAt`, "is required when status is published");
   if (value.order !== undefined && (typeof value.order !== "number" || !Number.isInteger(value.order) || value.order < 1)) fail(`${path}.order`, "must be a positive integer when present");

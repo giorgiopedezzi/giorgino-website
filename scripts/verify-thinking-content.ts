@@ -64,6 +64,11 @@ assert.equal(richTextToPlainText(getThinkingContent("en").dialogues.introduction
 
 expectValidationFailure({ locale: "fr" }, "unsupported locale");
 expectValidationFailure({ status: "scheduled" }, "unsupported status");
+assert.doesNotThrow(
+  () => validateThinkingRepository(indexes, dialogues, pairedArticles({ publishedAt: undefined })),
+  "draft articles may omit their publication date",
+);
+expectValidationFailure({ status: "published", publishedAt: undefined }, "is required when status is published");
 expectValidationFailure({ slug: "Not a valid slug" }, "lowercase URL slug");
 expectValidationFailure({ translationKey: "Not a valid identity" }, "stable identity");
 expectValidationFailure({ body: [{ type: "not-a-block" }] }, "unsupported block type");
