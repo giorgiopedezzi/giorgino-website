@@ -1,16 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { BodyCopy, DisplayHeading, EditorialHeading, PageContainer, Section, SectionLabel } from "@/components/primitives/Editorial";
 import { RichTextCopy, RichTextInline } from "@/components/primitives/RichText";
 import type { RichText } from "@/content/rich-text";
-import type { Locale } from "@/content/locales";
-import type { DialogueArtifact, EditorialArticle, EditorialBlock } from "@/content/types";
+import type { DialogueArtifact, EditorialArticle, EditorialBlock, EditorialHub } from "@/content/types";
 
 import styles from "./EditorialSystem.module.css";
 
-export function EditorialIndex({ locale, label, heading, introduction, articles }: { locale: Locale; label: string; heading: RichText; introduction: RichText; articles: EditorialArticle[] }) {
-  return <Section className={styles.page} aria-labelledby="thinking-heading"><PageContainer><div className={styles.intro}><SectionLabel>{label}</SectionLabel><DisplayHeading id="thinking-heading"><RichTextInline value={heading} /></DisplayHeading><RichTextCopy value={introduction} /></div><ol className={styles.articleList}>{articles.map((article, index) => <li key={article.slug}><Link href={`/${locale}/thinking/${article.slug}`} className={styles.articleLink}><span><EditorialHeading>{article.title}</EditorialHeading><span className={styles.excerpt}>{article.excerpt}</span></span><span className={styles.articleNumber}>{String(index + 1).padStart(2, "0")} <span aria-hidden="true">→</span></span></Link></li>)}</ol></PageContainer></Section>;
+export function EditorialPageShell({ headingId, label, heading, introduction, children }: { headingId: string; label: string; heading: RichText; introduction?: RichText; children?: ReactNode }) {
+  return <Section className={styles.page} aria-labelledby={headingId}><PageContainer><div className={styles.intro}><SectionLabel>{label}</SectionLabel><DisplayHeading id={headingId}><RichTextInline value={heading} /></DisplayHeading>{introduction && <RichTextCopy value={introduction} />}</div>{children}</PageContainer></Section>;
+}
+
+export function EditorialIndex({ headingId, label, heading, introduction, entries }: Omit<EditorialHub, "metadata"> & { headingId: string }) {
+  return <EditorialPageShell headingId={headingId} label={label} heading={heading} introduction={introduction}><ol className={styles.articleList}>{entries.map((entry, index) => <li key={entry.identity}><Link href={entry.href} className={styles.articleLink}><span><EditorialHeading>{entry.title}</EditorialHeading>{entry.summary && <span className={styles.excerpt}>{entry.summary}</span>}</span><span className={styles.articleNumber}>{String(index + 1).padStart(2, "0")} <span aria-hidden="true">→</span></span></Link></li>)}</ol></EditorialPageShell>;
 }
 
 export function EditorialArticleView({ article, referenceLabel, relatedLinksLabel }: { article: EditorialArticle; referenceLabel: string; relatedLinksLabel: string }) {

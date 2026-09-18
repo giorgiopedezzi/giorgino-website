@@ -18,9 +18,8 @@ export function SiteNavigation({ locale, placement }: SiteNavigationProps) {
   const basePath = `/${locale}`;
   const links: Array<[string, string]> = [
     [text.thinking, "thinking"],
-    [text.dialogues, "thinking/dialogues"],
     [text.running, "running"],
-    [text.about, "really-about-me"],
+    [text.about, "about"],
     [text.contact, "contact"],
   ];
   links.push(...getStandardPageNavigationEntries(locale).map(({ label, href }): [string, string] => [label, href]));

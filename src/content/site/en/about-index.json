@@ -1,0 +1,11 @@
+{
+  "metadata": { "title": "About \u2014 Giorgio Pedezzi", "description": "Personal and professional paths through Giorgio Pedezzi's work and life." },
+  "label": "About",
+  "heading": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "There is more than one honest way to introduce a person." }] }] },
+  "introduction": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Choose the thread that feels useful, personal or deliberately exhaustive." }] }] },
+  "entries": [
+    { "discriminant": "reallyAboutMe", "value": { "displayTitle": "Really About Me", "summary": "A more personal note from Giorgio Pedezzi." } },
+    { "discriminant": "standardPage", "value": { "target": "boring-about-me", "displayTitle": "Boring About Me", "summary": "A concise view of the work and career." } },
+    { "discriminant": "standardPage", "value": { "target": "really-boring-about-me", "displayTitle": "Really Boring About Me", "summary": "The longer, more exhaustive professional record." } }
+  ]
+}

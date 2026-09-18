@@ -13,6 +13,10 @@ export function getLocalePath(pathname: string, targetLocale: Locale) {
   if (!currentLocale || !isLocale(currentLocale)) return `/${targetLocale}`;
   if (currentLocale === targetLocale) return pathname;
 
+  if (segments[1] === "thinking" && segments[2] === "dialogues") {
+    return `/${targetLocale}/thinking/dialogues`;
+  }
+
   if (segments[1] === "thinking" && segments[2]) {
     const translatedSlug = getTranslatedThinkingSlug(currentLocale, segments[2], targetLocale);
     return translatedSlug ? `/${targetLocale}/thinking/${translatedSlug}` : `/${targetLocale}/thinking`;

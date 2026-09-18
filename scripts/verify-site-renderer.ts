@@ -51,7 +51,7 @@ async function main() {
     assert.equal(bytes.subarray(0, 6).toString("ascii"), "GIF89a");
     assert.ok(bytes.filter((byte) => byte === 0x2c).length >= 2, "the GIF must retain two image frames");
 
-    const publicPaths = ["/en", "/it", "/en/contact", "/it/contact", "/en/really-about-me", "/it/really-about-me", "/en/running", "/it/running", "/en/thinking", "/it/thinking", "/en/thinking/dialogues", "/it/thinking/dialogues"];
+    const publicPaths = ["/en", "/it", "/en/about", "/it/about", "/en/boring-about-me", "/en/contact", "/it/contact", "/en/really-about-me", "/it/really-about-me", "/en/running", "/it/running", "/en/thinking", "/it/thinking", "/en/thinking/dialogues", "/it/thinking/dialogues"];
     for (const path of publicPaths) {
       const response = await fetch(`${baseUrl}${path}`);
       assert.equal(response.status, 200, `${path} must remain publicly renderable`);
@@ -62,14 +62,20 @@ async function main() {
     assert.match(contactHtml, /rel="canonical" href="http:\/\/localhost:\d+\/en\/contact"/);
     assert.match(contactHtml, /hrefLang="it" href="http:\/\/localhost:\d+\/it\/contact"/);
     const homeHtml = await (await fetch(`${baseUrl}/en`)).text();
-    assert.match(homeHtml, /href="\/en\/thinking"/);
-    assert.match(homeHtml, /href="\/en\/running"/);
-    assert.match(homeHtml, /href="\/en\/really-about-me"/);
+    assert.match(homeHtml, /href="\/en\/about"/);
     assert.doesNotMatch(homeHtml, /Missing Man\./, "Home must not reproduce the personal deep page");
     const aboutHtml = await (await fetch(`${baseUrl}/en/really-about-me`)).text();
     assert.match(aboutHtml, /Experience matters only if it doesn/);
     assert.match(aboutHtml, /Started programming/);
-    console.log("Verified localized public routes, homepage deep-page handoffs, personal-content separation, metadata, development preview rendering, and animated GIF preservation.");
+    const aboutIndexHtml = await (await fetch(`${baseUrl}/en/about`)).text();
+    assert.match(aboutIndexHtml, /href="\/en\/really-about-me"/);
+    assert.match(aboutIndexHtml, /href="\/en\/boring-about-me"/);
+    assert.match(aboutIndexHtml, /There is more than one honest way/);
+    const navigationHtml = await (await fetch(`${baseUrl}/en/thinking`)).text();
+    assert.match(navigationHtml, /href="\/en\/about"/);
+    assert.equal((navigationHtml.match(/href="\/en\/thinking\/dialogues"/g) ?? []).length, 1, "Dialogues is discovered through the Thinking index without a duplicate top-level link");
+    assert.doesNotMatch(navigationHtml, /href="\/en\/(?:boring-about-me|really-boring-about-me)"/, "About child pages are curated through the About hub rather than duplicated in top-level navigation");
+    console.log("Verified localized public routes, configurable About/Thinking hubs, homepage deep-page handoffs, personal-content separation, metadata, development preview rendering, and animated GIF preservation.");
   } finally {
     server?.kill();
   }

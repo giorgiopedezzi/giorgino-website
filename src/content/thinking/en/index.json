@@ -1,76 +1,17 @@
 {
   "metadata": {
-    "title": "Thinking — Giorgio Pedezzi",
+    "title": "Thinking \u2014 Giorgio Pedezzi",
     "description": "Not content. A place to follow a line of thought long enough to see where it goes."
   },
   "label": "Thinking",
-  "heading": {
-    "type": "doc",
-    "content": [
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Some notes worth leaving unfinished."
-          }
-        ]
-      }
-    ]
-  },
-  "introduction": {
-    "type": "doc",
-    "content": [
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Not content. A place to follow a line of thought long enough to see where it goes."
-          }
-        ]
-      }
-    ]
-  },
-  "dialogueArtifacts": [],
-  "dialogues": {
-    "metadata": {
-      "title": "Dialogues with AI — Giorgio Pedezzi",
-      "description": "Reflections from real conversations, with their original artifacts."
-    },
-    "label": "Dialogues with AI",
-    "heading": {
-      "type": "doc",
-      "content": [
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Conversations worth keeping open."
-            }
-          ]
-        }
-      ]
-    },
-    "introduction": {
-      "type": "doc",
-      "content": [
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Reflections from real conversations, with their original artifacts."
-            }
-          ]
-        }
-      ]
-    },
-    "emptyLabel": "No dialogues published."
-  },
-  "articleLabels": {
-    "references": "References",
-    "relatedLinks": "Related reading"
-  }
+  "heading": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Some notes worth leaving unfinished." }] }] },
+  "introduction": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Not content. A place to follow a line of thought long enough to see where it goes." }] }] },
+  "entries": [
+    { "discriminant": "article", "value": { "target": "the-humanities-belong-inside-the-ai-revolution", "displayTitle": "The humanities belong inside the AI revolution", "summary": "Not as resistance to technology, but as part of learning how to use it." } },
+    { "discriminant": "article", "value": { "target": "the-tears-were-ours", "displayTitle": "The tears were ours", "summary": "On anthropomorphising AI without forgetting what it is." } },
+    { "discriminant": "article", "value": { "target": "signal-noise-and-plausible-answers", "displayTitle": "Signal, noise and plausible answers", "summary": "Why AI increases the value of judgment rather than eliminating it." } },
+    { "discriminant": "article", "value": { "target": "some-things-should-be-earned", "displayTitle": "Some things should be earned", "summary": "Boston, friction, meaning and a world of instant outcomes." } },
+    { "discriminant": "dialogues", "value": { "displayTitle": "Dialogues with AI", "summary": "Reflections from real conversations, with their original artifacts." } }
+  ],
+  "articleLabels": { "references": "References", "relatedLinks": "Related reading" }
 }

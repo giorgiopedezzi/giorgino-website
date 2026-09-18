@@ -1,76 +1,17 @@
 {
   "metadata": {
-    "title": "Pensieri — Giorgio Pedezzi",
+    "title": "Pensieri \u2014 Giorgio Pedezzi",
     "description": "Non contenuti. Un luogo per seguire un pensiero abbastanza a lungo da vedere dove porta."
   },
   "label": "Pensieri",
-  "heading": {
-    "type": "doc",
-    "content": [
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Appunti che vale la pena lasciare incompiuti."
-          }
-        ]
-      }
-    ]
-  },
-  "introduction": {
-    "type": "doc",
-    "content": [
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Non contenuti. Un luogo per seguire un pensiero abbastanza a lungo da vedere dove porta."
-          }
-        ]
-      }
-    ]
-  },
-  "dialogueArtifacts": [],
-  "dialogues": {
-    "metadata": {
-      "title": "Dialoghi con l'AI — Giorgio Pedezzi",
-      "description": "Riflessioni nate da conversazioni reali, con i loro artefatti originali."
-    },
-    "label": "Dialoghi con l'AI",
-    "heading": {
-      "type": "doc",
-      "content": [
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Conversazioni da tenere aperte."
-            }
-          ]
-        }
-      ]
-    },
-    "introduction": {
-      "type": "doc",
-      "content": [
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Riflessioni nate da conversazioni reali, con i loro artefatti originali."
-            }
-          ]
-        }
-      ]
-    },
-    "emptyLabel": "Nessun dialogo pubblicato."
-  },
-  "articleLabels": {
-    "references": "Riferimenti",
-    "relatedLinks": "Letture correlate"
-  }
+  "heading": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Appunti che vale la pena lasciare incompiuti." }] }] },
+  "introduction": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Non contenuti. Un luogo per seguire un pensiero abbastanza a lungo da vedere dove porta." }] }] },
+  "entries": [
+    { "discriminant": "article", "value": { "target": "le-discipline-umanistiche-appartengono-alla-rivoluzione-dell-ai", "displayTitle": "Le discipline umanistiche appartengono alla rivoluzione dell'AI", "summary": "Non come resistenza alla tecnologia, ma per imparare a usarla." } },
+    { "discriminant": "article", "value": { "target": "le-lacrime-erano-nostre", "displayTitle": "Le lacrime erano nostre", "summary": "Sull'antropomorfizzare l'AI senza dimenticare che cosa sia." } },
+    { "discriminant": "article", "value": { "target": "segnale-rumore-e-risposte-plausibili", "displayTitle": "Segnale, rumore e risposte plausibili", "summary": "Perch\u00e9 l'AI aumenta il valore del giudizio invece di eliminarlo." } },
+    { "discriminant": "article", "value": { "target": "alcune-cose-dovrebbero-essere-conquistate", "displayTitle": "Alcune cose dovrebbero essere conquistate", "summary": "Boston, attrito, significato e un mondo di risultati immediati." } },
+    { "discriminant": "dialogues", "value": { "displayTitle": "Dialoghi con l'AI", "summary": "Riflessioni nate da conversazioni reali, con i loro artefatti originali." } }
+  ],
+  "articleLabels": { "references": "Riferimenti", "relatedLinks": "Letture correlate" }
 }

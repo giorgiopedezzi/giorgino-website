@@ -13,7 +13,6 @@ export type SiteSettings = {
     footerLabel: string;
     footerHeading: string;
     thinking: string;
-    dialogues: string;
     running: string;
     about: string;
     contact: string;
@@ -57,7 +56,6 @@ export function validateSiteSettings(value: unknown, path = "site-settings.json"
       footerLabel: text(navigation.footerLabel, `${path}.navigation.footerLabel`),
       footerHeading: text(navigation.footerHeading, `${path}.navigation.footerHeading`),
       thinking: text(navigation.thinking, `${path}.navigation.thinking`),
-      dialogues: text(navigation.dialogues, `${path}.navigation.dialogues`),
       running: text(navigation.running, `${path}.navigation.running`),
       about: text(navigation.about, `${path}.navigation.about`),
       contact: text(navigation.contact, `${path}.navigation.contact`),

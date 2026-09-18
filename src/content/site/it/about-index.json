@@ -1,0 +1,9 @@
+{
+  "metadata": { "title": "Di me \u2014 Giorgio Pedezzi", "description": "Percorsi personali e professionali nel lavoro e nella vita di Giorgio Pedezzi." },
+  "label": "Di me",
+  "heading": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "C'\u00e8 pi\u00f9 di un modo sincero per presentare una persona." }] }] },
+  "introduction": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Scegli il filo che ti sembra utile, personale o volutamente esaustivo." }] }] },
+  "entries": [
+    { "discriminant": "reallyAboutMe", "value": { "displayTitle": "Davvero di me", "summary": "Una nota pi\u00f9 personale su Giorgio Pedezzi." } }
+  ]
+}

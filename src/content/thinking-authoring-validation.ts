@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { locales, type Locale } from "./locales";
 import { validateHomeContent } from "./home";
 import { validateAboutContent } from "./about";
+import { validateAboutIndexes } from "./about-index";
 import { validateAuthoringFoundation } from "./site-content";
 import { validateRunningContent } from "./running";
 import { validateContactContent } from "./contact";
@@ -15,9 +16,9 @@ type LocalUpdate = { additions: Array<{ path: string; contents: string }>; delet
 
 const contentRoot = join(process.cwd(), "src", "content", "thinking");
 const siteContentRoot = join(process.cwd(), "src", "content", "site");
-const contentPath = /^src\/content\/thinking\/(en|it)\/(index|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
+const contentPath = /^src\/content\/thinking\/(en|it)\/(index|dialogues|articles\/[a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
 const mediaPath = /^public\/thinking-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
-const siteContentPath = /^src\/content\/site\/(en|it)\/(?:about|authoring-foundation|contact|home|running|site-settings)\.json$/;
+const siteContentPath = /^src\/content\/site\/(en|it)\/(?:about|about-index|authoring-foundation|contact|home|running|site-settings)\.json$/;
 const standardPagePath = /^src\/content\/site\/(en|it)\/pages\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/;
 const siteMediaPath = /^public\/site-media\/[a-zA-Z0-9][a-zA-Z0-9._-]*(?:\/[a-zA-Z0-9][a-zA-Z0-9._-]*)*\.(?:jpe?g|png|webp|gif)$/i;
 
@@ -54,13 +55,14 @@ export function validateThinkingAuthoringUpdate(value: unknown) {
     return addition === undefined ? readJson(join(contentRoot, relativePath.slice("src/content/thinking/".length))) : parseJsonAddition(addition, relativePath);
   };
   const indexes = Object.fromEntries(locales.map((locale) => [locale, readCandidate(`src/content/thinking/${locale}/index.json`)])) as Record<Locale, unknown>;
+  const dialogues = Object.fromEntries(locales.map((locale) => [locale, readCandidate(`src/content/thinking/${locale}/dialogues.json`)])) as Record<Locale, unknown>;
   const articles = locales.flatMap((locale) => {
     const directory = join(contentRoot, locale, "articles");
     const paths = new Set(readdirSync(directory).filter((name) => name.endsWith(".json")).map((name) => `src/content/thinking/${locale}/articles/${name}`));
     for (const path of additions.keys()) if (path.startsWith(`src/content/thinking/${locale}/articles/`)) paths.add(path);
     return [...paths].filter((path) => !deletions.has(path)).sort().map((path) => ({ path: path.replace("src/content/thinking/", ""), value: readCandidate(path) }));
   });
-  validateThinkingRepository(indexes, articles);
+  validateThinkingRepository(indexes, dialogues, articles);
 }
 
 export function validateSiteAuthoringUpdate(value: unknown) {
@@ -86,7 +88,14 @@ export function validateSiteAuthoringUpdate(value: unknown) {
       value: additions.has(path) ? parseJsonAddition(additions.get(path)!, path) : readJson(join(directory, path.slice(path.lastIndexOf("/") + 1))),
     }));
   });
-  validateStandardPageRepository(standardPages);
+  const validatedStandardPages = validateStandardPageRepository(standardPages);
+  const aboutIndexes = Object.fromEntries(locales.map((locale) => {
+    const path = `src/content/site/${locale}/about-index.json`;
+    if (deletions.has(path)) throw new Error(`${path} is required`);
+    const addition = additions.get(path);
+    return [locale, addition === undefined ? readJson(join(siteContentRoot, locale, "about-index.json")) : parseJsonAddition(addition, path)];
+  })) as Record<Locale, unknown>;
+  validateAboutIndexes(aboutIndexes, validatedStandardPages);
 
   const readFoundation = (locale: Locale) => {
     const path = `src/content/site/${locale}/authoring-foundation.json`;

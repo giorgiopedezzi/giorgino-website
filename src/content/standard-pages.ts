@@ -22,7 +22,7 @@ export type StandardPage = {
 type StandardPageInput = { path: string; value: unknown };
 const root = join(process.cwd(), "src", "content", "site");
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const reservedSlugs = new Set(["authoring-foundation", "contact", "really-about-me", "running", "thinking"]);
+const reservedSlugs = new Set(["about", "authoring-foundation", "contact", "really-about-me", "running", "thinking"]);
 
 function fail(path: string, message: string): never { throw new Error(`Standard page validation failed at ${path}: ${message}`); }
 function record(value: unknown, path: string): Record<string, unknown> { if (typeof value !== "object" || value === null || Array.isArray(value)) fail(path, "expected an object"); return value as Record<string, unknown>; }

@@ -17,6 +17,7 @@ assert.equal(english.belief.statements.length, 2);
 assert.equal(english.darkMatter.narrative.length, 2);
 assert.equal(english.thinking.linkLabel, "Follow the thinking");
 assert.equal(english.thinking.linkHref, "/en/thinking");
+assert.equal(english.human.linkHref, "/en/really-about-me", "the homepage keeps its deliberate handoff to the bespoke personal page");
 assert.equal("articles" in english.thinking, false, "Home must not duplicate the Thinking index");
 assert.equal(italian.belief.statements.length, 4);
 assert.equal(italian.running.linkLabel, "Guarda l'esperimento");

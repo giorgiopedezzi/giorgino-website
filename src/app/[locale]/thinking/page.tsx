@@ -19,6 +19,7 @@ export default async function ThinkingPage({ params }: Readonly<{ params: Promis
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const { isEnabled: isPreview } = await draftMode();
+  const { label, heading, introduction, entries } = getThinkingContent(locale, isPreview);
 
-  return <><SiteNavigation locale={locale} placement="header" /><main>{isPreview && <ThinkingPreviewState />}<EditorialIndex locale={locale} {...getThinkingContent(locale, isPreview)} /></main></>;
+  return <><SiteNavigation locale={locale} placement="header" /><main>{isPreview && <ThinkingPreviewState />}<EditorialIndex headingId="thinking-heading" label={label} heading={heading} introduction={introduction} entries={entries} /></main></>;
 }

@@ -12,9 +12,8 @@
     "footerLabel": "Elsewhere",
     "footerHeading": "Find a different thread",
     "thinking": "Thinking",
-    "dialogues": "Dialogues with AI",
     "running": "Are you a runner?",
-    "about": "Really About Me",
+    "about": "About",
     "contact": "Contact"
   },
   "language": { "label": "Language", "english": "EN", "italian": "IT" },

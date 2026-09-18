@@ -1,0 +1,8 @@
+{
+  "metadata": { "title": "Dialoghi con l'AI \u2014 Giorgio Pedezzi", "description": "Riflessioni nate da conversazioni reali, con i loro artefatti originali." },
+  "label": "Dialoghi con l'AI",
+  "heading": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Conversazioni da tenere aperte." }] }] },
+  "introduction": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Riflessioni nate da conversazioni reali, con i loro artefatti originali." }] }] },
+  "emptyLabel": "Nessun dialogo pubblicato.",
+  "artifacts": []
+}

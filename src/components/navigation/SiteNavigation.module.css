@@ -48,12 +48,6 @@
   text-underline-offset: .25em;
 }
 
-.disabledLanguage {
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  opacity: .55;
-}
-
 .homeLink,
 .menu summary,
 .menuLinks a,

@@ -42,7 +42,7 @@ assert.match(authoringConfig, /englishStandardPages: standardPageCollection\("en
 assert.match(authoringConfig, /italianStandardPages: standardPageCollection\("it"/, "Italian page creation must use the Italian collection");
 assert.deepEqual(validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page({ sections: [page().sections[1], page().sections[0]] }) }])[0].sections.map((section) => section.type), ["links", "editorial"]);
 assert.throws(() => validateStandardPageRepository([{ path: "en/pages/invalid.json", value: page({ slug: "Not valid" }) }]), /lowercase URL slug/);
-for (const slug of ["authoring-foundation", "contact", "really-about-me", "running", "thinking"]) assert.throws(() => validateStandardPageRepository([{ path: `en/pages/${slug}.json`, value: page({ slug }) }]), /reserved/);
+for (const slug of ["about", "authoring-foundation", "contact", "really-about-me", "running", "thinking"]) assert.throws(() => validateStandardPageRepository([{ path: `en/pages/${slug}.json`, value: page({ slug }) }]), /reserved/);
 assert.throws(() => validateStandardPageRepository([{ path: "a", value: page() }, { path: "b", value: page() }]), /duplicate slug/);
 assert.throws(() => validateStandardPageRepository([{ path: "a", value: page() }, { path: "b", value: page({ slug: "other" }) }]), /duplicate translation identity/);
 assert.doesNotThrow(() => validateStandardPageRepository([{ path: "en/pages/field-notes.json", value: page() }]));

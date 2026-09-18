@@ -9,7 +9,7 @@
   },
   "status": "published",
   "navigationLabel": "Boring about me",
-  "showInNavigation": true,
+  "showInNavigation": false,
   "navigationOrder": 2,
   "sections": [
     {

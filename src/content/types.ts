@@ -55,6 +55,21 @@ export type EditorialArticle = {
   relatedLinks: EditorialLink[];
 };
 
+export type EditorialHubEntry = {
+  identity: string;
+  href: string;
+  title: string;
+  summary?: string;
+};
+
+export type EditorialHub = {
+  metadata: ContentMetadata;
+  label: string;
+  heading: RichText;
+  introduction?: RichText;
+  entries: EditorialHubEntry[];
+};
+
 export type DialogueArtifact = {
   screenshot: string;
   alt: string;
@@ -64,11 +79,7 @@ export type DialogueArtifact = {
   stretch?: boolean;
 };
 
-export type EditorialContent = {
-  metadata: ContentMetadata;
-  label: string;
-  heading: RichText;
-  introduction: RichText;
+export type EditorialContent = EditorialHub & {
   articles: EditorialArticle[];
   dialogueArtifacts: DialogueArtifact[];
   dialogues: {

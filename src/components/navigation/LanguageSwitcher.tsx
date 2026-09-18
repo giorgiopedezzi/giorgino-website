@@ -13,21 +13,15 @@ export function LanguageSwitcher({ locale, copy }: { locale: Locale; copy: { lab
   return (
     <nav aria-label={copy.label} className={styles.languageSwitcher}>
       {(["en", "it"] as const).map((nextLocale) => (
-        nextLocale === "it" ? (
-          <span aria-disabled="true" className={styles.disabledLanguage} key={nextLocale} lang={nextLocale}>
-            {copy.italian}
-          </span>
-        ) : (
-          <Link
-            aria-current={nextLocale === locale ? "page" : undefined}
-            className={nextLocale === locale ? styles.activeLanguage : undefined}
-            href={`/locale/${nextLocale}?returnTo=${encodeURIComponent(pathname)}`}
-            key={nextLocale}
-            lang={nextLocale}
-          >
-            {copy.english}
-          </Link>
-        )
+        <Link
+          aria-current={nextLocale === locale ? "page" : undefined}
+          className={nextLocale === locale ? styles.activeLanguage : undefined}
+          href={`/locale/${nextLocale}?returnTo=${encodeURIComponent(pathname)}`}
+          key={nextLocale}
+          lang={nextLocale}
+        >
+          {nextLocale === "en" ? copy.english : copy.italian}
+        </Link>
       ))}
     </nav>
   );
