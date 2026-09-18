@@ -78,6 +78,7 @@ const extensions = [
     listItem: false,
     orderedList: false,
     strike: {},
+    underline: false,
   }),
   TextStyle,
   Underline,

@@ -41,6 +41,7 @@ assert.doesNotMatch(schema, /capabilities|richTextCapabilities/, "schema declara
 assert.doesNotMatch(toolbar, />Typography|title="Human Aside"|>Measure<|>Tone</, "deprecated authoring controls must not be exposed");
 assert.doesNotMatch(toolbar, /setMark\("textStyle"|toggleMark\("humanAside"/, "new saves cannot create deprecated phrase-size or inline-Human-Aside marks");
 assert.match(toolbar, /TextSizeExtension[^]*InlineHumanAsideExtension/, "legacy size and inline-Human-Aside extensions remain installed for lossless editing");
+assert.match(toolbar, /StarterKit\.configure\(\{[^]*?underline: false,[^]*?\}\),[^]*?\n  Underline,/, "Underline is registered explicitly without duplicating StarterKit's built-in extension");
 assert.match(toolbar, /supportsParagraphRole\(mode\).*<div[^]*?<span>Paragraph<\/span>/, "paragraph roles are mode-gated");
 assert.match(toolbar, /supportsScale\(mode\).*<div[^]*?<span>Whole field<\/span>/, "whole-field Scale is mode-gated");
 assert.match(toolbar, /mode === "copy" \|\| mode === "inline"/, "only ordinary Copy and Inline expose Scale");
